@@ -9,10 +9,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="manifest" href="manifest.json" />
 
-  <!-- Google Fonts for Elegant Typography -->
+  <!-- Google Fonts for Diverse & Elegant Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 
   <style>
     /* --- DESIGN SYSTEM & CSS VARIABLES --- */
@@ -22,9 +22,8 @@
       --heading-font: 'Playfair Display', Georgia, serif;
       --body-font: 'Source Serif 4', Georgia, serif;
       --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --accent-color: #8c6d3f;
+      --accent-color: #2c2523;
       --accent-gold: #b8860b;
-      --red-letter-color: #a33b20;
       --panel-bg: rgba(252, 250, 247, 0.94);
       --border-color: rgba(0, 0, 0, 0.08);
       --verse-num-color: #a89f91;
@@ -32,44 +31,13 @@
       --line-height: 1.85;
       --text-align: left;
       --bg-image: none;
-      --card-bg: rgba(255, 255, 255, 0.8);
-      --pill-bg: #f0ebe1;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --pill-bg: rgba(0, 0, 0, 0.04);
+      --pill-border: rgba(0, 0, 0, 0.08);
       --active-pill: #2c2523;
       --active-pill-text: #ffffff;
-      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
       --safe-area-top: env(safe-area-inset-top, 0px);
       --safe-area-bottom: env(safe-area-inset-bottom, 0px);
-    }
-
-    /* --- THEME VARIATIONS --- */
-    [data-theme="dark"] {
-      --bg-color: #121110;
-      --text-color: #e6e2dd;
-      --accent-color: #d4af37;
-      --accent-gold: #e6c667;
-      --red-letter-color: #d96b52;
-      --panel-bg: rgba(18, 17, 16, 0.94);
-      --border-color: rgba(255, 255, 255, 0.1);
-      --verse-num-color: #736e67;
-      --card-bg: rgba(28, 26, 25, 0.9);
-      --pill-bg: #22201e;
-      --active-pill: #e6e2dd;
-      --active-pill-text: #121110;
-    }
-
-    [data-theme="light"] {
-      --bg-color: #ffffff;
-      --text-color: #1a1a1a;
-      --accent-color: #2b580c;
-      --accent-gold: #3b7a13;
-      --red-letter-color: #b32d00;
-      --panel-bg: rgba(255, 255, 255, 0.96);
-      --border-color: #ebebeb;
-      --verse-num-color: #999999;
-      --card-bg: #f7f7f7;
-      --pill-bg: #f0f0f0;
-      --active-pill: #1a1a1a;
-      --active-pill-text: #ffffff;
     }
 
     * {
@@ -94,22 +62,37 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      transition: background-color 0.3s ease;
     }
 
-    /* --- MODERN BUTTON SYSTEM --- */
+    /* --- SLEEK, MODERN BUTTON SYSTEM --- */
     button, .nav-pill, .nav-btn, .icon-btn, .chip-btn {
       font-family: var(--ui-font);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      border-radius: 9999px;
+      border: 1px solid var(--pill-border);
+      background: var(--pill-bg);
+      color: var(--text-color);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
       cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    button:hover, .nav-pill:hover, .nav-btn:hover, .icon-btn:hover {
+      background: rgba(0, 0, 0, 0.07);
+      transform: translateY(-1px);
     }
 
     button:active, .nav-pill:active, .nav-btn:active, .icon-btn:active, .chip-btn:active {
-      transform: scale(0.96);
-      opacity: 0.85;
+      transform: scale(0.95);
+      opacity: 0.9;
     }
 
-    /* --- HEADER & NAVIGATION BAR --- */
+    /* --- HEADER & SEPARATED NAVIGATION --- */
     header {
       position: sticky;
       top: 0;
@@ -127,38 +110,29 @@
     .nav-pill-group {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-    }
-
-    .nav-pill {
-      background: var(--pill-bg);
-      color: var(--text-color);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 0.45rem 0.9rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
       gap: 0.4rem;
     }
 
+    .nav-pill {
+      padding: 0.5rem 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
     .nav-pill .chevron {
-      font-size: 0.65rem;
-      opacity: 0.6;
+      font-size: 0.6rem;
+      opacity: 0.5;
     }
 
     .icon-btn {
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      width: 38px;
-      height: 38px;
-      border: 1px solid var(--border-color);
-      background: var(--pill-bg);
-      color: var(--text-color);
-      font-size: 1rem;
+      font-size: 1.05rem;
     }
 
     /* --- MAIN READER CONTENT --- */
@@ -206,14 +180,14 @@
     .verse {
       margin-bottom: 1rem;
       position: relative;
-      border-radius: 8px;
-      padding: 0.4rem 0.5rem;
+      border-radius: 12px;
+      padding: 0.4rem 0.6rem;
       transition: background 0.2s ease;
       cursor: pointer;
     }
 
     .verse:active, .verse.selected {
-      background: rgba(140, 109, 63, 0.12);
+      background: rgba(0, 0, 0, 0.05);
     }
 
     .verse-num {
@@ -226,16 +200,11 @@
       vertical-align: super;
     }
 
-    .red-letter {
-      color: var(--red-letter-color);
-    }
-
-    /* Drop Cap for Verse 1 */
     .verse[data-verse="1"]::first-letter {
       font-family: var(--heading-font);
       font-size: 1.3em;
       font-weight: 700;
-      color: var(--accent-color);
+      color: var(--accent-gold);
     }
 
     body.reader-mode .verse-num {
@@ -246,7 +215,7 @@
       color: var(--accent-gold);
     }
 
-    /* --- BOTTOM BAR --- */
+    /* --- FOOTER NAVIGATION --- */
     footer {
       position: fixed;
       bottom: 0;
@@ -264,13 +233,7 @@
     }
 
     .nav-btn {
-      background: var(--pill-bg);
-      color: var(--text-color);
-      border: 1px solid var(--border-color);
-      border-radius: 18px;
-      padding: 0.5rem 1rem;
-      font-size: 0.82rem;
-      font-weight: 600;
+      padding: 0.55rem 1.1rem;
     }
 
     .streak-pill {
@@ -281,14 +244,14 @@
       background: var(--card-bg);
       border: 1px solid var(--border-color);
       padding: 0.45rem 0.85rem;
-      border-radius: 20px;
+      border-radius: 9999px;
     }
 
     /* --- OVERLAY & MODALS --- */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(6px);
       z-index: 90;
       opacity: 0;
@@ -301,7 +264,6 @@
       pointer-events: auto;
     }
 
-    /* Bottom Sheet Modals (Navigation) */
     .modal-sheet {
       position: fixed;
       bottom: -100%;
@@ -340,7 +302,7 @@
 
     .sheet-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
       gap: 0.6rem;
       overflow-y: auto;
       max-height: 50vh;
@@ -348,13 +310,8 @@
     }
 
     .chip-btn {
-      background: var(--pill-bg);
-      border: 1px solid var(--border-color);
-      color: var(--text-color);
       border-radius: 12px;
       padding: 0.65rem 0.2rem;
-      font-size: 0.85rem;
-      font-weight: 600;
       text-align: center;
     }
 
@@ -364,7 +321,7 @@
       border-color: var(--active-pill);
     }
 
-    /* --- STATIC-HEADER SETTINGS POP-UP MODAL --- */
+    /* --- STATIC-HEADER SETTINGS MODAL --- */
     .settings-modal {
       position: fixed;
       top: 50%;
@@ -393,7 +350,7 @@
     }
 
     .settings-header-fixed {
-      padding: 1.25rem 1.5rem;
+      padding: 1.1rem 1.25rem;
       background: var(--panel-bg);
       border-bottom: 1px solid var(--border-color);
       display: flex;
@@ -403,14 +360,13 @@
     }
 
     .settings-scroll-body {
-      padding: 1.5rem;
+      padding: 1.25rem;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
     }
 
-    /* LIVE PREVIEW CARD */
     .preview-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -460,30 +416,29 @@
     }
 
     .segmented-control {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
       background: var(--pill-bg);
       padding: 3px;
-      border-radius: 12px;
-      gap: 2px;
+      border-radius: 16px;
+      gap: 3px;
     }
 
     .segmented-control button {
-      flex: 1;
       border: none;
       background: transparent;
+      box-shadow: none;
       color: var(--text-color);
-      padding: 0.5rem;
-      font-size: 0.82rem;
-      font-weight: 600;
-      border-radius: 9px;
+      padding: 0.55rem 0.2rem;
+      font-size: 0.8rem;
+      border-radius: 12px;
     }
 
     .segmented-control button.active {
       background: var(--card-bg);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
-    /* Galleries */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -492,16 +447,14 @@
 
     .gallery-chip {
       aspect-ratio: 16/10;
-      border-radius: 10px;
+      border-radius: 12px;
       border: 2px solid var(--border-color);
-      background-size: cover;
-      background-position: center;
       cursor: pointer;
       transition: transform 0.15s ease, border-color 0.15s ease;
     }
 
     .gallery-chip.active {
-      border-color: var(--accent-color);
+      border-color: var(--active-pill);
       transform: scale(0.96);
     }
 
@@ -511,7 +464,7 @@
       justify-content: space-between;
       background: var(--pill-bg);
       padding: 0.6rem 1rem;
-      border-radius: 12px;
+      border-radius: 16px;
       border: 1px solid var(--border-color);
     }
 
@@ -543,13 +496,17 @@
     }
   </style>
 </head>
-<body data-theme="parchment">
+<body>
 
   <!-- TOP NAVIGATION -->
   <header>
     <div class="nav-pill-group">
       <button class="nav-pill" id="btn-book-select">
-        <span id="label-book-chapter">John 1</span>
+        <span id="label-book">John</span>
+        <span class="chevron">▼</span>
+      </button>
+      <button class="nav-pill" id="btn-chapter-select">
+        <span id="label-chapter">Ch. 1</span>
         <span class="chevron">▼</span>
       </button>
       <button class="nav-pill" id="btn-trans-select">
@@ -583,14 +540,14 @@
   <!-- OVERLAY -->
   <div class="overlay" id="overlay"></div>
 
-  <!-- MODAL: BOOK & CHAPTER SELECTOR -->
+  <!-- MODAL: BOOK, CHAPTER & TRANSLATION SELECTOR -->
   <div class="modal-sheet" id="nav-modal">
     <div class="sheet-header">
-      <div class="sheet-title" id="nav-modal-title">Select Book & Chapter</div>
+      <div class="sheet-title" id="nav-modal-title">Select Book</div>
       <button class="icon-btn" id="close-nav-modal">✕</button>
     </div>
     <div class="sheet-grid" id="nav-grid">
-      <!-- Dynamic chips for books or chapters -->
+      <!-- Dynamic chips for books, chapters, or translations -->
     </div>
   </div>
 
@@ -608,23 +565,15 @@
         <span class="preview-verse-num">1</span>In the beginning was the Word, and the Word was with God, and the Word was God.
       </div>
 
-      <!-- Theme Selection -->
-      <div class="setting-section">
-        <label class="setting-label">Theme Preset</label>
-        <div class="segmented-control" id="theme-control">
-          <button data-val="parchment" onclick="setTheme('parchment')">Parchment</button>
-          <button data-val="dark" onclick="setTheme('dark')">Dark</button>
-          <button data-val="light" onclick="setTheme('light')">Blank</button>
-        </div>
-      </div>
-
       <!-- Typography -->
       <div class="setting-section">
         <label class="setting-label">Font Style</label>
         <div class="segmented-control" id="font-control">
-          <button data-val="Serif" onclick="setFont('Source Serif 4, Georgia, serif')">Serif</button>
-          <button data-val="Sans" onclick="setFont('Inter, system-ui, sans-serif')">Sans</button>
-          <button data-val="Editorial" onclick="setFont('Playfair Display, serif')">Editorial</button>
+          <button data-val="serif" onclick="setFont('Source Serif 4, Georgia, serif', 'serif')">Serif</button>
+          <button data-val="editorial" onclick="setFont('Playfair Display, serif', 'editorial')">Editorial</button>
+          <button data-val="sans" onclick="setFont('Inter, system-ui, sans-serif', 'sans')">Sans</button>
+          <button data-val="cinzel" onclick="setFont('Cinzel, serif', 'cinzel')">Elegance</button>
+          <button data-val="mono" onclick="setFont('Fira Code, monospace', 'mono')">Mono</button>
         </div>
       </div>
 
@@ -647,27 +596,34 @@
         </div>
       </div>
 
+      <!-- Header & Footer Bar Color Gallery -->
+      <div class="setting-section">
+        <label class="setting-label">Bar Theme Palette</label>
+        <div class="gallery-grid" id="panel-gallery">
+          <div class="gallery-chip" style="background: rgba(252, 250, 247, 0.94);" onclick="setPanelColor('rgba(252, 250, 247, 0.94)', this)"></div>
+          <div class="gallery-chip" style="background: rgba(18, 17, 16, 0.94);" onclick="setPanelColor('rgba(18, 17, 16, 0.94)', this)"></div>
+          <div class="gallery-chip" style="background: rgba(245, 239, 230, 0.94);" onclick="setPanelColor('rgba(245, 239, 230, 0.94)', this)"></div>
+          <div class="gallery-chip" style="background: rgba(234, 242, 237, 0.94);" onclick="setPanelColor('rgba(234, 242, 237, 0.94)', this)"></div>
+        </div>
+      </div>
+
       <!-- Background Gallery -->
       <div class="setting-section">
         <label class="setting-label">Background Gallery</label>
         <div class="gallery-grid" id="bg-gallery">
-          <div class="gallery-chip" style="background: #fcfaf7;" onclick="setGalleryBg('none', this)" title="Solid Default"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #f5efe6 0%, #e8decb 100%);" onclick="setGalleryBg('linear-gradient(135deg, #f5efe6 0%, #e8decb 100%)', this)" title="Warm Sand"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #1e1b18 0%, #0d0c0b 100%);" onclick="setGalleryBg('linear-gradient(135deg, #1e1b18 0%, #0d0c0b 100%)', this)" title="Deep Charcoal"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%);" onclick="setGalleryBg('linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%)', this)" title="Soft Sage"></div>
+          <div class="gallery-chip" style="background: #fcfaf7;" onclick="setGalleryBg('#fcfaf7', this)"></div>
+          <div class="gallery-chip" style="background: #121110;" onclick="setGalleryBg('#121110', this)"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #f5efe6 0%, #e8decb 100%);" onclick="setGalleryBg('linear-gradient(135deg, #f5efe6 0%, #e8decb 100%)', this)"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #1e1b18 0%, #0d0c0b 100%);" onclick="setGalleryBg('linear-gradient(135deg, #1e1b18 0%, #0d0c0b 100%)', this)"></div>
         </div>
       </div>
 
-      <!-- Color Customization -->
+      <!-- Live Text Color Selector -->
       <div class="setting-section">
-        <label class="setting-label">Color Customization</label>
+        <label class="setting-label">Custom Text Color</label>
         <div class="color-picker-row">
           <span>Text Color</span>
           <input type="color" id="text-color-picker" onchange="setTextColor(this.value)" value="#2c2523" />
-        </div>
-        <div class="color-picker-row" style="margin-top: 0.5rem;">
-          <span>Words in Red Color</span>
-          <input type="color" id="red-letter-picker" onchange="setRedLetterColor(this.value)" value="#a33b20" />
         </div>
       </div>
 
