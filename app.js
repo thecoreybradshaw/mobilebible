@@ -53,7 +53,8 @@ const TRANSLATIONS = {
 };
 
 // UI Elements
-const labelBookChapter = document.getElementById('label-book-chapter');
+const labelBook = document.getElementById('label-book');
+const labelChapter = document.getElementById('label-chapter');
 const labelTranslation = document.getElementById('label-translation');
 const metaTranslation = document.getElementById('meta-translation');
 const chapterTitle = document.getElementById('chapter-title');
@@ -66,6 +67,7 @@ const overlay = document.getElementById('overlay');
 const navModalTitle = document.getElementById('nav-modal-title');
 const navGrid = document.getElementById('nav-grid');
 const btnBookSelect = document.getElementById('btn-book-select');
+const btnChapterSelect = document.getElementById('btn-chapter-select');
 const btnTransSelect = document.getElementById('btn-trans-select');
 const closeNavModalBtn = document.getElementById('close-nav-modal');
 
@@ -79,7 +81,7 @@ async function getTranslationData(code) {
 
   const path = `./data/${codeLower}/${codeLower}.json`;
   const response = await fetch(path);
-  if (!response.ok) throw new Error(`Translation not found at ${path}`);
+  if (!response.ok) throw new Error(`Translation file not found at ${path}`);
   
   const data = await response.json();
   translationCache[codeLower] = data;
@@ -99,7 +101,8 @@ async function loadChapter() {
 
     renderChapter(targetBook.name, targetChapter);
 
-    labelBookChapter.textContent = `${targetBook.name} ${state.chapter}`;
+    labelBook.textContent = targetBook.name;
+    labelChapter.textContent = `Ch. ${state.chapter}`;
     labelTranslation.textContent = state.translation.toUpperCase();
     metaTranslation.textContent = bibleData.translation || TRANSLATIONS[state.translation];
 
@@ -118,15 +121,11 @@ async function loadChapter() {
 function renderChapter(bookName, chapterData) {
   chapterTitle.textContent = `${bookName} ${chapterData.chapter}`;
   
-  versesList.innerHTML = chapterData.verses.map(v => {
-    // Optional helper for red letter formatting if JSON tags it
-    let formattedText = v.text;
-    return `
-      <div class="verse" data-verse="${v.verse}" onclick="toggleVerseSelection(this)">
-        <span class="verse-num">${v.verse}</span>${formattedText}
-      </div>
-    `;
-  }).join('');
+  versesList.innerHTML = chapterData.verses.map(v => `
+    <div class="verse" data-verse="${v.verse}" onclick="toggleVerseSelection(this)">
+      <span class="verse-num">${v.verse}</span>${v.text}
+    </div>
+  `).join('');
 }
 
 function toggleVerseSelection(el) {
@@ -154,7 +153,12 @@ function renderModalContent() {
       const btn = document.createElement('button');
       btn.className = `chip-btn ${b.name.toLowerCase() === state.book.toLowerCase() ? 'active' : ''}`;
       btn.textContent = b.name;
-      btn.onclick = () => { state.book = b.name; state.chapter = 1; state.modalType = 'chapters'; renderModalContent(); };
+      btn.onclick = () => {
+        state.book = b.name;
+        state.chapter = 1;
+        state.modalType = 'chapters';
+        renderModalContent();
+      };
       navGrid.appendChild(btn);
     });
   } else if (state.modalType === 'chapters') {
@@ -209,7 +213,7 @@ nextBtn.addEventListener('click', () => {
   }
 });
 
-// Settings Modal Handlers
+// Settings Handlers
 openSettingsBtn.addEventListener('click', () => {
   settingsModal.classList.add('open');
   overlay.classList.add('active');
@@ -225,20 +229,18 @@ overlay.addEventListener('click', () => { closeModal(); closeSettingsModal(); })
 closeNavModalBtn.addEventListener('click', closeModal);
 
 btnBookSelect.addEventListener('click', () => openModal('books'));
+btnChapterSelect.addEventListener('click', () => openModal('chapters'));
 btnTransSelect.addEventListener('click', () => openModal('translations'));
-
-function setTheme(theme) {
-  if (theme === 'parchment') document.body.removeAttribute('data-theme');
-  else document.body.setAttribute('data-theme', theme);
-  localStorage.setItem('bible_theme', theme);
-  updateActiveSegment('theme-control', theme);
-}
 
 function setFont(font, valKey = '') {
   document.documentElement.style.setProperty('--body-font', font);
   localStorage.setItem('bible_font', font);
   if (!valKey) {
-    valKey = font.includes('Playfair') ? 'Editorial' : font.includes('Inter') ? 'Sans' : 'Serif';
+    if (font.includes('Playfair')) valKey = 'editorial';
+    else if (font.includes('Inter')) valKey = 'sans';
+    else if (font.includes('Cinzel')) valKey = 'cinzel';
+    else if (font.includes('Fira')) valKey = 'mono';
+    else valKey = 'serif';
   }
   updateActiveSegment('font-control', valKey);
 }
@@ -258,21 +260,27 @@ function setTextAlign(align) {
   updateActiveSegment('align-control', align);
 }
 
+function setPanelColor(colorValue, element) {
+  document.documentElement.style.setProperty('--panel-bg', colorValue);
+  localStorage.setItem('bible_panel_color', colorValue);
+  if (element) {
+    document.querySelectorAll('#panel-gallery .gallery-chip').forEach(el => el.classList.remove('active'));
+    element.classList.add('active');
+  }
+}
+
 function setGalleryBg(bgValue, element) {
-  document.documentElement.style.setProperty('--bg-image', bgValue);
+  document.documentElement.style.setProperty('--bg-color', bgValue);
   localStorage.setItem('bible_bg_gallery', bgValue);
-  document.querySelectorAll('.gallery-chip').forEach(el => el.classList.remove('active'));
-  if (element) element.classList.add('active');
+  if (element) {
+    document.querySelectorAll('#bg-gallery .gallery-chip').forEach(el => el.classList.remove('active'));
+    element.classList.add('active');
+  }
 }
 
 function setTextColor(color) {
   document.documentElement.style.setProperty('--text-color', color);
   localStorage.setItem('bible_text_color', color);
-}
-
-function setRedLetterColor(color) {
-  document.documentElement.style.setProperty('--red-letter-color', color);
-  localStorage.setItem('bible_red_letter_color', color);
 }
 
 function toggleReaderMode() {
@@ -306,29 +314,23 @@ function updateStreak() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  const savedTheme = localStorage.getItem('bible_theme') || 'parchment';
   const savedFont = localStorage.getItem('bible_font');
   const savedAlign = localStorage.getItem('bible_text_align') || 'left';
   const savedBg = localStorage.getItem('bible_bg_gallery');
+  const savedPanel = localStorage.getItem('bible_panel_color');
   const savedTextColor = localStorage.getItem('bible_text_color');
-  const savedRedColor = localStorage.getItem('bible_red_letter_color');
   const isReaderMode = localStorage.getItem('bible_reader_mode') === 'true';
 
-  setTheme(savedTheme);
   if (savedFont) setFont(savedFont);
-  else setFont('Source Serif 4, Georgia, serif', 'Serif');
+  else setFont('Source Serif 4, Georgia, serif', 'serif');
+
   setTextAlign(savedAlign);
 
-  if (savedBg) {
-    document.documentElement.style.setProperty('--bg-image', savedBg);
-  }
+  if (savedBg) document.documentElement.style.setProperty('--bg-color', savedBg);
+  if (savedPanel) document.documentElement.style.setProperty('--panel-bg', savedPanel);
   if (savedTextColor) {
     document.documentElement.style.setProperty('--text-color', savedTextColor);
     document.getElementById('text-color-picker').value = savedTextColor;
-  }
-  if (savedRedColor) {
-    document.documentElement.style.setProperty('--red-letter-color', savedRedColor);
-    document.getElementById('red-letter-picker').value = savedRedColor;
   }
 
   if (isReaderMode) {
