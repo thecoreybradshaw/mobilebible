@@ -48,8 +48,8 @@ const BIBLE_BOOKS = [
 const TRANSLATIONS = {
   kjv: 'King James Version',
   web: 'World English Bible',
-  asv: 'American Standard Version'
-  bsb: 'Berean Standard Bible'
+  asv: 'American Standard Version',
+  bsb: 'Berean Standard Bible',
   ylt: 'Youngs Literal Translation'
 };
 
