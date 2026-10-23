@@ -188,19 +188,27 @@ function showToast(msg) {
   setTimeout(() => toastEl.classList.remove('show'), 2200);
 }
 
-// FULLSCREEN TOGGLE ENGINE
+// Check if the browser natively supports document-level fullscreen
+const supportsFullscreen = document.fullscreenEnabled || 
+                           document.webkitFullscreenEnabled;
+
 if (toggleFullscreenBtn) {
-  toggleFullscreenBtn.addEventListener('click', () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(err => {
-        console.warn(`Error attempting to enable fullscreen: ${err.message}`);
-      });
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
+  if (!supportsFullscreen) {
+    // Hide the button on browsers/devices (like iOS Safari) that don't support it
+    toggleFullscreenBtn.style.display = 'none';
+  } else {
+    toggleFullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.warn(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
       }
-    }
-  });
+    });
+  }
 }
 
 // Modal Handlers
