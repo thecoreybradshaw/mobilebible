@@ -96,7 +96,7 @@
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* --- HEADER & MODERN NAVIGATION BAR --- */
+    /* --- HEADER & NAVIGATION BAR --- */
     header {
       position: sticky;
       top: 0;
@@ -382,27 +382,68 @@
       border-color: var(--active-pill);
     }
 
-    /* Settings Side Drawer */
-    .drawer {
+    /* --- POP-UP SETTINGS MODAL --- */
+    .settings-modal {
       position: fixed;
-      top: 0;
-      right: -100%;
-      width: 100%;
-      max-width: 360px;
-      height: 100%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      width: calc(100% - 2rem);
+      max-width: 440px;
+      max-height: 85vh;
       background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
       z-index: 100;
-      box-shadow: -8px 0 25px rgba(0,0,0,0.15);
-      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 1.5rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       overflow-y: auto;
-      padding: calc(1.5rem + var(--safe-area-top)) 1.25rem 2rem 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.25rem;
     }
 
-    .drawer.open {
-      right: 0;
+    .settings-modal.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* LIVE PREVIEW CARD */
+    .preview-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.2rem;
+      text-align: var(--text-align);
+      font-family: var(--body-font);
+      font-size: var(--font-size);
+      line-height: var(--line-height);
+      color: var(--text-color);
+      transition: all 0.2s ease;
+    }
+
+    .preview-label {
+      font-family: var(--ui-font);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .preview-verse-num {
+      font-family: var(--ui-font);
+      font-size: 0.75em;
+      font-weight: 700;
+      color: var(--verse-num-color);
+      margin-right: 0.4rem;
+      vertical-align: super;
     }
 
     .setting-section {
@@ -477,7 +518,7 @@
     <button class="icon-btn" id="open-settings" aria-label="Settings">⚙️</button>
   </header>
 
-  <!-- MAIN READING CONTAINER -->
+  <!-- MAIN READER CONTENT -->
   <main id="reader-container">
     <div class="book-meta">
       <span class="translation-tag" id="meta-translation">King James Version</span>
@@ -511,26 +552,32 @@
     </div>
   </div>
 
-  <!-- SETTINGS DRAWER -->
-  <div class="drawer" id="settings-drawer">
+  <!-- POP-UP SETTINGS MODAL -->
+  <div class="settings-modal" id="settings-modal">
     <div class="sheet-header">
-      <div class="sheet-title">Display Settings</div>
+      <div class="sheet-title">Aesthetics & Typography</div>
       <button class="icon-btn" id="close-settings">✕</button>
+    </div>
+
+    <!-- LIVE PREVIEW BOX -->
+    <div class="preview-card" id="preview-box">
+      <span class="preview-label">Live Preview — John 1:1</span>
+      <span class="preview-verse-num">1</span>In the beginning was the Word, and the Word was with God, and the Word was God.
     </div>
 
     <!-- Theme Selection -->
     <div class="setting-section">
-      <label class="setting-label">Theme</label>
+      <label class="setting-label">Theme Preset</label>
       <div class="segmented-control" id="theme-control">
         <button data-val="parchment" onclick="setTheme('parchment')">Parchment</button>
         <button data-val="dark" onclick="setTheme('dark')">Dark</button>
-        <button data-val="light" onclick="setTheme('light')">Light</button>
+        <button data-val="light" onclick="setTheme('light')">Blank</button>
       </div>
     </div>
 
-    <!-- Typography Options -->
+    <!-- Typography -->
     <div class="setting-section">
-      <label class="setting-label">Typography</label>
+      <label class="setting-label">Font Style</label>
       <div class="segmented-control" id="font-control">
         <button data-val="Serif" onclick="setFont('Source Serif 4, Georgia, serif')">Serif</button>
         <button data-val="Sans" onclick="setFont('Inter, system-ui, sans-serif')">Sans</button>
@@ -549,7 +596,7 @@
 
     <!-- Alignment -->
     <div class="setting-section">
-      <label class="setting-label">Text Alignment</label>
+      <label class="setting-label">Alignment</label>
       <div class="segmented-control" id="align-control">
         <button data-val="left" onclick="setTextAlign('left')">Left</button>
         <button data-val="center" onclick="setTextAlign('center')">Center</button>
@@ -567,6 +614,15 @@
       <div class="toggle-row">
         <span>Verse Scroll Snap</span>
         <input type="checkbox" id="chk-scroll-mode" onchange="toggleScrollMode()" />
+      </div>
+    </div>
+
+    <!-- Custom Background Wallpaper -->
+    <div class="setting-section">
+      <label class="setting-label">Background Wallpaper</label>
+      <div class="toggle-row">
+        <input type="file" id="bg-uploader" accept="image/*" style="font-size: 0.8rem;" />
+        <button class="nav-btn" onclick="clearCustomBg()">Reset</button>
       </div>
     </div>
   </div>
