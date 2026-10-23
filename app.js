@@ -4,7 +4,9 @@ const state = {
   translation: localStorage.getItem('bible_translation') || 'kjv',
   book: localStorage.getItem('bible_book') || 'John',
   chapter: parseInt(localStorage.getItem('bible_chapter'), 10) || 1,
-  modalType: 'books'
+  modalType: 'books',
+  parallelTranslation: localStorage.getItem('bible_parallel_trans') || 'asv',
+  isParallelActive: localStorage.getItem('bible_parallel_mode') === 'true'
 };
 
 const translationCache = {};
@@ -95,6 +97,9 @@ async function getTranslationData(code) {
 async function loadChapter() {
   try {
     versesList.innerHTML = `<p style="text-align:center; padding: 2rem; opacity:0.6;">Loading scripture...</p>`;
+    const parallelList = document.getElementById('parallel-verses-list');
+    if (parallelList) parallelList.innerHTML = '';
+
     clearVerseSelection();
     
     const bibleData = await getTranslationData(state.translation);
@@ -111,6 +116,10 @@ async function loadChapter() {
     labelTranslation.textContent = state.translation.toUpperCase();
     metaTranslation.textContent = bibleData.translation || TRANSLATIONS[state.translation];
 
+    if (state.isParallelActive) {
+      await loadParallelChapter(targetBook.name, state.chapter);
+    }
+
     localStorage.setItem('bible_translation', state.translation);
     localStorage.setItem('bible_book', targetBook.name);
     localStorage.setItem('bible_chapter', state.chapter);
@@ -119,6 +128,28 @@ async function loadChapter() {
   } catch (error) {
     console.error(error);
     versesList.innerHTML = `<div style="text-align:center; padding: 3rem 1rem; color: #cc3333;">Chapter unavailable.</div>`;
+  }
+}
+
+async function loadParallelChapter(bookName, chapterNum) {
+  const parallelList = document.getElementById('parallel-verses-list');
+  if (!parallelList) return;
+
+  try {
+    const parallelData = await getTranslationData(state.parallelTranslation);
+    const pBook = parallelData.books.find(b => b.name.toLowerCase() === bookName.toLowerCase());
+    if (!pBook) return;
+
+    const pChapter = pBook.chapters.find(c => c.chapter === chapterNum);
+    if (!pChapter) return;
+
+    parallelList.innerHTML = pChapter.verses.map(v => `
+      <div class="verse" data-verse="${v.verse}">
+        <span class="verse-num">${v.verse}</span><span class="verse-text">${v.text}</span>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error("Parallel load error:", err);
   }
 }
 
@@ -157,7 +188,6 @@ function copySelectedVerses() {
   const selectedEls = Array.from(document.querySelectorAll('.verse.selected'));
   if (selectedEls.length === 0) return;
 
-  // Sort by verse number numerically
   selectedEls.sort((a, b) => parseInt(a.dataset.verse, 10) - parseInt(b.dataset.verse, 10));
 
   const numbers = selectedEls.map(el => parseInt(el.dataset.verse, 10));
@@ -194,7 +224,6 @@ const supportsFullscreen = document.fullscreenEnabled ||
 
 if (toggleFullscreenBtn) {
   if (!supportsFullscreen) {
-    // Hide the button on browsers/devices (like iOS Safari) that don't support it
     toggleFullscreenBtn.style.display = 'none';
   } else {
     toggleFullscreenBtn.addEventListener('click', () => {
@@ -394,10 +423,46 @@ function applyTextColor() {
   }
 }
 
+// PUSHABLE BUTTON TOGGLE HANDLERS
 function toggleReaderMode() {
-  const isActive = document.getElementById('chk-reader-mode').checked;
-  document.body.classList.toggle('reader-mode', isActive);
-  localStorage.setItem('bible_reader_mode', isActive);
+  const isReader = document.body.classList.toggle('reader-mode');
+  localStorage.setItem('bible_reader_mode', isReader);
+  updateActiveButton('btn-reader-mode', isReader);
+}
+
+function toggleScrollMode() {
+  const isScroll = document.body.classList.toggle('scroll-mode');
+  localStorage.setItem('bible_scroll_mode', isScroll);
+  updateActiveButton('btn-scroll-mode', isScroll);
+}
+
+function toggleParallelMode() {
+  state.isParallelActive = !state.isParallelActive;
+  document.body.classList.toggle('parallel-mode', state.isParallelActive);
+  localStorage.setItem('bible_parallel_mode', state.isParallelActive);
+  updateActiveButton('btn-parallel-mode', state.isParallelActive);
+
+  const parallelSection = document.getElementById('parallel-select-section');
+  if (parallelSection) {
+    parallelSection.style.display = state.isParallelActive ? 'flex' : 'none';
+  }
+
+  loadChapter();
+}
+
+function setParallelTranslation(code) {
+  state.parallelTranslation = code;
+  localStorage.setItem('bible_parallel_trans', code);
+  updateActiveSegment('parallel-trans-control', code);
+  loadChapter();
+}
+
+function updateActiveButton(btnId, isActive) {
+  const btn = document.getElementById(btnId);
+  if (btn) {
+    if (isActive) btn.classList.add('active');
+    else btn.classList.remove('active');
+  }
 }
 
 function updateActiveSegment(controlId, activeVal) {
@@ -416,7 +481,10 @@ window.addEventListener('DOMContentLoaded', () => {
   const savedBg = localStorage.getItem('bible_bg_gallery');
   const savedPanel = localStorage.getItem('bible_panel_color') || 'rgba(252, 250, 247, 0.85)';
   const savedTextColor = localStorage.getItem('bible_text_color');
+  
   const isReaderMode = localStorage.getItem('bible_reader_mode') === 'true';
+  const isScrollMode = localStorage.getItem('bible_scroll_mode') === 'true';
+  const isParallelMode = localStorage.getItem('bible_parallel_mode') === 'true';
 
   if (savedFont) setFont(savedFont);
   else setFont('Source Serif 4, Georgia, serif', 'serif');
@@ -441,8 +509,21 @@ window.addEventListener('DOMContentLoaded', () => {
 
   if (isReaderMode) {
     document.body.classList.add('reader-mode');
-    document.getElementById('chk-reader-mode').checked = true;
+    updateActiveButton('btn-reader-mode', true);
   }
+  if (isScrollMode) {
+    document.body.classList.add('scroll-mode');
+    updateActiveButton('btn-scroll-mode', true);
+  }
+  if (isParallelMode) {
+    state.isParallelActive = true;
+    document.body.classList.add('parallel-mode');
+    updateActiveButton('btn-parallel-mode', true);
+    const pSec = document.getElementById('parallel-select-section');
+    if (pSec) pSec.style.display = 'flex';
+  }
+
+  updateActiveSegment('parallel-trans-control', state.parallelTranslation);
 
   loadChapter();
 });
