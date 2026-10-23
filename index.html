@@ -118,6 +118,12 @@
       gap: 0.4rem;
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
     .nav-pill {
       padding: 0.5rem 0.85rem;
       display: flex;
@@ -145,7 +151,7 @@
       max-width: 680px;
       width: 100%;
       margin: 0 auto;
-      padding: 2rem 1.25rem calc(5rem + var(--safe-area-bottom)) 1.25rem;
+      padding: 2rem 1.25rem calc(6rem + var(--safe-area-bottom)) 1.25rem;
     }
 
     .book-meta {
@@ -186,12 +192,18 @@
       position: relative;
       border-radius: 14px;
       padding: 0.4rem 0.6rem;
-      transition: background 0.2s ease;
+      transition: background 0.2s ease, border-color 0.2s ease;
       cursor: pointer;
+      border: 1px solid transparent;
     }
 
-    .verse:active, .verse.selected {
+    .verse:active {
       background: rgba(0, 0, 0, 0.05);
+    }
+
+    .verse.selected {
+      background: rgba(184, 134, 11, 0.12);
+      border-color: rgba(184, 134, 11, 0.35);
     }
 
     .verse-num {
@@ -241,6 +253,71 @@
       padding: 0.55rem 1.25rem;
       flex: 0 1 120px;
       text-align: center;
+    }
+
+    /* --- FLOATING VERSE SELECTION ACTION BAR --- */
+    .verse-action-bar {
+      position: fixed;
+      bottom: calc(4.5rem + var(--safe-area-bottom));
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 0.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+      z-index: 20;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .verse-action-bar.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .action-count {
+      font-family: var(--ui-font);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--button-text-color);
+    }
+
+    .action-btn {
+      padding: 0.45rem 0.9rem;
+      font-size: 0.8rem;
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast {
+      position: fixed;
+      top: calc(4.5rem + var(--safe-area-top));
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: rgba(0, 0, 0, 0.85);
+      color: #ffffff;
+      font-family: var(--ui-font);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 0.6rem 1.2rem;
+      border-radius: 9999px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      z-index: 110;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
     }
 
     /* --- OVERLAY & MODALS --- */
@@ -534,7 +611,10 @@
         <span class="chevron">▼</span>
       </button>
     </div>
-    <button class="icon-btn" id="open-settings" aria-label="Settings">☰</button>
+    <div class="header-actions">
+      <button class="icon-btn" id="toggle-fullscreen" aria-label="Toggle Fullscreen" title="Fullscreen">⛶</button>
+      <button class="icon-btn" id="open-settings" aria-label="Settings">☰</button>
+    </div>
   </header>
 
   <!-- MAIN READER CONTENT -->
@@ -549,6 +629,16 @@
       <!-- Verses render dynamically here -->
     </div>
   </main>
+
+  <!-- FLOATING VERSE SELECTION ACTION BAR -->
+  <div class="verse-action-bar" id="verse-action-bar">
+    <span class="action-count" id="action-count">1 verse selected</span>
+    <button class="action-btn" onclick="copySelectedVerses()">📋 Copy</button>
+    <button class="action-btn" onclick="clearVerseSelection()">✕ Clear</button>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast">Copied to clipboard!</div>
 
   <!-- FOOTER NAVIGATION -->
   <footer>
