@@ -591,6 +591,42 @@
       font-weight: 500;
       color: var(--button-text-color);
     }
+    /* Parallel Side-by-Side Reading Grid */
+    .reader-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    body.parallel-mode .reader-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .parallel-column {
+      display: none;
+      border-left: 1px solid var(--border-color);
+      padding-left: 1rem;
+    }
+
+    body.parallel-mode .parallel-column {
+      display: block;
+    }
+
+    /* Scroll Snap Mode (One Verse at a Time) */
+    body.scroll-mode main {
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      height: calc(100vh - 140px);
+    }
+
+    body.scroll-mode .verse {
+      scroll-snap-align: center;
+      min-height: 45vh;
+      display: flex;
+      align-items: center;
+      font-size: 1.25em;
+    }
   </style>
 </head>
 <body>
@@ -625,8 +661,14 @@
       <div class="divider"></div>
     </div>
 
-    <div id="verses-list">
-      <!-- Verses render dynamically here -->
+    <!-- MAIN SINGLE / PARALLEL READING COLUMNS -->
+    <div class="reader-grid" id="reader-grid">
+      <div class="reader-column" id="verses-list">
+        <!-- Main Translation Verses Render Here -->
+      </div>
+      <div class="reader-column parallel-column" id="parallel-verses-list">
+        <!-- Secondary Parallel Translation Verses Render Here -->
+      </div>
     </div>
   </main>
 
@@ -663,7 +705,7 @@
   <!-- POP-UP SETTINGS MODAL (STATIC HEADER) -->
   <div class="settings-modal" id="settings-modal">
     <div class="settings-header-fixed">
-      <div class="sheet-title">Aesthetics & Typography</div>
+      <div class="sheet-title">Settings</div>
       <button class="icon-btn" id="close-settings">✕</button>
     </div>
 
@@ -676,7 +718,7 @@
 
       <!-- 8 Distinct Typography Choices -->
       <div class="setting-section">
-        <label class="setting-label">Font Style (8 Choices)</label>
+        <label class="setting-label">Font Style</label>
         <div class="segmented-control" id="font-control">
           <button data-val="serif" onclick="setFont('Source Serif 4, Georgia, serif', 'serif')">Serif</button>
           <button data-val="editorial" onclick="setFont('Playfair Display, serif', 'editorial')">Editorial</button>
@@ -750,12 +792,23 @@
         </div>
       </div>
 
-      <!-- Reading Modes -->
+      <!-- Reading Modes & Features -->
       <div class="setting-section">
-        <label class="setting-label">Reading Mode</label>
-        <div class="toggle-row">
-          <span>Hide Verse Numbers</span>
-          <input type="checkbox" id="chk-reader-mode" onchange="toggleReaderMode()" />
+        <label class="setting-label">Reading Options</label>
+        <div class="segmented-control">
+          <button id="btn-reader-mode" onclick="toggleReaderMode()">Hide Numbers</button>
+          <button id="btn-scroll-mode" onclick="toggleScrollMode()">Scroll Mode</button>
+          <button id="btn-parallel-mode" onclick="toggleParallelMode()">Parallel</button>
+        </div>
+      </div>
+
+      <!-- Parallel Translation Selector (Only shows when Parallel Mode is active) -->
+      <div class="setting-section" id="parallel-select-section" style="display: none;">
+        <label class="setting-label">Secondary Translation</label>
+        <div class="segmented-control" id="parallel-trans-control">
+          <button data-val="kjv" onclick="setParallelTranslation('kjv')">KJV</button>
+          <button data-val="web" onclick="setParallelTranslation('web')">WEB</button>
+          <button data-val="asv" onclick="setParallelTranslation('asv')">ASV</button>
         </div>
       </div>
     </div>
