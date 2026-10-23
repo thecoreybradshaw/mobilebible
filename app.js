@@ -58,8 +58,10 @@ const labelBook = document.getElementById('label-book');
 const labelChapter = document.getElementById('label-chapter');
 const labelTranslation = document.getElementById('label-translation');
 const metaTranslation = document.getElementById('meta-translation');
+const metaParallel = document.getElementById('meta-translation-parallel');
 const chapterTitle = document.getElementById('chapter-title');
 const versesList = document.getElementById('verses-list');
+const parallelVersesList = document.getElementById('parallel-verses-list');
 const prevBtn = document.getElementById('prev-chapter');
 const nextBtn = document.getElementById('next-chapter');
 
@@ -97,8 +99,7 @@ async function getTranslationData(code) {
 async function loadChapter() {
   try {
     versesList.innerHTML = `<p style="text-align:center; padding: 2rem; opacity:0.6;">Loading scripture...</p>`;
-    const parallelList = document.getElementById('parallel-verses-list');
-    if (parallelList) parallelList.innerHTML = '';
+    if (parallelVersesList) parallelVersesList.innerHTML = '';
 
     clearVerseSelection();
     
@@ -132,24 +133,29 @@ async function loadChapter() {
 }
 
 async function loadParallelChapter(bookName, chapterNum) {
-  const parallelList = document.getElementById('parallel-verses-list');
-  if (!parallelList) return;
+  if (!parallelVersesList) return;
 
   try {
     const parallelData = await getTranslationData(state.parallelTranslation);
+    
+    if (metaParallel) {
+      metaParallel.textContent = parallelData.translation || TRANSLATIONS[state.parallelTranslation];
+    }
+
     const pBook = parallelData.books.find(b => b.name.toLowerCase() === bookName.toLowerCase());
     if (!pBook) return;
 
     const pChapter = pBook.chapters.find(c => c.chapter === chapterNum);
     if (!pChapter) return;
 
-    parallelList.innerHTML = pChapter.verses.map(v => `
+    parallelVersesList.innerHTML = pChapter.verses.map(v => `
       <div class="verse" data-verse="${v.verse}">
         <span class="verse-num">${v.verse}</span><span class="verse-text">${v.text}</span>
       </div>
     `).join('');
   } catch (err) {
     console.error("Parallel load error:", err);
+    parallelVersesList.innerHTML = `<div style="text-align:center; padding: 3rem 1rem; color: #cc3333;">Translation file missing.</div>`;
   }
 }
 
@@ -457,6 +463,16 @@ function setParallelTranslation(code) {
   loadChapter();
 }
 
+// Dynamically generate parallel buttons from TRANSLATIONS object
+function renderParallelTranslationOptions() {
+  const control = document.getElementById('parallel-trans-control');
+  if (!control) return;
+  control.innerHTML = Object.entries(TRANSLATIONS).map(([code, name]) => `
+    <button data-val="${code}" onclick="setParallelTranslation('${code}')">${code.toUpperCase()}</button>
+  `).join('');
+  updateActiveSegment('parallel-trans-control', state.parallelTranslation);
+}
+
 function updateActiveButton(btnId, isActive) {
   const btn = document.getElementById(btnId);
   if (btn) {
@@ -523,7 +539,6 @@ window.addEventListener('DOMContentLoaded', () => {
     if (pSec) pSec.style.display = 'flex';
   }
 
-  updateActiveSegment('parallel-trans-control', state.parallelTranslation);
-
+  renderParallelTranslationOptions();
   loadChapter();
 });
