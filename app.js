@@ -105,10 +105,11 @@ const btnBookSelect = document.getElementById('btn-book-select');
 const btnTransSelect = document.getElementById('btn-trans-select');
 const closeNavModalBtn = document.getElementById('close-nav-modal');
 
-// Settings Drawer Elements
-const settingsDrawer = document.getElementById('settings-drawer');
+// Settings Modal Elements
+const settingsModal = document.getElementById('settings-modal');
 const openSettingsBtn = document.getElementById('open-settings');
 const closeSettingsBtn = document.getElementById('close-settings');
+const bgUploader = document.getElementById('bg-uploader');
 
 // 1. Fetch Translation Data (with Memory Caching)
 async function getTranslationData(code) {
@@ -279,21 +280,21 @@ nextBtn.addEventListener('click', () => {
   }
 });
 
-// 6. Settings & Drawer Controls
+// 6. Settings Modal & Aesthetics Handlers
 openSettingsBtn.addEventListener('click', () => {
-  settingsDrawer.classList.add('open');
+  settingsModal.classList.add('open');
   overlay.classList.add('active');
 });
 
-function closeSettingsDrawer() {
-  settingsDrawer.classList.remove('open');
+function closeSettingsModal() {
+  settingsModal.classList.remove('open');
   overlay.classList.remove('active');
 }
 
-closeSettingsBtn.addEventListener('click', closeSettingsDrawer);
+closeSettingsBtn.addEventListener('click', closeSettingsModal);
 overlay.addEventListener('click', () => {
   closeModal();
-  closeSettingsDrawer();
+  closeSettingsModal();
 });
 closeNavModalBtn.addEventListener('click', closeModal);
 
@@ -310,9 +311,17 @@ function setTheme(theme) {
   updateActiveSegment('theme-control', theme);
 }
 
-function setFont(font) {
+function setFont(font, valKey = '') {
   document.documentElement.style.setProperty('--body-font', font);
   localStorage.setItem('bible_font', font);
+  
+  // Find matching font val if not explicitly passed
+  if (!valKey) {
+    if (font.includes('Playfair')) valKey = 'Editorial';
+    else if (font.includes('Inter')) valKey = 'Sans';
+    else valKey = 'Serif';
+  }
+  updateActiveSegment('font-control', valKey);
 }
 
 let currentFontSize = parseFloat(localStorage.getItem('bible_font_size')) || 1.15;
@@ -342,11 +351,34 @@ function toggleScrollMode() {
   localStorage.setItem('bible_scroll_mode', isActive);
 }
 
+// Custom Wallpaper Upload Handler
+if (bgUploader) {
+  bgUploader.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const base64Img = `url('${evt.target.result}')`;
+        document.documentElement.style.setProperty('--bg-image', base64Img);
+        localStorage.setItem('bible_bg_img', base64Img);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
+
+function clearCustomBg() {
+  document.documentElement.style.setProperty('--bg-image', 'none');
+  localStorage.removeItem('bible_bg_img');
+  if (bgUploader) bgUploader.value = '';
+}
+
 function updateActiveSegment(controlId, activeVal) {
   const container = document.getElementById(controlId);
   if (!container) return;
   Array.from(container.children).forEach(btn => {
-    if (btn.getAttribute('data-val') === activeVal) {
+    const val = btn.getAttribute('data-val') || btn.textContent.trim();
+    if (val.toLowerCase() === activeVal.toLowerCase()) {
       btn.classList.add('active');
     } else {
       btn.classList.remove('active');
@@ -378,12 +410,21 @@ window.addEventListener('DOMContentLoaded', () => {
   const savedTheme = localStorage.getItem('bible_theme') || 'parchment';
   const savedFont = localStorage.getItem('bible_font');
   const savedAlign = localStorage.getItem('bible_text_align') || 'left';
+  const savedBg = localStorage.getItem('bible_bg_img');
   const isReaderMode = localStorage.getItem('bible_reader_mode') === 'true';
   const isScrollMode = localStorage.getItem('bible_scroll_mode') === 'true';
 
   setTheme(savedTheme);
-  if (savedFont) setFont(savedFont);
+  if (savedFont) {
+    setFont(savedFont);
+  } else {
+    setFont('Source Serif 4, Georgia, serif', 'Serif');
+  }
   setTextAlign(savedAlign);
+
+  if (savedBg) {
+    document.documentElement.style.setProperty('--bg-image', savedBg);
+  }
 
   if (isReaderMode) {
     document.body.classList.add('reader-mode');
