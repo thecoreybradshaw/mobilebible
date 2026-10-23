@@ -72,6 +72,11 @@ const closeNavModalBtn = document.getElementById('close-nav-modal');
 const settingsModal = document.getElementById('settings-modal');
 const openSettingsBtn = document.getElementById('open-settings');
 const closeSettingsBtn = document.getElementById('close-settings');
+const toggleFullscreenBtn = document.getElementById('toggle-fullscreen');
+
+const verseActionBar = document.getElementById('verse-action-bar');
+const actionCount = document.getElementById('action-count');
+const toastEl = document.getElementById('toast');
 
 async function getTranslationData(code) {
   const codeLower = code.toLowerCase();
@@ -89,6 +94,7 @@ async function getTranslationData(code) {
 async function loadChapter() {
   try {
     versesList.innerHTML = `<p style="text-align:center; padding: 2rem; opacity:0.6;">Loading scripture...</p>`;
+    clearVerseSelection();
     
     const bibleData = await getTranslationData(state.translation);
     const targetBook = bibleData.books.find(b => b.name.toLowerCase() === state.book.toLowerCase());
@@ -120,15 +126,83 @@ function renderChapter(bookName, chapterData) {
   
   versesList.innerHTML = chapterData.verses.map(v => `
     <div class="verse" data-verse="${v.verse}" onclick="toggleVerseSelection(this)">
-      <span class="verse-num">${v.verse}</span>${v.text}
+      <span class="verse-num">${v.verse}</span><span class="verse-text">${v.text}</span>
     </div>
   `).join('');
 }
 
+// VERSE SELECTION & CLIPBOARD COPY ENGINE
 function toggleVerseSelection(el) {
   el.classList.toggle('selected');
+  updateVerseActionBar();
 }
 
+function updateVerseActionBar() {
+  const selectedVerses = document.querySelectorAll('.verse.selected');
+  if (selectedVerses.length > 0) {
+    actionCount.textContent = `${selectedVerses.length} verse${selectedVerses.length > 1 ? 's' : ''} selected`;
+    verseActionBar.classList.add('active');
+  } else {
+    verseActionBar.classList.remove('active');
+  }
+}
+
+function clearVerseSelection() {
+  document.querySelectorAll('.verse.selected').forEach(el => el.classList.remove('selected'));
+  updateVerseActionBar();
+}
+
+function copySelectedVerses() {
+  const selectedEls = Array.from(document.querySelectorAll('.verse.selected'));
+  if (selectedEls.length === 0) return;
+
+  // Sort by verse number numerically
+  selectedEls.sort((a, b) => parseInt(a.dataset.verse, 10) - parseInt(b.dataset.verse, 10));
+
+  const numbers = selectedEls.map(el => parseInt(el.dataset.verse, 10));
+  const minNum = numbers[0];
+  const maxNum = numbers[numbers.length - 1];
+  const verseRef = minNum === maxNum ? `${minNum}` : `${minNum}-${maxNum}`;
+
+  const formattedVerses = selectedEls.map(el => {
+    const num = el.dataset.verse;
+    const text = el.querySelector('.verse-text').textContent.trim();
+    return `[${num}] ${text}`;
+  }).join(' ');
+
+  const fullText = `${state.book} ${state.chapter}:${verseRef} (${state.translation.toUpperCase()})\n"${formattedVerses}"`;
+
+  navigator.clipboard.writeText(fullText).then(() => {
+    showToast('Copied to clipboard!');
+    clearVerseSelection();
+  }).catch(err => {
+    console.error('Clipboard copy failed:', err);
+    showToast('Failed to copy text.');
+  });
+}
+
+function showToast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  setTimeout(() => toastEl.classList.remove('show'), 2200);
+}
+
+// FULLSCREEN TOGGLE ENGINE
+if (toggleFullscreenBtn) {
+  toggleFullscreenBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.warn(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  });
+}
+
+// Modal Handlers
 function openModal(type) {
   state.modalType = type;
   navModal.classList.add('open');
@@ -258,25 +332,21 @@ function setTextAlign(align) {
   updateActiveSegment('align-control', align);
 }
 
-// Dynamic Luminance & Contrast Engine for Bar Themes
 function setPanelColor(colorValue, element) {
   document.documentElement.style.setProperty('--panel-bg', colorValue);
   localStorage.setItem('bible_panel_color', colorValue);
 
-  // Extract RGBA numbers to calculate background brightness
   const rgbaMatch = colorValue.match(/\d+/g);
   if (rgbaMatch && rgbaMatch.length >= 3) {
     const [r, g, b] = rgbaMatch.map(Number);
     const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
 
     if (luminance > 0.5) {
-      // Light bar theme -> Use dark contrast buttons & dark icon/text colors
       document.documentElement.style.setProperty('--button-text-color', '#121110');
       document.documentElement.style.setProperty('--pill-bg', 'rgba(0, 0, 0, 0.06)');
       document.documentElement.style.setProperty('--pill-border', 'rgba(0, 0, 0, 0.12)');
       document.documentElement.style.setProperty('--border-color', 'rgba(0, 0, 0, 0.1)');
     } else {
-      // Dark bar theme -> Use crisp white contrast buttons & white icon/text colors
       document.documentElement.style.setProperty('--button-text-color', '#ffffff');
       document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.15)');
       document.documentElement.style.setProperty('--pill-border', 'rgba(255, 255, 255, 0.22)');
@@ -306,7 +376,6 @@ function setGalleryBg(bgValue, element) {
   }
 }
 
-// Explicit Save Handler for Desktop Text Color Picker
 function applyTextColor() {
   const colorInput = document.getElementById('text-color-picker');
   if (colorInput) {
