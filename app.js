@@ -231,13 +231,13 @@ function setFont(font, valKey = '') {
   document.documentElement.style.setProperty('--body-font', font);
   localStorage.setItem('bible_font', font);
   if (!valKey) {
-    if (font.includes('Playfair')) valKey = 'editorial';
+    if (font.includes('Playfair Display SC')) valKey = 'playfair-sc';
+    else if (font.includes('Cinzel Decorative')) valKey = 'cinzel-decor';
+    else if (font.includes('Playfair')) valKey = 'editorial';
     else if (font.includes('Lora')) valKey = 'lora';
     else if (font.includes('Inter')) valKey = 'sans';
     else if (font.includes('Cinzel')) valKey = 'cinzel';
     else if (font.includes('Fira')) valKey = 'mono';
-    else if (font.includes('Georgia')) valKey = 'georgia';
-    else if (font.includes('system-ui')) valKey = 'clean';
     else valKey = 'serif';
   }
   updateActiveSegment('font-control', valKey);
@@ -258,9 +258,32 @@ function setTextAlign(align) {
   updateActiveSegment('align-control', align);
 }
 
+// Dynamic Luminance & Contrast Engine for Bar Themes
 function setPanelColor(colorValue, element) {
   document.documentElement.style.setProperty('--panel-bg', colorValue);
   localStorage.setItem('bible_panel_color', colorValue);
+
+  // Extract RGBA numbers to calculate background brightness
+  const rgbaMatch = colorValue.match(/\d+/g);
+  if (rgbaMatch && rgbaMatch.length >= 3) {
+    const [r, g, b] = rgbaMatch.map(Number);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+
+    if (luminance > 0.5) {
+      // Light bar theme -> Use dark contrast buttons & dark icon/text colors
+      document.documentElement.style.setProperty('--button-text-color', '#121110');
+      document.documentElement.style.setProperty('--pill-bg', 'rgba(0, 0, 0, 0.06)');
+      document.documentElement.style.setProperty('--pill-border', 'rgba(0, 0, 0, 0.12)');
+      document.documentElement.style.setProperty('--border-color', 'rgba(0, 0, 0, 0.1)');
+    } else {
+      // Dark bar theme -> Use crisp white contrast buttons & white icon/text colors
+      document.documentElement.style.setProperty('--button-text-color', '#ffffff');
+      document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.15)');
+      document.documentElement.style.setProperty('--pill-border', 'rgba(255, 255, 255, 0.22)');
+      document.documentElement.style.setProperty('--border-color', 'rgba(255, 255, 255, 0.12)');
+    }
+  }
+
   if (element) {
     document.querySelectorAll('#panel-gallery .gallery-chip').forEach(el => el.classList.remove('active'));
     element.classList.add('active');
@@ -275,7 +298,7 @@ function setGalleryBg(bgValue, element) {
     document.documentElement.style.setProperty('--bg-image', 'none');
     document.documentElement.style.setProperty('--bg-color', bgValue);
   }
-  
+
   localStorage.setItem('bible_bg_gallery', bgValue);
   if (element) {
     document.querySelectorAll('#bg-gallery .gallery-chip').forEach(el => el.classList.remove('active'));
@@ -283,9 +306,14 @@ function setGalleryBg(bgValue, element) {
   }
 }
 
-function setTextColor(color) {
-  document.documentElement.style.setProperty('--text-color', color);
-  localStorage.setItem('bible_text_color', color);
+// Explicit Save Handler for Desktop Text Color Picker
+function applyTextColor() {
+  const colorInput = document.getElementById('text-color-picker');
+  if (colorInput) {
+    const chosenColor = colorInput.value;
+    document.documentElement.style.setProperty('--text-color', chosenColor);
+    localStorage.setItem('bible_text_color', chosenColor);
+  }
 }
 
 function toggleReaderMode() {
@@ -308,7 +336,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const savedFont = localStorage.getItem('bible_font');
   const savedAlign = localStorage.getItem('bible_text_align') || 'left';
   const savedBg = localStorage.getItem('bible_bg_gallery');
-  const savedPanel = localStorage.getItem('bible_panel_color');
+  const savedPanel = localStorage.getItem('bible_panel_color') || 'rgba(252, 250, 247, 0.85)';
   const savedTextColor = localStorage.getItem('bible_text_color');
   const isReaderMode = localStorage.getItem('bible_reader_mode') === 'true';
 
@@ -316,6 +344,7 @@ window.addEventListener('DOMContentLoaded', () => {
   else setFont('Source Serif 4, Georgia, serif', 'serif');
 
   setTextAlign(savedAlign);
+  setPanelColor(savedPanel);
 
   if (savedBg) {
     if (savedBg.includes('gradient')) {
@@ -327,7 +356,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  if (savedPanel) document.documentElement.style.setProperty('--panel-bg', savedPanel);
   if (savedTextColor) {
     document.documentElement.style.setProperty('--text-color', savedTextColor);
     document.getElementById('text-color-picker').value = savedTextColor;
