@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Bible Reader</title>
+  <meta name="theme-color" content="#fcfaf7" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- Google Fonts for Elegant Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+
+  <style>
+    /* --- ELEGANT DEFAULT THEME (PARCHMENT / EDITORIAL) --- */
+    :root {
+      --bg-color: #fcfaf7;
+      --text-color: #2c2523;
+      --heading-font: 'Playfair Display', Georgia, serif;
+      --body-font: 'Source Serif 4', Georgia, serif;
+      --accent-color: #8c6d3f;
+      --accent-gold: #b8860b;
+      --panel-bg: rgba(252, 250, 247, 0.88);
+      --border-color: #e8e2d8;
+      --verse-num-color: #a89f91;
+      --font-size: 1.15rem;
+      --line-height: 1.85;
+      --text-align: left;
+      --bg-image: none;
+      --card-bg: rgba(255, 255, 255, 0.6);
+      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    }
+
+    /* --- THEME VARIATIONS --- */
+    [data-theme="dark"] {
+      --bg-color: #161514;
+      --text-color: #e6e2dd;
+      --accent-color: #d4af37;
+      --accent-gold: #e6c667;
+      --panel-bg: rgba(22, 21, 20, 0.90);
+      --border-color: #2a2826;
+      --verse-num-color: #736e67;
+      --card-bg: rgba(30, 28, 27, 0.6);
+      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="light"] {
+      --bg-color: #ffffff;
+      --text-color: #1a1a1a;
+      --accent-color: #2b580c;
+      --accent-gold: #3b7a13;
+      --panel-bg: rgba(255, 255, 255, 0.92);
+      --border-color: #ebebeb;
+      --verse-num-color: #999999;
+      --card-bg: #ffffff;
+      --box-shadow: none;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      background-image: var(--bg-image);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: var(--text-color);
+      font-family: var(--body-font);
+      font-size: var(--font-size);
+      line-height: var(--line-height);
+      text-align: var(--text-align);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
+    /* --- TOP NAVIGATION BAR --- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--panel-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 1.25rem;
+      transition: background 0.3s ease;
+    }
+
+    .brand-title {
+      font-family: var(--heading-font);
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.05em;
+      color: var(--accent-color);
+      text-transform: uppercase;
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    select, button {
+      background: var(--card-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 0.45rem 0.85rem;
+      font-size: 0.85rem;
+      font-family: var(--body-font);
+      cursor: pointer;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    select:focus, button:focus {
+      border-color: var(--accent-color);
+    }
+
+    .icon-btn {
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--border-color);
+      background: var(--card-bg);
+      font-size: 1.1rem;
+    }
+
+    /* --- MAIN READING CONTAINER --- */
+    main {
+      flex: 1;
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 6rem 1.5rem;
+    }
+
+    .book-meta {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .translation-tag {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.4rem;
+    }
+
+    .chapter-header {
+      font-family: var(--heading-font);
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--text-color);
+      letter-spacing: -0.02em;
+    }
+
+    .divider {
+      width: 40px;
+      height: 2px;
+      background: var(--accent-gold);
+      margin: 1.2rem auto 0 auto;
+      opacity: 0.6;
+      border-radius: 2px;
+    }
+
+    .verse {
+      margin-bottom: 1.1rem;
+      position: relative;
+      border-radius: 8px;
+      padding: 0.35rem 0.5rem;
+      transition: background 0.2s ease;
+    }
+
+    .verse:active {
+      background: rgba(140, 109, 63, 0.08);
+    }
+
+    .verse-num {
+      font-family: var(--heading-font);
+      font-size: 0.8em;
+      font-weight: 600;
+      color: var(--verse-num-color);
+      margin-right: 0.45rem;
+      user-select: none;
+    }
+
+    /* Drop cap for first verse */
+    .verse[data-verse="1"]::first-letter {
+      font-family: var(--heading-font);
+      font-size: 1.25em;
+      font-weight: 700;
+      color: var(--accent-color);
+    }
+
+    /* Reader Mode Switch */
+    body.reader-mode .verse-num {
+      display: none;
+    }
+
+    /* Scroll Mode Snap */
+    body.scroll-mode main {
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+      height: calc(100vh - 120px);
+    }
+
+    body.scroll-mode .verse {
+      scroll-snap-align: center;
+      min-height: 45vh;
+      display: flex;
+      align-items: center;
+      font-size: 1.3em;
+    }
+
+    /* --- FOOTER NAVIGATION --- */
+    footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--panel-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 1.5rem;
+      z-index: 10;
+    }
+
+    .streak-pill {
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--text-color);
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+    }
+
+    /* --- SETTINGS DRAWER --- */
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      max-width: 380px;
+      height: 100%;
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 100;
+      box-shadow: -8px 0 25px rgba(0,0,0,0.15);
+      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow-y: auto;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    .drawer.open {
+      right: 0;
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+
+    .drawer-header h2 {
+      font-family: var(--heading-font);
+      font-size: 1.4rem;
+      color: var(--text-color);
+    }
+
+    .setting-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .setting-group label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+      color: var(--verse-num-color);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-group button {
+      flex: 1;
+      border-radius: 12px;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(2px);
+      z-index: 90;
+      display: none;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+  </style>
+</head>
+<body data-theme="parchment">
+
+  <!-- TOP NAVIGATION -->
+  <header>
+    <div class="brand-title">Scripture</div>
+    <div class="nav-controls">
+      <select id="translation-select">
+        <option value="web">WEB</option>
+        <option value="kjv">KJV</option>
+        <option value="asv">ASV</option>
+      </select>
+      <select id="book-select">
+        <option value="John">John</option>
+        <option value="Genesis">Genesis</option>
+      </select>
+      <select id="chapter-select">
+        <option value="1">Ch. 1</option>
+      </select>
+      <button class="icon-btn" id="open-settings" aria-label="Settings">⚙️</button>
+    </div>
+  </header>
+
+  <!-- BIBLE TEXT DISPLAY -->
+  <main id="reader-container">
+    <div class="book-meta">
+      <span class="translation-tag">World English Bible</span>
+      <h1 class="chapter-header" id="chapter-title">John 1</h1>
+      <div class="divider"></div>
+    </div>
+
+    <div id="verses-list">
+      <div class="verse" data-verse="1">
+        <span class="verse-num">1</span>In the beginning was the Word, and the Word was with God, and the Word was God.
+      </div>
+      <div class="verse" data-verse="2">
+        <span class="verse-num">2</span>The same was in the beginning with God.
+      </div>
+      <div class="verse" data-verse="3">
+        <span class="verse-num">3</span>All things were made through him. Without him was not anything made that has been made.
+      </div>
+      <div class="verse" data-verse="4">
+        <span class="verse-num">4</span>In him was life, and the life was the light of men.
+      </div>
+      <div class="verse" data-verse="5">
+        <span class="verse-num">5</span>The light shines in the darkness, and the darkness hasn't overcome it.
+      </div>
+    </div>
+  </main>
+
+  <!-- BOTTOM NAVIGATION -->
+  <footer>
+    <button id="prev-chapter">← Previous</button>
+    <div class="streak-pill">🔥 <span id="streak-count">1</span> Day Streak</div>
+    <button id="next-chapter">Next →</button>
+  </footer>
+
+  <!-- SETTINGS OVERLAY -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- SETTINGS DRAWER -->
+  <div class="drawer" id="settings-drawer">
+    <div class="drawer-header">
+      <h2>Reading Display</h2>
+      <button class="icon-btn" id="close-settings">✕</button>
+    </div>
+
+    <!-- Theme Selection -->
+    <div class="setting-group">
+      <label>Theme Aesthetics</label>
+      <div class="btn-group">
+        <button onclick="setTheme('parchment')">Parchment</button>
+        <button onclick="setTheme('dark')">Dark</button>
+        <button onclick="setTheme('light')">Blank Slate</button>
+      </div>
+    </div>
+
+    <!-- Typography Options -->
+    <div class="setting-group">
+      <label>Typography</label>
+      <div class="btn-group">
+        <button onclick="setFont('Source Serif 4, serif')">Serif</button>
+        <button onclick="setFont('system-ui, sans-serif')">Sans</button>
+        <button onclick="setFont('Playfair Display, serif')">Editorial</button>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <label>Text Size</label>
+      <div class="btn-group">
+        <button onclick="adjustFontSize(-0.1)">A-</button>
+        <button onclick="adjustFontSize(0.1)">A+</button>
+      </div>
+    </div>
+
+    <div class="setting-group">
+      <label>Alignment</label>
+      <div class="btn-group">
+        <button onclick="setTextAlign('left')">Left</button>
+        <button onclick="setTextAlign('center')">Center</button>
+        <button onclick="setTextAlign('justify')">Justify</button>
+      </div>
+    </div>
+
+    <!-- Reading Modes -->
+    <div class="setting-group">
+      <label>Special Modes</label>
+      <button id="toggle-reader-mode" onclick="toggleReaderMode()">Toggle Reader Mode (Hide Numbers)</button>
+      <button id="toggle-scroll-mode" onclick="toggleScrollMode()">Toggle Verse Scroll-Snap</button>
+    </div>
+
+    <!-- Custom Background Image -->
+    <div class="setting-group">
+      <label>Custom Background</label>
+      <input type="file" id="bg-uploader" accept="image/*" />
+      <button onclick="clearCustomBg()">Reset Background</button>
+    </div>
+  </div>
+
+  <!-- BASIC UI LOGIC & STORAGE PERSISTENCE -->
+  <script>
+    const drawer = document.getElementById('settings-drawer');
+    const overlay = document.getElementById('overlay');
+    const openBtn = document.getElementById('open-settings');
+    const closeBtn = document.getElementById('close-settings');
+    const bgUploader = document.getElementById('bg-uploader');
+
+    openBtn.addEventListener('click', () => { drawer.classList.add('open'); overlay.classList.add('active'); });
+    closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
+    function closeDrawer() { drawer.classList.remove('open'); overlay.classList.remove('active'); }
+
+    function setFont(font) {
+      document.documentElement.style.setProperty('--body-font', font);
+      localStorage.setItem('bible_font', font);
+    }
+
+    let currentFontSize = parseFloat(localStorage.getItem('bible_font_size')) || 1.15;
+    document.documentElement.style.setProperty('--font-size', `${currentFontSize}rem`);
+
+    function adjustFontSize(delta) {
+      currentFontSize = Math.min(Math.max(0.85, currentFontSize + delta), 2.2);
+      document.documentElement.style.setProperty('--font-size', `${currentFontSize}rem`);
+      localStorage.setItem('bible_font_size', currentFontSize);
+    }
+
+    function setTextAlign(align) {
+      document.documentElement.style.setProperty('--text-align', align);
+      localStorage.setItem('bible_text_align', align);
+    }
+
+    function toggleReaderMode() {
+      document.body.classList.toggle('reader-mode');
+      localStorage.setItem('bible_reader_mode', document.body.classList.contains('reader-mode'));
+    }
+
+    function toggleScrollMode() {
+      document.body.classList.toggle('scroll-mode');
+      localStorage.setItem('bible_scroll_mode', document.body.classList.contains('scroll-mode'));
+    }
+
+    function setTheme(theme) {
+      if (theme === 'parchment') {
+        document.body.removeAttribute('data-theme');
+      } else {
+        document.body.setAttribute('data-theme', theme);
+      }
+      localStorage.setItem('bible_theme', theme);
+    }
+
+    bgUploader.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          const base64Img = `url('${evt.target.result}')`;
+          document.documentElement.style.setProperty('--bg-image', base64Img);
+          localStorage.setItem('bible_bg_img', base64Img);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function clearCustomBg() {
+      document.documentElement.style.setProperty('--bg-image', 'none');
+      localStorage.removeItem('bible_bg_img');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('bible_theme');
+      const savedFont = localStorage.getItem('bible_font');
+      const savedAlign = localStorage.getItem('bible_text_align');
+      const savedBg = localStorage.getItem('bible_bg_img');
+      const isReaderMode = localStorage.getItem('bible_reader_mode') === 'true';
+      const isScrollMode = localStorage.getItem('bible_scroll_mode') === 'true';
+
+      if (savedTheme) setTheme(savedTheme);
+      if (savedFont) setFont(savedFont);
+      if (savedAlign) setTextAlign(savedAlign);
+      if (savedBg) document.documentElement.style.setProperty('--bg-image', savedBg);
+      if (isReaderMode) document.body.classList.add('reader-mode');
+      if (isScrollMode) document.body.classList.add('scroll-mode');
+    });
+  </script>
+</body>
+</html>
