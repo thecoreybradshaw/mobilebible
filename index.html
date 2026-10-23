@@ -654,20 +654,26 @@
   </header>
 
   <!-- MAIN READER CONTENT -->
+
   <main id="reader-container">
     <div class="book-meta">
-      <span class="translation-tag" id="meta-translation">King James Version</span>
       <h1 class="chapter-header" id="chapter-title">John 1</h1>
       <div class="divider"></div>
     </div>
 
     <!-- MAIN SINGLE / PARALLEL READING COLUMNS -->
     <div class="reader-grid" id="reader-grid">
-      <div class="reader-column" id="verses-list">
-        <!-- Main Translation Verses Render Here -->
+      <div class="reader-column">
+        <span class="translation-tag" id="meta-translation">King James Version</span>
+        <div id="verses-list">
+          <!-- Main Translation Verses Render Here -->
+        </div>
       </div>
-      <div class="reader-column parallel-column" id="parallel-verses-list">
-        <!-- Secondary Parallel Translation Verses Render Here -->
+      <div class="reader-column parallel-column">
+        <span class="translation-tag" id="meta-translation-parallel">American Standard Version</span>
+        <div id="parallel-verses-list">
+          <!-- Secondary Parallel Translation Verses Render Here -->
+        </div>
       </div>
     </div>
   </main>
@@ -806,9 +812,7 @@
       <div class="setting-section" id="parallel-select-section" style="display: none;">
         <label class="setting-label">Secondary Translation</label>
         <div class="segmented-control" id="parallel-trans-control">
-          <button data-val="kjv" onclick="setParallelTranslation('kjv')">KJV</button>
-          <button data-val="web" onclick="setParallelTranslation('web')">WEB</button>
-          <button data-val="asv" onclick="setParallelTranslation('asv')">ASV</button>
+          <!-- Populated dynamically from TRANSLATIONS object -->
         </div>
       </div>
     </div>
