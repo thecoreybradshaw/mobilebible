@@ -9,13 +9,13 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="manifest" href="manifest.json" />
 
-  <!-- Google Fonts for 8 Elegant Typography Styles -->
+  <!-- Google Fonts for 8 Distinct Typography Styles -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700&family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display+SC:wght@700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 
   <style>
-    /* --- DESIGN SYSTEM & GLASSMORPHISM VARIABLES --- */
+    /* --- DESIGN SYSTEM & DYNAMIC CONTRAST VARIABLES --- */
     :root {
       --bg-color: #fcfaf7;
       --text-color: #2c2523;
@@ -23,19 +23,23 @@
       --body-font: 'Source Serif 4', Georgia, serif;
       --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --accent-gold: #b8860b;
-      --panel-bg: rgba(252, 250, 247, 0.75);
-      --border-color: rgba(255, 255, 255, 0.4);
-      --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+      --panel-bg: rgba(252, 250, 247, 0.85);
+      --border-color: rgba(0, 0, 0, 0.08);
+      --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.06);
       --verse-num-color: #a89f91;
       --font-size: 1.15rem;
       --line-height: 1.85;
       --text-align: left;
       --bg-image: none;
       --card-bg: rgba(255, 255, 255, 0.65);
-      --pill-bg: rgba(255, 255, 255, 0.55);
-      --pill-border: rgba(255, 255, 255, 0.6);
+      
+      /* Dynamic Button Contrast System */
+      --pill-bg: rgba(255, 255, 255, 0.65);
+      --pill-border: rgba(0, 0, 0, 0.12);
+      --button-text-color: #2c2523;
       --active-pill: #2c2523;
       --active-pill-text: #ffffff;
+      
       --safe-area-top: env(safe-area-inset-top, 0px);
       --safe-area-bottom: env(safe-area-inset-bottom, 0px);
     }
@@ -74,7 +78,7 @@
       border-radius: 16px;
       border: 1px solid var(--pill-border);
       background: var(--pill-bg);
-      color: var(--text-color);
+      color: var(--button-text-color);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       box-shadow: var(--glass-shadow);
@@ -83,9 +87,8 @@
     }
 
     button:hover, .nav-pill:hover, .nav-btn:hover, .icon-btn:hover {
-      background: rgba(255, 255, 255, 0.85);
       transform: translateY(-2px);
-      box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.12);
+      box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.12);
     }
 
     button:active, .nav-pill:active, .nav-btn:active, .icon-btn:active, .chip-btn:active {
@@ -124,7 +127,7 @@
 
     .nav-pill .chevron {
       font-size: 0.6rem;
-      opacity: 0.5;
+      opacity: 0.6;
     }
 
     .icon-btn {
@@ -293,6 +296,7 @@
       font-family: var(--ui-font);
       font-size: 1rem;
       font-weight: 700;
+      color: var(--button-text-color);
     }
 
     .sheet-grid {
@@ -427,7 +431,7 @@
       border: none;
       background: transparent;
       box-shadow: none;
-      color: var(--text-color);
+      color: var(--button-text-color);
       padding: 0.55rem 0.2rem;
       font-size: 0.78rem;
       border-radius: 14px;
@@ -435,6 +439,7 @@
 
     .segmented-control button.active {
       background: var(--card-bg);
+      color: var(--text-color);
       box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
@@ -466,11 +471,19 @@
       padding: 0.6rem 1rem;
       border-radius: 18px;
       border: 1px solid var(--border-color);
+      gap: 0.5rem;
+    }
+
+    .color-picker-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
     }
 
     .color-picker-row span {
       font-size: 0.85rem;
       font-weight: 600;
+      color: var(--button-text-color);
     }
 
     .color-picker-row input[type="color"] {
@@ -480,6 +493,12 @@
       border-radius: 50%;
       cursor: pointer;
       background: transparent;
+    }
+
+    .save-color-btn {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.75rem;
+      border-radius: 12px;
     }
 
     .toggle-row {
@@ -493,6 +512,7 @@
       font-family: var(--ui-font);
       font-size: 0.9rem;
       font-weight: 500;
+      color: var(--button-text-color);
     }
   </style>
 </head>
@@ -564,7 +584,7 @@
         <span class="preview-verse-num">1</span>In the beginning was the Word, and the Word was with God, and the Word was God.
       </div>
 
-      <!-- 8 Typography Options -->
+      <!-- 8 Distinct Typography Choices -->
       <div class="setting-section">
         <label class="setting-label">Font Style (8 Choices)</label>
         <div class="segmented-control" id="font-control">
@@ -574,8 +594,8 @@
           <button data-val="sans" onclick="setFont('Inter, system-ui, sans-serif', 'sans')">Sans</button>
           <button data-val="cinzel" onclick="setFont('Cinzel, serif', 'cinzel')">Elegance</button>
           <button data-val="mono" onclick="setFont('Fira Code, monospace', 'mono')">Mono</button>
-          <button data-val="clean" onclick="setFont('system-ui, -apple-system, sans-serif', 'clean')">Clean</button>
-          <button data-val="georgia" onclick="setFont('Georgia, serif', 'georgia')">Georgia</button>
+          <button data-val="cinzel-decor" onclick="setFont('Cinzel Decorative, serif', 'cinzel-decor')">Majestic</button>
+          <button data-val="playfair-sc" onclick="setFont('Playfair Display SC, serif', 'playfair-sc')">Caps</button>
         </div>
       </div>
 
@@ -598,42 +618,45 @@
         </div>
       </div>
 
-      <!-- Expanded Bar Theme Palette -->
+      <!-- Expanded Bar Theme Palette with Spectrum Primary Colors -->
       <div class="setting-section">
         <label class="setting-label">Bar Theme Palette</label>
         <div class="gallery-grid" id="panel-gallery">
           <div class="gallery-chip" style="background: rgba(252, 250, 247, 0.85);" onclick="setPanelColor('rgba(252, 250, 247, 0.85)', this)" title="Parchment"></div>
           <div class="gallery-chip" style="background: rgba(18, 17, 16, 0.85);" onclick="setPanelColor('rgba(18, 17, 16, 0.85)', this)" title="Midnight"></div>
-          <div class="gallery-chip" style="background: rgba(245, 239, 230, 0.85);" onclick="setPanelColor('rgba(245, 239, 230, 0.85)', this)" title="Warm Sand"></div>
-          <div class="gallery-chip" style="background: rgba(234, 242, 237, 0.85);" onclick="setPanelColor('rgba(234, 242, 237, 0.85)', this)" title="Soft Sage"></div>
-          <div class="gallery-chip" style="background: rgba(22, 34, 28, 0.85);" onclick="setPanelColor('rgba(22, 34, 28, 0.85)', this)" title="Emerald Dark"></div>
-          <div class="gallery-chip" style="background: rgba(20, 24, 38, 0.85);" onclick="setPanelColor('rgba(20, 24, 38, 0.85)', this)" title="Deep Indigo"></div>
-          <div class="gallery-chip" style="background: rgba(247, 238, 240, 0.85);" onclick="setPanelColor('rgba(247, 238, 240, 0.85)', this)" title="Rose Quartz"></div>
-          <div class="gallery-chip" style="background: rgba(250, 246, 232, 0.85);" onclick="setPanelColor('rgba(250, 246, 232, 0.85)', this)" title="Cream Gold"></div>
+          <div class="gallery-chip" style="background: rgba(168, 50, 50, 0.85);" onclick="setPanelColor('rgba(168, 50, 50, 0.85)', this)" title="Crimson Red"></div>
+          <div class="gallery-chip" style="background: rgba(224, 112, 32, 0.85);" onclick="setPanelColor('rgba(224, 112, 32, 0.85)', this)" title="Warm Orange"></div>
+          <div class="gallery-chip" style="background: rgba(18, 140, 126, 0.85);" onclick="setPanelColor('rgba(18, 140, 126, 0.85)', this)" title="Cyan Teal"></div>
+          <div class="gallery-chip" style="background: rgba(30, 42, 74, 0.85);" onclick="setPanelColor('rgba(30, 42, 74, 0.85)', this)" title="Deep Blue"></div>
+          <div class="gallery-chip" style="background: rgba(88, 44, 132, 0.85);" onclick="setPanelColor('rgba(88, 44, 132, 0.85)', this)" title="Royal Purple"></div>
+          <div class="gallery-chip" style="background: rgba(34, 112, 62, 0.85);" onclick="setPanelColor('rgba(34, 112, 62, 0.85)', this)" title="Emerald Green"></div>
         </div>
       </div>
 
-      <!-- Expanded Background Gallery -->
+      <!-- Expanded Background Gallery with Spectrum Primary Colors -->
       <div class="setting-section">
         <label class="setting-label">Background Gallery</label>
         <div class="gallery-grid" id="bg-gallery">
           <div class="gallery-chip" style="background: #fcfaf7;" onclick="setGalleryBg('#fcfaf7', this)"></div>
           <div class="gallery-chip" style="background: #121110;" onclick="setGalleryBg('#121110', this)"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #f5efe6 0%, #e8decb 100%);" onclick="setGalleryBg('linear-gradient(135deg, #f5efe6 0%, #e8decb 100%)', this)"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #1e1b18 0%, #0d0c0b 100%);" onclick="setGalleryBg('linear-gradient(135deg, #1e1b18 0%, #0d0c0b 100%)', this)"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%);" onclick="setGalleryBg('linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%)', this)"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #16221c 0%, #0a120d 100%);" onclick="setGalleryBg('linear-gradient(135deg, #16221c 0%, #0a120d 100%)', this)"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #f7eef0 0%, #e6d3d7 100%);" onclick="setGalleryBg('linear-gradient(135deg, #f7eef0 0%, #e6d3d7 100%)', this)"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #141826 0%, #080a12 100%);" onclick="setGalleryBg('linear-gradient(135deg, #141826 0%, #080a12 100%)', this)"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #f7dcd0 0%, #e88a74 100%);" onclick="setGalleryBg('linear-gradient(135deg, #f7dcd0 0%, #e88a74 100%)', this)" title="Soft Crimson"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #ffe0b2 0%, #fb8c00 100%);" onclick="setGalleryBg('linear-gradient(135deg, #ffe0b2 0%, #fb8c00 100%)', this)" title="Sunset Orange"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #e0f7fa 0%, #00acc1 100%);" onclick="setGalleryBg('linear-gradient(135deg, #e0f7fa 0%, #00acc1 100%)', this)" title="Cyan Cyan"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #e1bee7 0%, #8e24aa 100%);" onclick="setGalleryBg('linear-gradient(135deg, #e1bee7 0%, #8e24aa 100%)', this)" title="Deep Purple"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%);" onclick="setGalleryBg('linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%)', this)" title="Soft Sage"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #141826 0%, #080a12 100%);" onclick="setGalleryBg('linear-gradient(135deg, #141826 0%, #080a12 100%)', this)" title="Midnight Indigo"></div>
         </div>
       </div>
 
-      <!-- Live Custom Text Color Picker -->
+      <!-- Live Custom Text Color Picker with Save Button -->
       <div class="setting-section">
         <label class="setting-label">Custom Text Color</label>
         <div class="color-picker-row">
           <span>Text Color</span>
-          <input type="color" id="text-color-picker" onchange="setTextColor(this.value)" value="#2c2523" />
+          <div class="color-picker-controls">
+            <input type="color" id="text-color-picker" value="#2c2523" />
+            <button class="save-color-btn" onclick="applyTextColor()">Apply Color</button>
+          </div>
         </div>
       </div>
 
