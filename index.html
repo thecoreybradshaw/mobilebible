@@ -24,16 +24,17 @@
       --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --accent-color: #8c6d3f;
       --accent-gold: #b8860b;
-      --panel-bg: rgba(252, 250, 247, 0.92);
+      --red-letter-color: #a33b20;
+      --panel-bg: rgba(252, 250, 247, 0.94);
       --border-color: rgba(0, 0, 0, 0.08);
       --verse-num-color: #a89f91;
       --font-size: 1.15rem;
       --line-height: 1.85;
       --text-align: left;
       --bg-image: none;
-      --card-bg: rgba(255, 255, 255, 0.7);
+      --card-bg: rgba(255, 255, 255, 0.8);
       --pill-bg: #f0ebe1;
-      --active-pill: #8c6d3f;
+      --active-pill: #2c2523;
       --active-pill-text: #ffffff;
       --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
       --safe-area-top: env(safe-area-inset-top, 0px);
@@ -46,14 +47,14 @@
       --text-color: #e6e2dd;
       --accent-color: #d4af37;
       --accent-gold: #e6c667;
-      --panel-bg: rgba(18, 17, 16, 0.92);
+      --red-letter-color: #d96b52;
+      --panel-bg: rgba(18, 17, 16, 0.94);
       --border-color: rgba(255, 255, 255, 0.1);
       --verse-num-color: #736e67;
-      --card-bg: rgba(28, 26, 25, 0.8);
+      --card-bg: rgba(28, 26, 25, 0.9);
       --pill-bg: #22201e;
-      --active-pill: #d4af37;
+      --active-pill: #e6e2dd;
       --active-pill-text: #121110;
-      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
 
     [data-theme="light"] {
@@ -61,14 +62,14 @@
       --text-color: #1a1a1a;
       --accent-color: #2b580c;
       --accent-gold: #3b7a13;
-      --panel-bg: rgba(255, 255, 255, 0.94);
+      --red-letter-color: #b32d00;
+      --panel-bg: rgba(255, 255, 255, 0.96);
       --border-color: #ebebeb;
       --verse-num-color: #999999;
       --card-bg: #f7f7f7;
       --pill-bg: #f0f0f0;
-      --active-pill: #2b580c;
+      --active-pill: #1a1a1a;
       --active-pill-text: #ffffff;
-      --box-shadow: none;
     }
 
     * {
@@ -94,6 +95,18 @@
       flex-direction: column;
       overflow-x: hidden;
       transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* --- MODERN BUTTON SYSTEM --- */
+    button, .nav-pill, .nav-btn, .icon-btn, .chip-btn {
+      font-family: var(--ui-font);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    button:active, .nav-pill:active, .nav-btn:active, .icon-btn:active, .chip-btn:active {
+      transform: scale(0.96);
+      opacity: 0.85;
     }
 
     /* --- HEADER & NAVIGATION BAR --- */
@@ -122,20 +135,12 @@
       color: var(--text-color);
       border: 1px solid var(--border-color);
       border-radius: 20px;
-      padding: 0.45rem 0.85rem;
-      font-family: var(--ui-font);
+      padding: 0.45rem 0.9rem;
       font-size: 0.85rem;
       font-weight: 600;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .nav-pill:active {
-      transform: scale(0.97);
-      opacity: 0.8;
+      gap: 0.4rem;
     }
 
     .nav-pill .chevron {
@@ -144,7 +149,6 @@
     }
 
     .icon-btn {
-      padding: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -155,12 +159,6 @@
       background: var(--pill-bg);
       color: var(--text-color);
       font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .icon-btn:active {
-      transform: scale(0.95);
     }
 
     /* --- MAIN READER CONTENT --- */
@@ -228,6 +226,10 @@
       vertical-align: super;
     }
 
+    .red-letter {
+      color: var(--red-letter-color);
+    }
+
     /* Drop Cap for Verse 1 */
     .verse[data-verse="1"]::first-letter {
       font-family: var(--heading-font);
@@ -236,28 +238,12 @@
       color: var(--accent-color);
     }
 
-    /* Dynamic Reader Mode Toggle */
     body.reader-mode .verse-num {
       display: none;
     }
     body.reader-mode .verse.selected .verse-num {
       display: inline-block;
       color: var(--accent-gold);
-    }
-
-    /* Scroll Mode Snap */
-    body.scroll-mode main {
-      scroll-snap-type: y mandatory;
-      overflow-y: scroll;
-      height: calc(100vh - 120px);
-    }
-
-    body.scroll-mode .verse {
-      scroll-snap-align: center;
-      min-height: 40vh;
-      display: flex;
-      align-items: center;
-      font-size: 1.25em;
     }
 
     /* --- BOTTOM BAR --- */
@@ -282,11 +268,9 @@
       color: var(--text-color);
       border: 1px solid var(--border-color);
       border-radius: 18px;
-      padding: 0.5rem 0.9rem;
-      font-family: var(--ui-font);
+      padding: 0.5rem 1rem;
       font-size: 0.82rem;
       font-weight: 600;
-      cursor: pointer;
     }
 
     .streak-pill {
@@ -304,8 +288,8 @@
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(6px);
       z-index: 90;
       opacity: 0;
       pointer-events: none;
@@ -317,7 +301,7 @@
       pointer-events: auto;
     }
 
-    /* Bottom Sheet Modals (Selection) */
+    /* Bottom Sheet Modals (Navigation) */
     .modal-sheet {
       position: fixed;
       bottom: -100%;
@@ -344,7 +328,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 0.5rem;
+      padding-bottom: 0.75rem;
       border-bottom: 1px solid var(--border-color);
     }
 
@@ -369,11 +353,9 @@
       color: var(--text-color);
       border-radius: 12px;
       padding: 0.65rem 0.2rem;
-      font-family: var(--ui-font);
       font-size: 0.85rem;
       font-weight: 600;
       text-align: center;
-      cursor: pointer;
     }
 
     .chip-btn.active {
@@ -382,7 +364,7 @@
       border-color: var(--active-pill);
     }
 
-    /* --- POP-UP SETTINGS MODAL --- */
+    /* --- STATIC-HEADER SETTINGS POP-UP MODAL --- */
     .settings-modal {
       position: fixed;
       top: 50%;
@@ -395,21 +377,37 @@
       border: 1px solid var(--border-color);
       border-radius: 24px;
       z-index: 100;
-      padding: 1.5rem;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
       opacity: 0;
       pointer-events: none;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      overflow: hidden;
     }
 
     .settings-modal.open {
       opacity: 1;
       pointer-events: auto;
       transform: translate(-50%, -50%) scale(1);
+    }
+
+    .settings-header-fixed {
+      padding: 1.25rem 1.5rem;
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .settings-scroll-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
     }
 
     /* LIVE PREVIEW CARD */
@@ -475,11 +473,9 @@
       background: transparent;
       color: var(--text-color);
       padding: 0.5rem;
-      font-family: var(--ui-font);
       font-size: 0.82rem;
       font-weight: 600;
       border-radius: 9px;
-      cursor: pointer;
     }
 
     .segmented-control button.active {
@@ -487,11 +483,57 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
+    /* Galleries */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+    }
+
+    .gallery-chip {
+      aspect-ratio: 16/10;
+      border-radius: 10px;
+      border: 2px solid var(--border-color);
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .gallery-chip.active {
+      border-color: var(--accent-color);
+      transform: scale(0.96);
+    }
+
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--pill-bg);
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .color-picker-row span {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .color-picker-row input[type="color"] {
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      background: transparent;
+    }
+
     .toggle-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.6rem 0;
+      padding: 0.4rem 0;
     }
 
     .toggle-row span {
@@ -552,77 +594,90 @@
     </div>
   </div>
 
-  <!-- POP-UP SETTINGS MODAL -->
+  <!-- POP-UP SETTINGS MODAL (STATIC HEADER) -->
   <div class="settings-modal" id="settings-modal">
-    <div class="sheet-header">
+    <div class="settings-header-fixed">
       <div class="sheet-title">Aesthetics & Typography</div>
       <button class="icon-btn" id="close-settings">✕</button>
     </div>
 
-    <!-- LIVE PREVIEW BOX -->
-    <div class="preview-card" id="preview-box">
-      <span class="preview-label">Live Preview — John 1:1</span>
-      <span class="preview-verse-num">1</span>In the beginning was the Word, and the Word was with God, and the Word was God.
-    </div>
-
-    <!-- Theme Selection -->
-    <div class="setting-section">
-      <label class="setting-label">Theme Preset</label>
-      <div class="segmented-control" id="theme-control">
-        <button data-val="parchment" onclick="setTheme('parchment')">Parchment</button>
-        <button data-val="dark" onclick="setTheme('dark')">Dark</button>
-        <button data-val="light" onclick="setTheme('light')">Blank</button>
+    <div class="settings-scroll-body">
+      <!-- LIVE PREVIEW BOX -->
+      <div class="preview-card" id="preview-box">
+        <span class="preview-label">Live Preview — John 1:1</span>
+        <span class="preview-verse-num">1</span>In the beginning was the Word, and the Word was with God, and the Word was God.
       </div>
-    </div>
 
-    <!-- Typography -->
-    <div class="setting-section">
-      <label class="setting-label">Font Style</label>
-      <div class="segmented-control" id="font-control">
-        <button data-val="Serif" onclick="setFont('Source Serif 4, Georgia, serif')">Serif</button>
-        <button data-val="Sans" onclick="setFont('Inter, system-ui, sans-serif')">Sans</button>
-        <button data-val="Editorial" onclick="setFont('Playfair Display, serif')">Editorial</button>
+      <!-- Theme Selection -->
+      <div class="setting-section">
+        <label class="setting-label">Theme Preset</label>
+        <div class="segmented-control" id="theme-control">
+          <button data-val="parchment" onclick="setTheme('parchment')">Parchment</button>
+          <button data-val="dark" onclick="setTheme('dark')">Dark</button>
+          <button data-val="light" onclick="setTheme('light')">Blank</button>
+        </div>
       </div>
-    </div>
 
-    <!-- Text Size -->
-    <div class="setting-section">
-      <label class="setting-label">Text Size</label>
-      <div class="segmented-control">
-        <button onclick="adjustFontSize(-0.10)">A-</button>
-        <button onclick="adjustFontSize(0.10)">A+</button>
+      <!-- Typography -->
+      <div class="setting-section">
+        <label class="setting-label">Font Style</label>
+        <div class="segmented-control" id="font-control">
+          <button data-val="Serif" onclick="setFont('Source Serif 4, Georgia, serif')">Serif</button>
+          <button data-val="Sans" onclick="setFont('Inter, system-ui, sans-serif')">Sans</button>
+          <button data-val="Editorial" onclick="setFont('Playfair Display, serif')">Editorial</button>
+        </div>
       </div>
-    </div>
 
-    <!-- Alignment -->
-    <div class="setting-section">
-      <label class="setting-label">Alignment</label>
-      <div class="segmented-control" id="align-control">
-        <button data-val="left" onclick="setTextAlign('left')">Left</button>
-        <button data-val="center" onclick="setTextAlign('center')">Center</button>
-        <button data-val="justify" onclick="setTextAlign('justify')">Justify</button>
+      <!-- Text Size -->
+      <div class="setting-section">
+        <label class="setting-label">Text Size</label>
+        <div class="segmented-control">
+          <button onclick="adjustFontSize(-0.10)">A-</button>
+          <button onclick="adjustFontSize(0.10)">A+</button>
+        </div>
       </div>
-    </div>
 
-    <!-- Reading Modes -->
-    <div class="setting-section">
-      <label class="setting-label">Reading Mode</label>
-      <div class="toggle-row">
-        <span>Hide Verse Numbers</span>
-        <input type="checkbox" id="chk-reader-mode" onchange="toggleReaderMode()" />
+      <!-- Alignment -->
+      <div class="setting-section">
+        <label class="setting-label">Alignment</label>
+        <div class="segmented-control" id="align-control">
+          <button data-val="left" onclick="setTextAlign('left')">Left</button>
+          <button data-val="center" onclick="setTextAlign('center')">Center</button>
+          <button data-val="justify" onclick="setTextAlign('justify')">Justify</button>
+        </div>
       </div>
-      <div class="toggle-row">
-        <span>Verse Scroll Snap</span>
-        <input type="checkbox" id="chk-scroll-mode" onchange="toggleScrollMode()" />
-      </div>
-    </div>
 
-    <!-- Custom Background Wallpaper -->
-    <div class="setting-section">
-      <label class="setting-label">Background Wallpaper</label>
-      <div class="toggle-row">
-        <input type="file" id="bg-uploader" accept="image/*" style="font-size: 0.8rem;" />
-        <button class="nav-btn" onclick="clearCustomBg()">Reset</button>
+      <!-- Background Gallery -->
+      <div class="setting-section">
+        <label class="setting-label">Background Gallery</label>
+        <div class="gallery-grid" id="bg-gallery">
+          <div class="gallery-chip" style="background: #fcfaf7;" onclick="setGalleryBg('none', this)" title="Solid Default"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #f5efe6 0%, #e8decb 100%);" onclick="setGalleryBg('linear-gradient(135deg, #f5efe6 0%, #e8decb 100%)', this)" title="Warm Sand"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #1e1b18 0%, #0d0c0b 100%);" onclick="setGalleryBg('linear-gradient(135deg, #1e1b18 0%, #0d0c0b 100%)', this)" title="Deep Charcoal"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%);" onclick="setGalleryBg('linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%)', this)" title="Soft Sage"></div>
+        </div>
+      </div>
+
+      <!-- Color Customization -->
+      <div class="setting-section">
+        <label class="setting-label">Color Customization</label>
+        <div class="color-picker-row">
+          <span>Text Color</span>
+          <input type="color" id="text-color-picker" onchange="setTextColor(this.value)" value="#2c2523" />
+        </div>
+        <div class="color-picker-row" style="margin-top: 0.5rem;">
+          <span>Words in Red Color</span>
+          <input type="color" id="red-letter-picker" onchange="setRedLetterColor(this.value)" value="#a33b20" />
+        </div>
+      </div>
+
+      <!-- Reading Modes -->
+      <div class="setting-section">
+        <label class="setting-label">Reading Mode</label>
+        <div class="toggle-row">
+          <span>Hide Verse Numbers</span>
+          <input type="checkbox" id="chk-reader-mode" onchange="toggleReaderMode()" />
+        </div>
       </div>
     </div>
   </div>
