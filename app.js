@@ -268,7 +268,14 @@ function setPanelColor(colorValue, element) {
 }
 
 function setGalleryBg(bgValue, element) {
-  document.documentElement.style.setProperty('--bg-color', bgValue);
+  if (bgValue.includes('gradient')) {
+    document.documentElement.style.setProperty('--bg-image', bgValue);
+    document.documentElement.style.setProperty('--bg-color', 'transparent');
+  } else {
+    document.documentElement.style.setProperty('--bg-image', 'none');
+    document.documentElement.style.setProperty('--bg-color', bgValue);
+  }
+  
   localStorage.setItem('bible_bg_gallery', bgValue);
   if (element) {
     document.querySelectorAll('#bg-gallery .gallery-chip').forEach(el => el.classList.remove('active'));
@@ -310,7 +317,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setTextAlign(savedAlign);
 
-  if (savedBg) document.documentElement.style.setProperty('--bg-color', savedBg);
+  if (savedBg) {
+    if (savedBg.includes('gradient')) {
+      document.documentElement.style.setProperty('--bg-image', savedBg);
+      document.documentElement.style.setProperty('--bg-color', 'transparent');
+    } else {
+      document.documentElement.style.setProperty('--bg-image', 'none');
+      document.documentElement.style.setProperty('--bg-color', savedBg);
+    }
+  }
+
   if (savedPanel) document.documentElement.style.setProperty('--panel-bg', savedPanel);
   if (savedTextColor) {
     document.documentElement.style.setProperty('--text-color', savedTextColor);
