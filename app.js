@@ -1,6 +1,5 @@
 // --- BIBLE APP LOGIC & STATE ENGINE ---
 
-// Global State
 const state = {
   translation: localStorage.getItem('bible_translation') || 'kjv',
   book: localStorage.getItem('bible_book') || 'John',
@@ -52,7 +51,6 @@ const TRANSLATIONS = {
   asv: 'American Standard Version'
 };
 
-// UI Elements
 const labelBook = document.getElementById('label-book');
 const labelChapter = document.getElementById('label-chapter');
 const labelTranslation = document.getElementById('label-translation');
@@ -110,7 +108,6 @@ async function loadChapter() {
     localStorage.setItem('bible_book', targetBook.name);
     localStorage.setItem('bible_chapter', state.chapter);
 
-    updateStreak();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (error) {
     console.error(error);
@@ -132,7 +129,6 @@ function toggleVerseSelection(el) {
   el.classList.toggle('selected');
 }
 
-// Modal Handlers
 function openModal(type) {
   state.modalType = type;
   navModal.classList.add('open');
@@ -213,7 +209,6 @@ nextBtn.addEventListener('click', () => {
   }
 });
 
-// Settings Handlers
 openSettingsBtn.addEventListener('click', () => {
   settingsModal.classList.add('open');
   overlay.classList.add('active');
@@ -237,9 +232,12 @@ function setFont(font, valKey = '') {
   localStorage.setItem('bible_font', font);
   if (!valKey) {
     if (font.includes('Playfair')) valKey = 'editorial';
+    else if (font.includes('Lora')) valKey = 'lora';
     else if (font.includes('Inter')) valKey = 'sans';
     else if (font.includes('Cinzel')) valKey = 'cinzel';
     else if (font.includes('Fira')) valKey = 'mono';
+    else if (font.includes('Georgia')) valKey = 'georgia';
+    else if (font.includes('system-ui')) valKey = 'clean';
     else valKey = 'serif';
   }
   updateActiveSegment('font-control', valKey);
@@ -297,20 +295,6 @@ function updateActiveSegment(controlId, activeVal) {
     if (val.toLowerCase() === activeVal.toLowerCase()) btn.classList.add('active');
     else btn.classList.remove('active');
   });
-}
-
-function updateStreak() {
-  const today = new Date().toISOString().slice(0, 10);
-  let streakData = JSON.parse(localStorage.getItem('bible_streak_data')) || { lastDate: '', count: 0 };
-
-  if (streakData.lastDate !== today) {
-    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
-    if (streakData.lastDate === yesterday) streakData.count++;
-    else streakData.count = 1;
-    streakData.lastDate = today;
-    localStorage.setItem('bible_streak_data', JSON.stringify(streakData));
-  }
-  document.getElementById('streak-count').textContent = streakData.count;
 }
 
 window.addEventListener('DOMContentLoaded', () => {
