@@ -2,48 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Bible Reader</title>
   <meta name="theme-color" content="#fcfaf7" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="manifest" href="manifest.json" />
 
   <!-- Google Fonts for Elegant Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    /* --- ELEGANT DEFAULT THEME (PARCHMENT / EDITORIAL) --- */
+    /* --- DESIGN SYSTEM & CSS VARIABLES --- */
     :root {
       --bg-color: #fcfaf7;
       --text-color: #2c2523;
       --heading-font: 'Playfair Display', Georgia, serif;
       --body-font: 'Source Serif 4', Georgia, serif;
+      --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --accent-color: #8c6d3f;
       --accent-gold: #b8860b;
-      --panel-bg: rgba(252, 250, 247, 0.88);
-      --border-color: #e8e2d8;
+      --panel-bg: rgba(252, 250, 247, 0.92);
+      --border-color: rgba(0, 0, 0, 0.08);
       --verse-num-color: #a89f91;
       --font-size: 1.15rem;
       --line-height: 1.85;
       --text-align: left;
       --bg-image: none;
-      --card-bg: rgba(255, 255, 255, 0.6);
-      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      --card-bg: rgba(255, 255, 255, 0.7);
+      --pill-bg: #f0ebe1;
+      --active-pill: #8c6d3f;
+      --active-pill-text: #ffffff;
+      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      --safe-area-top: env(safe-area-inset-top, 0px);
+      --safe-area-bottom: env(safe-area-inset-bottom, 0px);
     }
 
     /* --- THEME VARIATIONS --- */
     [data-theme="dark"] {
-      --bg-color: #161514;
+      --bg-color: #121110;
       --text-color: #e6e2dd;
       --accent-color: #d4af37;
       --accent-gold: #e6c667;
-      --panel-bg: rgba(22, 21, 20, 0.90);
-      --border-color: #2a2826;
+      --panel-bg: rgba(18, 17, 16, 0.92);
+      --border-color: rgba(255, 255, 255, 0.1);
       --verse-num-color: #736e67;
-      --card-bg: rgba(30, 28, 27, 0.6);
+      --card-bg: rgba(28, 26, 25, 0.8);
+      --pill-bg: #22201e;
+      --active-pill: #d4af37;
+      --active-pill-text: #121110;
       --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
 
@@ -52,10 +61,13 @@
       --text-color: #1a1a1a;
       --accent-color: #2b580c;
       --accent-gold: #3b7a13;
-      --panel-bg: rgba(255, 255, 255, 0.92);
+      --panel-bg: rgba(255, 255, 255, 0.94);
       --border-color: #ebebeb;
       --verse-num-color: #999999;
-      --card-bg: #ffffff;
+      --card-bg: #f7f7f7;
+      --pill-bg: #f0f0f0;
+      --active-pill: #2b580c;
+      --active-pill-text: #ffffff;
       --box-shadow: none;
     }
 
@@ -81,55 +93,54 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      transition: background-color 0.4s ease, color 0.4s ease;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    /* --- TOP NAVIGATION BAR --- */
+    /* --- HEADER & MODERN NAVIGATION BAR --- */
     header {
       position: sticky;
       top: 0;
       z-index: 10;
       background: var(--panel-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.85rem 1.25rem;
-      transition: background 0.3s ease;
+      padding: calc(0.6rem + var(--safe-area-top)) 1rem 0.6rem 1rem;
     }
 
-    .brand-title {
-      font-family: var(--heading-font);
-      font-weight: 700;
-      font-size: 1.1rem;
-      letter-spacing: 0.05em;
-      color: var(--accent-color);
-      text-transform: uppercase;
-    }
-
-    .nav-controls {
+    .nav-pill-group {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.5rem;
     }
 
-    select, button {
-      background: var(--card-bg);
+    .nav-pill {
+      background: var(--pill-bg);
       color: var(--text-color);
       border: 1px solid var(--border-color);
       border-radius: 20px;
       padding: 0.45rem 0.85rem;
+      font-family: var(--ui-font);
       font-size: 0.85rem;
-      font-family: var(--body-font);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
       cursor: pointer;
-      outline: none;
       transition: all 0.2s ease;
     }
 
-    select:focus, button:focus {
-      border-color: var(--accent-color);
+    .nav-pill:active {
+      transform: scale(0.97);
+      opacity: 0.8;
+    }
+
+    .nav-pill .chevron {
+      font-size: 0.65rem;
+      opacity: 0.6;
     }
 
     .icon-btn {
@@ -141,83 +152,97 @@
       width: 38px;
       height: 38px;
       border: 1px solid var(--border-color);
-      background: var(--card-bg);
-      font-size: 1.1rem;
+      background: var(--pill-bg);
+      color: var(--text-color);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    /* --- MAIN READING CONTAINER --- */
+    .icon-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* --- MAIN READER CONTENT --- */
     main {
       flex: 1;
       max-width: 680px;
       width: 100%;
       margin: 0 auto;
-      padding: 2.5rem 1.5rem 6rem 1.5rem;
+      padding: 2rem 1.25rem calc(5rem + var(--safe-area-bottom)) 1.25rem;
     }
 
     .book-meta {
       text-align: center;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
     }
 
     .translation-tag {
-      font-size: 0.75rem;
+      font-family: var(--ui-font);
+      font-size: 0.72rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--accent-gold);
       font-weight: 600;
       display: block;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.3rem;
     }
 
     .chapter-header {
       font-family: var(--heading-font);
-      font-size: 2.4rem;
+      font-size: 2.2rem;
       font-weight: 700;
       color: var(--text-color);
       letter-spacing: -0.02em;
     }
 
     .divider {
-      width: 40px;
+      width: 36px;
       height: 2px;
       background: var(--accent-gold);
-      margin: 1.2rem auto 0 auto;
+      margin: 1rem auto 0 auto;
       opacity: 0.6;
       border-radius: 2px;
     }
 
     .verse {
-      margin-bottom: 1.1rem;
+      margin-bottom: 1rem;
       position: relative;
       border-radius: 8px;
-      padding: 0.35rem 0.5rem;
+      padding: 0.4rem 0.5rem;
       transition: background 0.2s ease;
+      cursor: pointer;
     }
 
-    .verse:active {
-      background: rgba(140, 109, 63, 0.08);
+    .verse:active, .verse.selected {
+      background: rgba(140, 109, 63, 0.12);
     }
 
     .verse-num {
-      font-family: var(--heading-font);
-      font-size: 0.8em;
-      font-weight: 600;
+      font-family: var(--ui-font);
+      font-size: 0.75em;
+      font-weight: 700;
       color: var(--verse-num-color);
       margin-right: 0.45rem;
       user-select: none;
+      vertical-align: super;
     }
 
-    /* Drop cap for first verse */
+    /* Drop Cap for Verse 1 */
     .verse[data-verse="1"]::first-letter {
       font-family: var(--heading-font);
-      font-size: 1.25em;
+      font-size: 1.3em;
       font-weight: 700;
       color: var(--accent-color);
     }
 
-    /* Reader Mode Switch */
+    /* Dynamic Reader Mode Toggle */
     body.reader-mode .verse-num {
       display: none;
+    }
+    body.reader-mode .verse.selected .verse-num {
+      display: inline-block;
+      color: var(--accent-gold);
     }
 
     /* Scroll Mode Snap */
@@ -229,114 +254,209 @@
 
     body.scroll-mode .verse {
       scroll-snap-align: center;
-      min-height: 45vh;
+      min-height: 40vh;
       display: flex;
       align-items: center;
-      font-size: 1.3em;
+      font-size: 1.25em;
     }
 
-    /* --- FOOTER NAVIGATION --- */
+    /* --- BOTTOM BAR --- */
     footer {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
       background: var(--panel-bg);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-top: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.85rem 1.5rem;
+      padding: 0.75rem 1.25rem calc(0.75rem + var(--safe-area-bottom)) 1.25rem;
       z-index: 10;
     }
 
-    .streak-pill {
+    .nav-btn {
+      background: var(--pill-bg);
+      color: var(--text-color);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 0.5rem 0.9rem;
+      font-family: var(--ui-font);
       font-size: 0.82rem;
       font-weight: 600;
-      letter-spacing: 0.02em;
+      cursor: pointer;
+    }
+
+    .streak-pill {
+      font-family: var(--ui-font);
+      font-size: 0.8rem;
+      font-weight: 600;
       color: var(--text-color);
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      padding: 0.4rem 0.9rem;
+      padding: 0.45rem 0.85rem;
       border-radius: 20px;
     }
 
-    /* --- SETTINGS DRAWER --- */
+    /* --- OVERLAY & MODALS --- */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 90;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Bottom Sheet Modals (Selection) */
+    .modal-sheet {
+      position: fixed;
+      bottom: -100%;
+      left: 0;
+      right: 0;
+      max-height: 80vh;
+      background: var(--bg-color);
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
+      z-index: 100;
+      padding: 1.5rem 1.25rem calc(1.5rem + var(--safe-area-bottom)) 1.25rem;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+      transition: bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .modal-sheet.open {
+      bottom: 0;
+    }
+
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sheet-title {
+      font-family: var(--ui-font);
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .sheet-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+      gap: 0.6rem;
+      overflow-y: auto;
+      max-height: 50vh;
+      padding: 0.5rem 0;
+    }
+
+    .chip-btn {
+      background: var(--pill-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      border-radius: 12px;
+      padding: 0.65rem 0.2rem;
+      font-family: var(--ui-font);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .chip-btn.active {
+      background: var(--active-pill);
+      color: var(--active-pill-text);
+      border-color: var(--active-pill);
+    }
+
+    /* Settings Side Drawer */
     .drawer {
       position: fixed;
       top: 0;
       right: -100%;
       width: 100%;
-      max-width: 380px;
+      max-width: 360px;
       height: 100%;
-      background: var(--panel-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: var(--bg-color);
       z-index: 100;
       box-shadow: -8px 0 25px rgba(0,0,0,0.15);
       transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       overflow-y: auto;
-      padding: 2rem 1.5rem;
+      padding: calc(1.5rem + var(--safe-area-top)) 1.25rem 2rem 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 1.75rem;
+      gap: 1.5rem;
     }
 
     .drawer.open {
       right: 0;
     }
 
-    .drawer-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 1rem;
-    }
-
-    .drawer-header h2 {
-      font-family: var(--heading-font);
-      font-size: 1.4rem;
-      color: var(--text-color);
-    }
-
-    .setting-group {
+    .setting-section {
       display: flex;
       flex-direction: column;
       gap: 0.6rem;
     }
 
-    .setting-group label {
-      font-size: 0.75rem;
+    .setting-label {
+      font-family: var(--ui-font);
+      font-size: 0.72rem;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 600;
+      letter-spacing: 0.08em;
+      font-weight: 700;
       color: var(--verse-num-color);
     }
 
-    .btn-group {
+    .segmented-control {
       display: flex;
-      gap: 0.5rem;
-    }
-
-    .btn-group button {
-      flex: 1;
+      background: var(--pill-bg);
+      padding: 3px;
       border-radius: 12px;
+      gap: 2px;
     }
 
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(2px);
-      z-index: 90;
-      display: none;
+    .segmented-control button {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text-color);
+      padding: 0.5rem;
+      font-family: var(--ui-font);
+      font-size: 0.82rem;
+      font-weight: 600;
+      border-radius: 9px;
+      cursor: pointer;
     }
 
-    .overlay.active {
-      display: block;
+    .segmented-control button.active {
+      background: var(--card-bg);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0;
+    }
+
+    .toggle-row span {
+      font-family: var(--ui-font);
+      font-size: 0.9rem;
+      font-weight: 500;
     }
   </style>
 </head>
@@ -344,213 +464,113 @@
 
   <!-- TOP NAVIGATION -->
   <header>
-    <div class="brand-title">Scripture</div>
-    <div class="nav-controls">
-      <select id="translation-select">
-        <option value="web">WEB</option>
-        <option value="kjv">KJV</option>
-        <option value="asv">ASV</option>
-      </select>
-      <select id="book-select">
-        <option value="John">John</option>
-        <option value="Genesis">Genesis</option>
-      </select>
-      <select id="chapter-select">
-        <option value="1">Ch. 1</option>
-      </select>
-      <button class="icon-btn" id="open-settings" aria-label="Settings">⚙️</button>
+    <div class="nav-pill-group">
+      <button class="nav-pill" id="btn-book-select">
+        <span id="label-book-chapter">John 1</span>
+        <span class="chevron">▼</span>
+      </button>
+      <button class="nav-pill" id="btn-trans-select">
+        <span id="label-translation">KJV</span>
+        <span class="chevron">▼</span>
+      </button>
     </div>
+    <button class="icon-btn" id="open-settings" aria-label="Settings">⚙️</button>
   </header>
 
-  <!-- BIBLE TEXT DISPLAY -->
+  <!-- MAIN READING CONTAINER -->
   <main id="reader-container">
     <div class="book-meta">
-      <span class="translation-tag">World English Bible</span>
+      <span class="translation-tag" id="meta-translation">King James Version</span>
       <h1 class="chapter-header" id="chapter-title">John 1</h1>
       <div class="divider"></div>
     </div>
 
     <div id="verses-list">
-      <div class="verse" data-verse="1">
-        <span class="verse-num">1</span>In the beginning was the Word, and the Word was with God, and the Word was God.
-      </div>
-      <div class="verse" data-verse="2">
-        <span class="verse-num">2</span>The same was in the beginning with God.
-      </div>
-      <div class="verse" data-verse="3">
-        <span class="verse-num">3</span>All things were made through him. Without him was not anything made that has been made.
-      </div>
-      <div class="verse" data-verse="4">
-        <span class="verse-num">4</span>In him was life, and the life was the light of men.
-      </div>
-      <div class="verse" data-verse="5">
-        <span class="verse-num">5</span>The light shines in the darkness, and the darkness hasn't overcome it.
-      </div>
+      <!-- Verses will render dynamically here -->
     </div>
   </main>
 
-  <!-- BOTTOM NAVIGATION -->
+  <!-- FOOTER NAVIGATION -->
   <footer>
-    <button id="prev-chapter">← Previous</button>
+    <button class="nav-btn" id="prev-chapter">← Prev</button>
     <div class="streak-pill">🔥 <span id="streak-count">1</span> Day Streak</div>
-    <button id="next-chapter">Next →</button>
+    <button class="nav-btn" id="next-chapter">Next →</button>
   </footer>
 
-  <!-- SETTINGS OVERLAY -->
+  <!-- OVERLAY -->
   <div class="overlay" id="overlay"></div>
+
+  <!-- MODAL: BOOK & CHAPTER SELECTOR -->
+  <div class="modal-sheet" id="nav-modal">
+    <div class="sheet-header">
+      <div class="sheet-title" id="nav-modal-title">Select Book & Chapter</div>
+      <button class="icon-btn" id="close-nav-modal">✕</button>
+    </div>
+    <div class="sheet-grid" id="nav-grid">
+      <!-- Dynamic chips for books or chapters -->
+    </div>
+  </div>
 
   <!-- SETTINGS DRAWER -->
   <div class="drawer" id="settings-drawer">
-    <div class="drawer-header">
-      <h2>Reading Display</h2>
+    <div class="sheet-header">
+      <div class="sheet-title">Display Settings</div>
       <button class="icon-btn" id="close-settings">✕</button>
     </div>
 
     <!-- Theme Selection -->
-    <div class="setting-group">
-      <label>Theme Aesthetics</label>
-      <div class="btn-group">
-        <button onclick="setTheme('parchment')">Parchment</button>
-        <button onclick="setTheme('dark')">Dark</button>
-        <button onclick="setTheme('light')">Blank Slate</button>
+    <div class="setting-section">
+      <label class="setting-label">Theme</label>
+      <div class="segmented-control" id="theme-control">
+        <button data-val="parchment" onclick="setTheme('parchment')">Parchment</button>
+        <button data-val="dark" onclick="setTheme('dark')">Dark</button>
+        <button data-val="light" onclick="setTheme('light')">Light</button>
       </div>
     </div>
 
     <!-- Typography Options -->
-    <div class="setting-group">
-      <label>Typography</label>
-      <div class="btn-group">
-        <button onclick="setFont('Source Serif 4, serif')">Serif</button>
-        <button onclick="setFont('system-ui, sans-serif')">Sans</button>
-        <button onclick="setFont('Playfair Display, serif')">Editorial</button>
+    <div class="setting-section">
+      <label class="setting-label">Typography</label>
+      <div class="segmented-control" id="font-control">
+        <button data-val="Serif" onclick="setFont('Source Serif 4, Georgia, serif')">Serif</button>
+        <button data-val="Sans" onclick="setFont('Inter, system-ui, sans-serif')">Sans</button>
+        <button data-val="Editorial" onclick="setFont('Playfair Display, serif')">Editorial</button>
       </div>
     </div>
 
-    <div class="setting-group">
-      <label>Text Size</label>
-      <div class="btn-group">
-        <button onclick="adjustFontSize(-0.1)">A-</button>
-        <button onclick="adjustFontSize(0.1)">A+</button>
+    <!-- Text Size -->
+    <div class="setting-section">
+      <label class="setting-label">Text Size</label>
+      <div class="segmented-control">
+        <button onclick="adjustFontSize(-0.10)">A-</button>
+        <button onclick="adjustFontSize(0.10)">A+</button>
       </div>
     </div>
 
-    <div class="setting-group">
-      <label>Alignment</label>
-      <div class="btn-group">
-        <button onclick="setTextAlign('left')">Left</button>
-        <button onclick="setTextAlign('center')">Center</button>
-        <button onclick="setTextAlign('justify')">Justify</button>
+    <!-- Alignment -->
+    <div class="setting-section">
+      <label class="setting-label">Text Alignment</label>
+      <div class="segmented-control" id="align-control">
+        <button data-val="left" onclick="setTextAlign('left')">Left</button>
+        <button data-val="center" onclick="setTextAlign('center')">Center</button>
+        <button data-val="justify" onclick="setTextAlign('justify')">Justify</button>
       </div>
     </div>
 
     <!-- Reading Modes -->
-    <div class="setting-group">
-      <label>Special Modes</label>
-      <button id="toggle-reader-mode" onclick="toggleReaderMode()">Toggle Reader Mode (Hide Numbers)</button>
-      <button id="toggle-scroll-mode" onclick="toggleScrollMode()">Toggle Verse Scroll-Snap</button>
-    </div>
-
-    <!-- Custom Background Image -->
-    <div class="setting-group">
-      <label>Custom Background</label>
-      <input type="file" id="bg-uploader" accept="image/*" />
-      <button onclick="clearCustomBg()">Reset Background</button>
+    <div class="setting-section">
+      <label class="setting-label">Reading Mode</label>
+      <div class="toggle-row">
+        <span>Hide Verse Numbers</span>
+        <input type="checkbox" id="chk-reader-mode" onchange="toggleReaderMode()" />
+      </div>
+      <div class="toggle-row">
+        <span>Verse Scroll Snap</span>
+        <input type="checkbox" id="chk-scroll-mode" onchange="toggleScrollMode()" />
+      </div>
     </div>
   </div>
 
-  <!-- BASIC UI LOGIC & STORAGE PERSISTENCE -->
-  <script>
-    const drawer = document.getElementById('settings-drawer');
-    const overlay = document.getElementById('overlay');
-    const openBtn = document.getElementById('open-settings');
-    const closeBtn = document.getElementById('close-settings');
-    const bgUploader = document.getElementById('bg-uploader');
-
-    openBtn.addEventListener('click', () => { drawer.classList.add('open'); overlay.classList.add('active'); });
-    closeBtn.addEventListener('click', closeDrawer);
-    overlay.addEventListener('click', closeDrawer);
-    function closeDrawer() { drawer.classList.remove('open'); overlay.classList.remove('active'); }
-
-    function setFont(font) {
-      document.documentElement.style.setProperty('--body-font', font);
-      localStorage.setItem('bible_font', font);
-    }
-
-    let currentFontSize = parseFloat(localStorage.getItem('bible_font_size')) || 1.15;
-    document.documentElement.style.setProperty('--font-size', `${currentFontSize}rem`);
-
-    function adjustFontSize(delta) {
-      currentFontSize = Math.min(Math.max(0.85, currentFontSize + delta), 2.2);
-      document.documentElement.style.setProperty('--font-size', `${currentFontSize}rem`);
-      localStorage.setItem('bible_font_size', currentFontSize);
-    }
-
-    function setTextAlign(align) {
-      document.documentElement.style.setProperty('--text-align', align);
-      localStorage.setItem('bible_text_align', align);
-    }
-
-    function toggleReaderMode() {
-      document.body.classList.toggle('reader-mode');
-      localStorage.setItem('bible_reader_mode', document.body.classList.contains('reader-mode'));
-    }
-
-    function toggleScrollMode() {
-      document.body.classList.toggle('scroll-mode');
-      localStorage.setItem('bible_scroll_mode', document.body.classList.contains('scroll-mode'));
-    }
-
-    function setTheme(theme) {
-      if (theme === 'parchment') {
-        document.body.removeAttribute('data-theme');
-      } else {
-        document.body.setAttribute('data-theme', theme);
-      }
-      localStorage.setItem('bible_theme', theme);
-    }
-
-    bgUploader.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          const base64Img = `url('${evt.target.result}')`;
-          document.documentElement.style.setProperty('--bg-image', base64Img);
-          localStorage.setItem('bible_bg_img', base64Img);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    function clearCustomBg() {
-      document.documentElement.style.setProperty('--bg-image', 'none');
-      localStorage.removeItem('bible_bg_img');
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedTheme = localStorage.getItem('bible_theme');
-      const savedFont = localStorage.getItem('bible_font');
-      const savedAlign = localStorage.getItem('bible_text_align');
-      const savedBg = localStorage.getItem('bible_bg_img');
-      const isReaderMode = localStorage.getItem('bible_reader_mode') === 'true';
-      const isScrollMode = localStorage.getItem('bible_scroll_mode') === 'true';
-
-      if (savedTheme) setTheme(savedTheme);
-      if (savedFont) setFont(savedFont);
-      if (savedAlign) setTextAlign(savedAlign);
-      if (savedBg) document.documentElement.style.setProperty('--bg-image', savedBg);
-      if (isReaderMode) document.body.classList.add('reader-mode');
-      if (isScrollMode) document.body.classList.add('scroll-mode');
-    });
-    
-    // Register Service Worker for Offline PWA Capabilities (Placed globally at root level)
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js')
-          .then((reg) => console.log('Service Worker registered successfully:', reg.scope))
-          .catch((err) => console.error('Service Worker registration failed:', err));
-      });
-    }
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>
