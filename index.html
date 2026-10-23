@@ -9,31 +9,31 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="manifest" href="manifest.json" />
 
-  <!-- Google Fonts for Diverse & Elegant Typography -->
+  <!-- Google Fonts for 8 Elegant Typography Styles -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 
   <style>
-    /* --- DESIGN SYSTEM & CSS VARIABLES --- */
+    /* --- DESIGN SYSTEM & GLASSMORPHISM VARIABLES --- */
     :root {
       --bg-color: #fcfaf7;
       --text-color: #2c2523;
       --heading-font: 'Playfair Display', Georgia, serif;
       --body-font: 'Source Serif 4', Georgia, serif;
       --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --accent-color: #2c2523;
       --accent-gold: #b8860b;
-      --panel-bg: rgba(252, 250, 247, 0.94);
-      --border-color: rgba(0, 0, 0, 0.08);
+      --panel-bg: rgba(252, 250, 247, 0.75);
+      --border-color: rgba(255, 255, 255, 0.4);
+      --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
       --verse-num-color: #a89f91;
       --font-size: 1.15rem;
       --line-height: 1.85;
       --text-align: left;
       --bg-image: none;
-      --card-bg: rgba(255, 255, 255, 0.85);
-      --pill-bg: rgba(0, 0, 0, 0.04);
-      --pill-border: rgba(0, 0, 0, 0.08);
+      --card-bg: rgba(255, 255, 255, 0.65);
+      --pill-bg: rgba(255, 255, 255, 0.55);
+      --pill-border: rgba(255, 255, 255, 0.6);
       --active-pill: #2c2523;
       --active-pill-text: #ffffff;
       --safe-area-top: env(safe-area-inset-top, 0px);
@@ -65,26 +65,27 @@
       transition: background-color 0.3s ease;
     }
 
-    /* --- SLEEK, MODERN BUTTON SYSTEM --- */
+    /* --- FROSTED GLASSMORPHISM BUTTON ENGINE --- */
     button, .nav-pill, .nav-btn, .icon-btn, .chip-btn {
       font-family: var(--ui-font);
       font-size: 0.85rem;
       font-weight: 600;
       letter-spacing: -0.01em;
-      border-radius: 9999px;
+      border-radius: 16px;
       border: 1px solid var(--pill-border);
       background: var(--pill-bg);
       color: var(--text-color);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--glass-shadow);
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     button:hover, .nav-pill:hover, .nav-btn:hover, .icon-btn:hover {
-      background: rgba(0, 0, 0, 0.07);
-      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.85);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.12);
     }
 
     button:active, .nav-pill:active, .nav-btn:active, .icon-btn:active, .chip-btn:active {
@@ -92,15 +93,16 @@
       opacity: 0.9;
     }
 
-    /* --- HEADER & SEPARATED NAVIGATION --- */
+    /* --- HEADER & NAVIGATION BAR --- */
     header {
       position: sticky;
       top: 0;
       z-index: 10;
       background: var(--panel-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--glass-shadow);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -131,8 +133,7 @@
       justify-content: center;
       width: 40px;
       height: 40px;
-      border-radius: 50%;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
     }
 
     /* --- MAIN READER CONTENT --- */
@@ -180,7 +181,7 @@
     .verse {
       margin-bottom: 1rem;
       position: relative;
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 0.4rem 0.6rem;
       transition: background 0.2s ease;
       cursor: pointer;
@@ -222,9 +223,10 @@
       left: 0;
       right: 0;
       background: var(--panel-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-top: 1px solid var(--border-color);
+      box-shadow: var(--glass-shadow);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -233,26 +235,17 @@
     }
 
     .nav-btn {
-      padding: 0.55rem 1.1rem;
-    }
-
-    .streak-pill {
-      font-family: var(--ui-font);
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-color);
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      padding: 0.45rem 0.85rem;
-      border-radius: 9999px;
+      padding: 0.55rem 1.25rem;
+      flex: 0 1 120px;
+      text-align: center;
     }
 
     /* --- OVERLAY & MODALS --- */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(6px);
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(8px);
       z-index: 90;
       opacity: 0;
       pointer-events: none;
@@ -270,12 +263,14 @@
       left: 0;
       right: 0;
       max-height: 80vh;
-      background: var(--bg-color);
-      border-top-left-radius: 24px;
-      border-top-right-radius: 24px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(24px);
+      border-top: 1px solid var(--border-color);
+      border-top-left-radius: 28px;
+      border-top-right-radius: 28px;
       z-index: 100;
       padding: 1.5rem 1.25rem calc(1.5rem + var(--safe-area-bottom)) 1.25rem;
-      box-shadow: 0 -10px 30px rgba(0,0,0,0.2);
+      box-shadow: 0 -10px 40px rgba(0,0,0,0.15);
       transition: bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
@@ -310,7 +305,7 @@
     }
 
     .chip-btn {
-      border-radius: 12px;
+      border-radius: 14px;
       padding: 0.65rem 0.2rem;
       text-align: center;
     }
@@ -321,7 +316,7 @@
       border-color: var(--active-pill);
     }
 
-    /* --- STATIC-HEADER SETTINGS MODAL --- */
+    /* --- GLASSMORPHIC SETTINGS MODAL --- */
     .settings-modal {
       position: fixed;
       top: 50%;
@@ -330,11 +325,13 @@
       width: calc(100% - 2rem);
       max-width: 440px;
       max-height: 85vh;
-      background: var(--bg-color);
+      background: var(--panel-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--border-color);
-      border-radius: 24px;
+      border-radius: 28px;
       z-index: 100;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
       opacity: 0;
       pointer-events: none;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -370,7 +367,7 @@
     .preview-card {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
+      border-radius: 18px;
       padding: 1.2rem;
       text-align: var(--text-align);
       font-family: var(--body-font);
@@ -378,6 +375,7 @@
       line-height: var(--line-height);
       color: var(--text-color);
       transition: all 0.2s ease;
+      box-shadow: var(--glass-shadow);
     }
 
     .preview-label {
@@ -417,11 +415,12 @@
 
     .segmented-control {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
       background: var(--pill-bg);
-      padding: 3px;
-      border-radius: 16px;
-      gap: 3px;
+      padding: 4px;
+      border-radius: 18px;
+      gap: 4px;
+      border: 1px solid var(--border-color);
     }
 
     .segmented-control button {
@@ -430,13 +429,13 @@
       box-shadow: none;
       color: var(--text-color);
       padding: 0.55rem 0.2rem;
-      font-size: 0.8rem;
-      border-radius: 12px;
+      font-size: 0.78rem;
+      border-radius: 14px;
     }
 
     .segmented-control button.active {
       background: var(--card-bg);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
     .gallery-grid {
@@ -447,10 +446,11 @@
 
     .gallery-chip {
       aspect-ratio: 16/10;
-      border-radius: 12px;
+      border-radius: 14px;
       border: 2px solid var(--border-color);
       cursor: pointer;
       transition: transform 0.15s ease, border-color 0.15s ease;
+      box-shadow: var(--glass-shadow);
     }
 
     .gallery-chip.active {
@@ -464,7 +464,7 @@
       justify-content: space-between;
       background: var(--pill-bg);
       padding: 0.6rem 1rem;
-      border-radius: 16px;
+      border-radius: 18px;
       border: 1px solid var(--border-color);
     }
 
@@ -514,7 +514,7 @@
         <span class="chevron">▼</span>
       </button>
     </div>
-    <button class="icon-btn" id="open-settings" aria-label="Settings">⚙️</button>
+    <button class="icon-btn" id="open-settings" aria-label="Settings">☰</button>
   </header>
 
   <!-- MAIN READER CONTENT -->
@@ -526,14 +526,13 @@
     </div>
 
     <div id="verses-list">
-      <!-- Verses will render dynamically here -->
+      <!-- Verses render dynamically here -->
     </div>
   </main>
 
   <!-- FOOTER NAVIGATION -->
   <footer>
     <button class="nav-btn" id="prev-chapter">← Prev</button>
-    <div class="streak-pill">🔥 <span id="streak-count">1</span> Day Streak</div>
     <button class="nav-btn" id="next-chapter">Next →</button>
   </footer>
 
@@ -565,15 +564,18 @@
         <span class="preview-verse-num">1</span>In the beginning was the Word, and the Word was with God, and the Word was God.
       </div>
 
-      <!-- Typography -->
+      <!-- 8 Typography Options -->
       <div class="setting-section">
-        <label class="setting-label">Font Style</label>
+        <label class="setting-label">Font Style (8 Choices)</label>
         <div class="segmented-control" id="font-control">
           <button data-val="serif" onclick="setFont('Source Serif 4, Georgia, serif', 'serif')">Serif</button>
           <button data-val="editorial" onclick="setFont('Playfair Display, serif', 'editorial')">Editorial</button>
+          <button data-val="lora" onclick="setFont('Lora, serif', 'lora')">Classic</button>
           <button data-val="sans" onclick="setFont('Inter, system-ui, sans-serif', 'sans')">Sans</button>
           <button data-val="cinzel" onclick="setFont('Cinzel, serif', 'cinzel')">Elegance</button>
           <button data-val="mono" onclick="setFont('Fira Code, monospace', 'mono')">Mono</button>
+          <button data-val="clean" onclick="setFont('system-ui, -apple-system, sans-serif', 'clean')">Clean</button>
+          <button data-val="georgia" onclick="setFont('Georgia, serif', 'georgia')">Georgia</button>
         </div>
       </div>
 
@@ -596,18 +598,22 @@
         </div>
       </div>
 
-      <!-- Header & Footer Bar Color Gallery -->
+      <!-- Expanded Bar Theme Palette -->
       <div class="setting-section">
         <label class="setting-label">Bar Theme Palette</label>
         <div class="gallery-grid" id="panel-gallery">
-          <div class="gallery-chip" style="background: rgba(252, 250, 247, 0.94);" onclick="setPanelColor('rgba(252, 250, 247, 0.94)', this)"></div>
-          <div class="gallery-chip" style="background: rgba(18, 17, 16, 0.94);" onclick="setPanelColor('rgba(18, 17, 16, 0.94)', this)"></div>
-          <div class="gallery-chip" style="background: rgba(245, 239, 230, 0.94);" onclick="setPanelColor('rgba(245, 239, 230, 0.94)', this)"></div>
-          <div class="gallery-chip" style="background: rgba(234, 242, 237, 0.94);" onclick="setPanelColor('rgba(234, 242, 237, 0.94)', this)"></div>
+          <div class="gallery-chip" style="background: rgba(252, 250, 247, 0.85);" onclick="setPanelColor('rgba(252, 250, 247, 0.85)', this)" title="Parchment"></div>
+          <div class="gallery-chip" style="background: rgba(18, 17, 16, 0.85);" onclick="setPanelColor('rgba(18, 17, 16, 0.85)', this)" title="Midnight"></div>
+          <div class="gallery-chip" style="background: rgba(245, 239, 230, 0.85);" onclick="setPanelColor('rgba(245, 239, 230, 0.85)', this)" title="Warm Sand"></div>
+          <div class="gallery-chip" style="background: rgba(234, 242, 237, 0.85);" onclick="setPanelColor('rgba(234, 242, 237, 0.85)', this)" title="Soft Sage"></div>
+          <div class="gallery-chip" style="background: rgba(22, 34, 28, 0.85);" onclick="setPanelColor('rgba(22, 34, 28, 0.85)', this)" title="Emerald Dark"></div>
+          <div class="gallery-chip" style="background: rgba(20, 24, 38, 0.85);" onclick="setPanelColor('rgba(20, 24, 38, 0.85)', this)" title="Deep Indigo"></div>
+          <div class="gallery-chip" style="background: rgba(247, 238, 240, 0.85);" onclick="setPanelColor('rgba(247, 238, 240, 0.85)', this)" title="Rose Quartz"></div>
+          <div class="gallery-chip" style="background: rgba(250, 246, 232, 0.85);" onclick="setPanelColor('rgba(250, 246, 232, 0.85)', this)" title="Cream Gold"></div>
         </div>
       </div>
 
-      <!-- Background Gallery -->
+      <!-- Expanded Background Gallery -->
       <div class="setting-section">
         <label class="setting-label">Background Gallery</label>
         <div class="gallery-grid" id="bg-gallery">
@@ -615,10 +621,14 @@
           <div class="gallery-chip" style="background: #121110;" onclick="setGalleryBg('#121110', this)"></div>
           <div class="gallery-chip" style="background: linear-gradient(135deg, #f5efe6 0%, #e8decb 100%);" onclick="setGalleryBg('linear-gradient(135deg, #f5efe6 0%, #e8decb 100%)', this)"></div>
           <div class="gallery-chip" style="background: linear-gradient(135deg, #1e1b18 0%, #0d0c0b 100%);" onclick="setGalleryBg('linear-gradient(135deg, #1e1b18 0%, #0d0c0b 100%)', this)"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%);" onclick="setGalleryBg('linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%)', this)"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #16221c 0%, #0a120d 100%);" onclick="setGalleryBg('linear-gradient(135deg, #16221c 0%, #0a120d 100%)', this)"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #f7eef0 0%, #e6d3d7 100%);" onclick="setGalleryBg('linear-gradient(135deg, #f7eef0 0%, #e6d3d7 100%)', this)"></div>
+          <div class="gallery-chip" style="background: linear-gradient(135deg, #141826 0%, #080a12 100%);" onclick="setGalleryBg('linear-gradient(135deg, #141826 0%, #080a12 100%)', this)"></div>
         </div>
       </div>
 
-      <!-- Live Text Color Selector -->
+      <!-- Live Custom Text Color Picker -->
       <div class="setting-section">
         <label class="setting-label">Custom Text Color</label>
         <div class="color-picker-row">
