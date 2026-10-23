@@ -542,6 +542,15 @@
       if (isReaderMode) document.body.classList.add('reader-mode');
       if (isScrollMode) document.body.classList.add('scroll-mode');
     });
+    
+    // Register Service Worker for Offline PWA Capabilities (Placed globally at root level)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('Service Worker registered successfully:', reg.scope))
+          .catch((err) => console.error('Service Worker registration failed:', err));
+      });
+    }
   </script>
 </body>
 </html>
