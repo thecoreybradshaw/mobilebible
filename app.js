@@ -47,6 +47,33 @@ const BIBLE_BOOKS = [
   { name: 'Jude', chapters: 1 }, { name: 'Revelation', chapters: 22 }
 ];
 
+const BIBLE_MAPS = [
+  {
+    id: 'map-1',
+    title: "Divided Israel and Judea",
+    file: './resources/maps/ot-dividedisrael.jpg', // Replace with your actual filename
+    description: "Map of the divided kingdom of Israel, when Israel and Judah were seperate nations"
+  },
+  {
+    id: 'map-2',
+    title: "New Testament Israel",
+    file: './resources/maps/nt-israel.jpg',  // Replace with your actual filename
+    description: "A map of Israel in the time of Jesus."
+  }
+  {
+    id: 'map-3',
+    title: "New Testament World",
+    file: './resources/maps/nt-world.jpg',  // Replace with your actual filename
+    description: "A map of the world in the times of the New Testament."
+  }
+  {
+    id: 'map-4',
+    title: "The Seven Churches of Revelation",
+    file: './resources/maps/nt-7churches.jpg',  // Replace with your actual filename
+    description: "A map showing the locations of the seven churches mentioned in Revelation 2-3."
+  }
+];
+
 const TRANSLATIONS = {
   kjv: 'King James Version',
   asv: 'American Standard Version',
