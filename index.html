@@ -830,11 +830,11 @@
     </div>
     <div class="settings-scroll-body" style="gap: 0.75rem;">
       <button class="nav-pill" style="width: 100%; justify-content: space-between; padding: 1rem 1.25rem; font-size: 0.95rem;" onclick="openCustomizationSettings()">
-        <span>🎨 Customization</span>
+        <span>Customization</span>
         <span>›</span>
       </button>
       <button class="nav-pill" style="width: 100%; justify-content: space-between; padding: 1rem 1.25rem; font-size: 0.95rem;" onclick="openResourcesHub()">
-        <span>📚 Resources (Maps & Commentaries)</span>
+        <span>Resources (Maps & Commentaries)</span>
         <span>›</span>
       </button>
     </div>
@@ -847,16 +847,58 @@
       <button class="icon-btn" id="close-resources-modal">✕</button>
     </div>
     <div class="settings-scroll-body" style="gap: 1rem;">
-      <div class="preview-card" style="cursor: pointer;" onclick="showToast('Bible Maps feature coming soon!')">
+    
+      <!-- MAP TEMPLATE 1 -->
+      <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-1')">
         <span class="preview-label">Atlas & Geography</span>
-        <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">Bible Maps</h3>
-        <p style="font-size: 0.9rem; opacity: 0.8;">Explore historical maps of Paul's journeys, the Twelve Tribes, and the Kingdom of Israel.</p>
+        <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">
+          Divided Israel and Judea
+        </h3>
+        <p style="font-size: 0.9rem; opacity: 0.8;">
+          Map of the divided kingdom of Israel, when Israel and Judah were seperate nations
+        </p>
       </div>
+
+      <!-- MAP TEMPLATE 2 -->
+      <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-2')">
+        <span class="preview-label">Atlas & Geography</span>
+        <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">
+          New Testament Israel
+        </h3>
+        <p style="font-size: 0.9rem; opacity: 0.8;">
+          A map of Israel in the time of Jesus.
+        </p>
+      </div>
+
+      <!-- MAP TEMPLATE 3 -->
+      <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-3')">
+        <span class="preview-label">Atlas & Geography</span>
+        <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">
+          New Testament World
+        </h3>
+        <p style="font-size: 0.9rem; opacity: 0.8;">
+          A map of the world in the times of the New Testament.
+        </p>
+      </div>
+
+      <!-- MAP TEMPLATE 4 -->
+      <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-4')">
+        <span class="preview-label">Atlas & Geography</span>
+        <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">
+          The Seven Churches of Revelation
+        </h3>
+        <p style="font-size: 0.9rem; opacity: 0.8;">
+          A map showing the locations of the seven churches mentioned in Revelation 2-3.
+        </p>
+      </div>
+
+      <!-- COMMENTARIES SECTION -->
       <div class="preview-card" style="cursor: pointer;" onclick="showToast('Commentaries feature coming soon!')">
         <span class="preview-label">Study Notes</span>
         <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">Commentaries & Notes</h3>
         <p style="font-size: 0.9rem; opacity: 0.8;">Access verse-by-verse historical commentaries and cross-references.</p>
       </div>
+
     </div>
   </div>
 
