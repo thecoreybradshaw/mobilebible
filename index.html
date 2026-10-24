@@ -387,8 +387,12 @@
 
     .chip-btn {
       border-radius: 14px;
-      padding: 0.65rem 0.2rem;
+      padding: 0.65rem 0.4rem;
       text-align: center;
+      white-space: normal;
+      word-break: break-word;
+      line-height: 1.2;
+      font-size: 0.8rem;
     }
 
     .chip-btn.active {
@@ -814,6 +818,44 @@
         <div class="segmented-control" id="parallel-trans-control">
           <!-- Populated dynamically from TRANSLATIONS object -->
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: SETTINGS HUB MENU -->
+  <div class="settings-modal" id="settings-hub-modal">
+    <div class="settings-header-fixed">
+      <div class="sheet-title">Menu</div>
+      <button class="icon-btn" id="close-hub-modal">✕</button>
+    </div>
+    <div class="settings-scroll-body" style="gap: 0.75rem;">
+      <button class="nav-pill" style="width: 100%; justify-content: space-between; padding: 1rem 1.25rem; font-size: 0.95rem;" onclick="openCustomizationSettings()">
+        <span>🎨 Customization</span>
+        <span>›</span>
+      </button>
+      <button class="nav-pill" style="width: 100%; justify-content: space-between; padding: 1rem 1.25rem; font-size: 0.95rem;" onclick="openResourcesHub()">
+        <span>📚 Resources (Maps & Commentaries)</span>
+        <span>›</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: BIBLE RESOURCES -->
+  <div class="settings-modal" id="resources-modal">
+    <div class="settings-header-fixed">
+      <div class="sheet-title">Bible Resources</div>
+      <button class="icon-btn" id="close-resources-modal">✕</button>
+    </div>
+    <div class="settings-scroll-body" style="gap: 1rem;">
+      <div class="preview-card" style="cursor: pointer;" onclick="showToast('Bible Maps feature coming soon!')">
+        <span class="preview-label">Atlas & Geography</span>
+        <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">Bible Maps</h3>
+        <p style="font-size: 0.9rem; opacity: 0.8;">Explore historical maps of Paul's journeys, the Twelve Tribes, and the Kingdom of Israel.</p>
+      </div>
+      <div class="preview-card" style="cursor: pointer;" onclick="showToast('Commentaries feature coming soon!')">
+        <span class="preview-label">Study Notes</span>
+        <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">Commentaries & Notes</h3>
+        <p style="font-size: 0.9rem; opacity: 0.8;">Access verse-by-verse historical commentaries and cross-references.</p>
       </div>
     </div>
   </div>
