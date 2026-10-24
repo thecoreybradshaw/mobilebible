@@ -328,9 +328,34 @@ nextBtn.addEventListener('click', () => {
 });
 
 openSettingsBtn.addEventListener('click', () => {
-  settingsModal.classList.add('open');
+  settingsHubModal.classList.add('open');
   overlay.classList.add('active');
 });
+
+function closeSettingsHub() {
+  settingsHubModal.classList.remove('open');
+  overlay.classList.remove('active');
+}
+
+function openCustomizationSettings() {
+  closeSettingsHub();
+  settingsModal.classList.add('open');
+  overlay.classList.add('active');
+}
+
+function openResourcesHub() {
+  closeSettingsHub();
+  resourcesModal.classList.add('open');
+  overlay.classList.add('active');
+}
+
+function closeResourcesModal() {
+  resourcesModal.classList.remove('open');
+  overlay.classList.remove('active');
+}
+
+if (closeHubModalBtn) closeHubModalBtn.addEventListener('click', closeSettingsHub);
+if (closeResourcesModalBtn) closeResourcesModalBtn.addEventListener('click', closeResourcesModal);
 
 function closeSettingsModal() {
   settingsModal.classList.remove('open');
@@ -338,7 +363,12 @@ function closeSettingsModal() {
 }
 
 closeSettingsBtn.addEventListener('click', closeSettingsModal);
-overlay.addEventListener('click', () => { closeModal(); closeSettingsModal(); });
+overlay.addEventListener('click', () => { 
+  closeModal(); 
+  closeSettingsModal(); 
+  closeSettingsHub();
+  closeResourcesModal();
+});
 closeNavModalBtn.addEventListener('click', closeModal);
 
 btnBookSelect.addEventListener('click', () => openModal('books'));
@@ -497,6 +527,10 @@ window.addEventListener('DOMContentLoaded', () => {
   const savedBg = localStorage.getItem('bible_bg_gallery');
   const savedPanel = localStorage.getItem('bible_panel_color') || 'rgba(252, 250, 247, 0.85)';
   const savedTextColor = localStorage.getItem('bible_text_color');
+  const settingsHubModal = document.getElementById('settings-hub-modal');
+  const closeHubModalBtn = document.getElementById('close-hub-modal');
+  const resourcesModal = document.getElementById('resources-modal');
+  const closeResourcesModalBtn = document.getElementById('close-resources-modal');
   
   const isReaderMode = localStorage.getItem('bible_reader_mode') === 'true';
   const isScrollMode = localStorage.getItem('bible_scroll_mode') === 'true';
