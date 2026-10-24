@@ -47,39 +47,40 @@ const BIBLE_BOOKS = [
   { name: 'Jude', chapters: 1 }, { name: 'Revelation', chapters: 22 }
 ];
 
-const BIBLE_MAPS = [
-  {
-    id: 'map-1',
-    title: "Divided Israel and Judea",
-    file: './resources/maps/ot-dividedisrael.jpg', // Replace with your actual filename
-    description: "Map of the divided kingdom of Israel, when Israel and Judah were seperate nations"
-  },
-  {
-    id: 'map-2',
-    title: "New Testament Israel",
-    file: './resources/maps/nt-israel.jpg',  // Replace with your actual filename
-    description: "A map of Israel in the time of Jesus."
-  }
-  {
-    id: 'map-3',
-    title: "New Testament World",
-    file: './resources/maps/nt-world.jpg',  // Replace with your actual filename
-    description: "A map of the world in the times of the New Testament."
-  }
-  {
-    id: 'map-4',
-    title: "The Seven Churches of Revelation",
-    file: './resources/maps/nt-7churches.jpg',  // Replace with your actual filename
-    description: "A map showing the locations of the seven churches mentioned in Revelation 2-3."
-  }
-];
-
 const TRANSLATIONS = {
   kjv: 'King James Version',
   asv: 'American Standard Version',
   bsb: 'Berean Standard Bible',
   ylt: 'Youngs Literal Translation'
 };
+
+// --- BIBLE MAPS REGISTRY ---
+const BIBLE_MAPS = [
+  {
+    id: 'map-1',
+    title: "Divided Israel and Judea",
+    file: "./resources/maps/divided-israel.jpg",
+    description: "Map of the divided kingdom of Israel, when Israel and Judah were separate nations."
+  },
+  {
+    id: 'map-2',
+    title: "New Testament Israel",
+    file: "./resources/maps/nt-israel.jpg",
+    description: "A map of Israel in the time of Jesus."
+  },
+  {
+    id: 'map-3',
+    title: "New Testament World",
+    file: "./resources/maps/nt-world.jpg",
+    description: "A map of the world in the times of the New Testament."
+  },
+  {
+    id: 'map-4',
+    title: "The Seven Churches of Revelation",
+    file: "./resources/maps/seven-churches.jpg",
+    description: "A map showing the locations of the seven churches mentioned in Revelation 2-3."
+  }
+];
 
 const labelBook = document.getElementById('label-book');
 const labelChapter = document.getElementById('label-chapter');
@@ -110,6 +111,12 @@ const settingsHubModal = document.getElementById('settings-hub-modal');
 const closeHubModalBtn = document.getElementById('close-hub-modal');
 const resourcesModal = document.getElementById('resources-modal');
 const closeResourcesModalBtn = document.getElementById('close-resources-modal');
+
+const mapViewerModal = document.getElementById('map-viewer-modal');
+const closeMapModalBtn = document.getElementById('close-map-modal');
+const mapImageDisplay = document.getElementById('map-image-display');
+const mapTitle = document.getElementById('map-title');
+const mapDescription = document.getElementById('map-description');
 
 const verseActionBar = document.getElementById('verse-action-bar');
 const actionCount = document.getElementById('action-count');
@@ -386,8 +393,27 @@ function closeResourcesModal() {
   overlay.classList.remove('active');
 }
 
+function openMap(mapId) {
+  const mapObj = BIBLE_MAPS.find(m => m.id === mapId);
+  if (!mapObj) return;
+
+  mapTitle.textContent = mapObj.title;
+  mapImageDisplay.src = mapObj.file;
+  mapDescription.textContent = mapObj.description;
+
+  resourcesModal.classList.remove('open');
+  if (mapViewerModal) mapViewerModal.classList.add('open');
+  overlay.classList.add('active');
+}
+
+function closeMapModal() {
+  if (mapViewerModal) mapViewerModal.classList.remove('open');
+  overlay.classList.remove('active');
+}
+
 if (closeHubModalBtn) closeHubModalBtn.addEventListener('click', closeSettingsHub);
 if (closeResourcesModalBtn) closeResourcesModalBtn.addEventListener('click', closeResourcesModal);
+if (closeMapModalBtn) closeMapModalBtn.addEventListener('click', closeMapModal);
 
 function closeSettingsModal() {
   settingsModal.classList.remove('open');
@@ -400,6 +426,7 @@ overlay.addEventListener('click', () => {
   closeSettingsModal(); 
   closeSettingsHub();
   closeResourcesModal();
+  closeMapModal();
 });
 closeNavModalBtn.addEventListener('click', closeModal);
 
