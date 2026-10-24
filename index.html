@@ -902,6 +902,20 @@
     </div>
   </div>
 
+  <!-- MODAL: MAP VIEWER -->
+  <div class="settings-modal" id="map-viewer-modal" style="max-width: 600px;">
+    <div class="settings-header-fixed">
+      <div class="sheet-title" id="map-title">Bible Map</div>
+      <button class="icon-btn" id="close-map-modal">✕</button>
+    </div>
+    <div class="settings-scroll-body" style="text-align: center; padding: 1rem;">
+      <div style="overflow: auto; max-height: 65vh; border-radius: 12px; border: 1px solid var(--border-color);">
+        <img id="map-image-display" src="" alt="Bible Map" style="width: 100%; height: auto; display: block;" />
+      </div>
+      <p id="map-description" style="font-size: 0.85rem; opacity: 0.8; margin-top: 0.75rem;"></p>
+    </div>
+  </div>
+
   <script src="./app.js"></script>
 </body>
 </html>
