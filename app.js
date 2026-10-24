@@ -79,6 +79,11 @@ const openSettingsBtn = document.getElementById('open-settings');
 const closeSettingsBtn = document.getElementById('close-settings');
 const toggleFullscreenBtn = document.getElementById('toggle-fullscreen');
 
+const settingsHubModal = document.getElementById('settings-hub-modal');
+const closeHubModalBtn = document.getElementById('close-hub-modal');
+const resourcesModal = document.getElementById('resources-modal');
+const closeResourcesModalBtn = document.getElementById('close-resources-modal');
+
 const verseActionBar = document.getElementById('verse-action-bar');
 const actionCount = document.getElementById('action-count');
 const toastEl = document.getElementById('toast');
@@ -527,10 +532,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const savedBg = localStorage.getItem('bible_bg_gallery');
   const savedPanel = localStorage.getItem('bible_panel_color') || 'rgba(252, 250, 247, 0.85)';
   const savedTextColor = localStorage.getItem('bible_text_color');
-  const settingsHubModal = document.getElementById('settings-hub-modal');
-  const closeHubModalBtn = document.getElementById('close-hub-modal');
-  const resourcesModal = document.getElementById('resources-modal');
-  const closeResourcesModalBtn = document.getElementById('close-resources-modal');
   
   const isReaderMode = localStorage.getItem('bible_reader_mode') === 'true';
   const isScrollMode = localStorage.getItem('bible_scroll_mode') === 'true';
