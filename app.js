@@ -56,18 +56,21 @@ const TRANSLATIONS = {
 
 // --- BIBLE MAPS REGISTRY ---
 const BIBLE_MAPS = [
+/*
   {
     id: 'map-1',
     title: "Divided Israel and Judea",
     file: "./resources/maps/divided-israel.jpg",
     description: "Map of the divided kingdom of Israel, when Israel and Judah were separate nations."
   },
+  */
   {
     id: 'map-2',
     title: "New Testament Israel",
-    file: "./resources/maps/nt-israel.jpg",
+    file: "./resources/maps/nt-israel.jpeg",
     description: "A map of Israel in the time of Jesus."
   },
+  /*
   {
     id: 'map-3',
     title: "New Testament World",
@@ -80,6 +83,7 @@ const BIBLE_MAPS = [
     file: "./resources/maps/seven-churches.jpg",
     description: "A map showing the locations of the seven churches mentioned in Revelation 2-3."
   }
+*/
 ];
 
 const labelBook = document.getElementById('label-book');
