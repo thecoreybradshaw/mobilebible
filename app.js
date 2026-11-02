@@ -513,19 +513,22 @@ function setGalleryBg(bgValue, element) {
     document.documentElement.style.setProperty('--bg-color', bgValue);
   }
 
-  // Determine light or dark contrast based on selected background
   const isDark = bgValue === '#121110' || bgValue.includes('#141826');
   if (isDark) {
-    document.documentElement.style.setProperty('--text-color', '#fcfaf7');
+    if (!localStorage.getItem('bible_text_color')) {
+      document.documentElement.style.setProperty('--text-color', '#fcfaf7');
+    }
     document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.08)');
     document.documentElement.style.setProperty('--border-color', 'rgba(255, 255, 255, 0.15)');
     document.documentElement.style.setProperty('--verse-num-color', 'rgba(255, 255, 255, 0.45)');
     document.documentElement.style.setProperty('--accent-gold', '#f3cca1');
   } else {
-    document.documentElement.style.setProperty('--text-color', '#2c2523');
+    if (!localStorage.getItem('bible_text_color')) {
+      document.documentElement.style.setProperty('--text-color', '#2c2523');
+    }
     document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.65)');
     document.documentElement.style.setProperty('--border-color', 'rgba(0, 0, 0, 0.1)');
-    document.documentElement.style.setProperty('--verse-num-color', '#a89f91');
+    document.documentElement.style.setProperty('--verse-num-color', '#8c8273');
     document.documentElement.style.setProperty('--accent-gold', '#b8860b');
   }
 
