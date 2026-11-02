@@ -19,6 +19,7 @@
     :root {
       --bg-color: #fcfaf7;
       --text-color: #2c2523;
+      --ui-text-color: #2c2523;
       --heading-font: 'Playfair Display', Georgia, serif;
       --body-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -56,7 +57,7 @@
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-      color: var(--button-text-color);
+      color: var(--ui-text-color);
       font-family: var(--ui-font);
       font-size: var(--font-size);
       line-height: var(--line-height);
@@ -76,7 +77,7 @@
       border-radius: 16px;
       border: 1px solid var(--pill-border);
       background: var(--pill-bg);
-      color: var(--button-text-color);
+      color: var(--ui-text-color);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       box-shadow: var(--glass-shadow);
@@ -165,7 +166,7 @@
 
     /* Non-Read Tabs UI System */
     #view-resources, #view-plans, #view-settings {
-      color: var(--button-text-color);
+      color: var(--ui-text-color);
       text-align: left;
       font-family: var(--ui-font);
       font-size: 1rem;
@@ -175,7 +176,7 @@
     #view-resources .chapter-header, 
     #view-plans .chapter-header, 
     #view-settings .chapter-header {
-      color: var(--button-text-color);
+      color: var(--ui-text-color);
       font-family: var(--heading-font);
     }
 
@@ -185,7 +186,7 @@
     #view-settings .preview-card,
     #view-settings .color-picker-row {
       background: var(--card-bg);
-      color: var(--button-text-color);
+      color: var(--ui-text-color);
       border: 1px solid var(--border-color);
     }
 
@@ -195,12 +196,12 @@
     }
 
     #view-settings .segmented-control button {
-      color: var(--button-text-color);
+      color: var(--ui-text-color);
     }
 
     #view-settings .segmented-control button.active {
       background: var(--card-bg);
-      color: var(--button-text-color);
+      color: var(--ui-text-color);
     }
 
     .section-title {
@@ -234,7 +235,7 @@
       font-family: var(--heading-font);
       font-size: 2.2rem;
       font-weight: 700;
-      color: var(--button-text-color);
+      color: var(--ui-text-color);
       letter-spacing: -0.02em;
     }
 
@@ -358,7 +359,7 @@
       border: none;
       box-shadow: none;
       border-radius: 0;
-      color: var(--button-text-color);
+      color: var(--ui-text-color);
       opacity: 0.6;
     }
 
@@ -477,7 +478,7 @@
       font-family: var(--ui-font);
       font-size: 1rem;
       font-weight: 700;
-      color: var(--button-text-color);
+      color: var(--ui-text-color);
     }
 
     .sheet-grid {
@@ -541,7 +542,7 @@
       transition: transform 0.15s ease, border-color 0.15s ease;
       box-shadow: var(--glass-shadow);
     }
-    .gallery-chip.active { border-color: var(--button-text-color); transform: scale(0.96); }
+    .gallery-chip.active { border-color: var(--ui-text-color); transform: scale(0.96); }
 
     .color-picker-row {
       display: flex;
