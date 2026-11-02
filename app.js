@@ -455,7 +455,7 @@ function setFont(font, valKey = '') {
     else if (font.includes('Cinzel Decorative')) valKey = 'cinzel-decor';
     else if (font.includes('Playfair')) valKey = 'editorial';
     else if (font.includes('Lora')) valKey = 'lora';
-    else if (font.includes('Inter')) valKey = 'sans';
+    else if (font.includes('Source Serif 4')) valKey = 'serif';
     else if (font.includes('Cinzel')) valKey = 'cinzel';
     else if (font.includes('Fira')) valKey = 'mono';
     else valKey = 'sans';
@@ -492,11 +492,17 @@ function setPanelColor(colorValue, element) {
       document.documentElement.style.setProperty('--pill-bg', 'rgba(0, 0, 0, 0.06)');
       document.documentElement.style.setProperty('--pill-border', 'rgba(0, 0, 0, 0.12)');
       document.documentElement.style.setProperty('--border-color', 'rgba(0, 0, 0, 0.1)');
+      document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.65)');
+      document.documentElement.style.setProperty('--verse-num-color', '#a89f91');
+      document.documentElement.style.setProperty('--accent-gold', '#b8860b');
     } else {
       document.documentElement.style.setProperty('--button-text-color', '#ffffff');
       document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.15)');
       document.documentElement.style.setProperty('--pill-border', 'rgba(255, 255, 255, 0.22)');
       document.documentElement.style.setProperty('--border-color', 'rgba(255, 255, 255, 0.12)');
+      document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.08)');
+      document.documentElement.style.setProperty('--verse-num-color', 'rgba(255, 255, 255, 0.45)');
+      document.documentElement.style.setProperty('--accent-gold', '#f3cca1');
     }
   }
 
