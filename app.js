@@ -6,7 +6,10 @@ const state = {
   chapter: parseInt(localStorage.getItem('bible_chapter'), 10) || 1,
   modalType: 'books',
   parallelTranslation: localStorage.getItem('bible_parallel_trans') || 'asv',
-  isParallelActive: localStorage.getItem('bible_parallel_mode') === 'true'
+  isParallelActive: localStorage.getItem('bible_parallel_mode') === 'true',
+  activeTab: 'read',
+  activePlan: localStorage.getItem('bible_active_plan') || 'gospels',
+  planProgress: JSON.parse(localStorage.getItem('bible_plan_progress') || '{}')
 };
 
 const translationCache = {};
@@ -54,38 +57,38 @@ const TRANSLATIONS = {
   ylt: 'Youngs Literal Translation'
 };
 
-// --- BIBLE MAPS REGISTRY ---
 const BIBLE_MAPS = [
-/*
-  {
-    id: 'map-1',
-    title: "Divided Israel and Judea",
-    file: "./resources/maps/divided-israel.jpg",
-    description: "Map of the divided kingdom of Israel, when Israel and Judah were separate nations."
-  },
-  */
-  {
-    id: 'map-2',
-    title: "New Testament Israel",
-    file: "./resources/maps/nt-israel.jpeg",
-    description: "A map of Israel in the time of Jesus."
-  },
-  /*
-  {
-    id: 'map-3',
-    title: "New Testament World",
-    file: "./resources/maps/nt-world.jpg",
-    description: "A map of the world in the times of the New Testament."
-  },
-  {
-    id: 'map-4',
-    title: "The Seven Churches of Revelation",
-    file: "./resources/maps/seven-churches.jpg",
-    description: "A map showing the locations of the seven churches mentioned in Revelation 2-3."
-  }
-*/
+  { id: 'map-1', title: "Divided Israel and Judea", file: "./resources/maps/divided-israel.jpg", description: "Map of the divided kingdom when Israel and Judah were separate nations." },
+  { id: 'map-2', title: "New Testament Israel", file: "./resources/maps/nt-israel.jpeg", description: "A map of Israel in the time of Jesus." },
+  { id: 'map-3', title: "New Testament World", file: "./resources/maps/nt-world.jpg", description: "A map of the Mediterranean world in New Testament times." },
+  { id: 'map-4', title: "The Seven Churches of Revelation", file: "./resources/maps/seven-churches.jpg", description: "Locations of the seven churches in Asia Minor (Revelation 2-3)." }
 ];
 
+// --- SAMPLE READING PLANS DATA ---
+const READING_PLANS = {
+  gospels: {
+    title: "The Four Gospels (30-Day)",
+    days: [
+      { day: 1, book: 'Matthew', chapter: 1, label: 'Matthew 1 - Genealogy & Birth of Christ' },
+      { day: 2, book: 'Matthew', chapter: 2, label: 'Matthew 2 - Visit of the Wise Men' },
+      { day: 3, book: 'Matthew', chapter: 5, label: 'Matthew 5 - Sermon on the Mount' },
+      { day: 4, book: 'Mark', chapter: 1, label: 'Mark 1 - Beginning of the Gospel' },
+      { day: 5, book: 'Luke', chapter: 1, label: 'Luke 1 - Announcement of John & Jesus' },
+      { day: 6, book: 'John', chapter: 1, label: 'John 1 - The Word Became Flesh' }
+    ]
+  },
+  wisdom: {
+    title: "Wisdom Literature (14-Day)",
+    days: [
+      { day: 1, book: 'Psalms', chapter: 1, label: 'Psalms 1 - The Two Paths' },
+      { day: 2, book: 'Psalms', chapter: 23, label: 'Psalms 23 - The Lord is My Shepherd' },
+      { day: 3, book: 'Proverbs', chapter: 1, label: 'Proverbs 1 - Beginning of Knowledge' },
+      { day: 4, book: 'Ecclesiastes', chapter: 1, label: 'Ecclesiastes 1 - Everything is Meaningless' }
+    ]
+  }
+};
+
+// DOM Elements
 const labelBook = document.getElementById('label-book');
 const labelChapter = document.getElementById('label-chapter');
 const labelTranslation = document.getElementById('label-translation');
@@ -96,6 +99,7 @@ const versesList = document.getElementById('verses-list');
 const parallelVersesList = document.getElementById('parallel-verses-list');
 const prevBtn = document.getElementById('prev-chapter');
 const nextBtn = document.getElementById('next-chapter');
+const readHeader = document.getElementById('read-header');
 
 const navModal = document.getElementById('nav-modal');
 const overlay = document.getElementById('overlay');
@@ -106,26 +110,40 @@ const btnChapterSelect = document.getElementById('btn-chapter-select');
 const btnTransSelect = document.getElementById('btn-trans-select');
 const closeNavModalBtn = document.getElementById('close-nav-modal');
 
-const settingsModal = document.getElementById('settings-modal');
-const openSettingsBtn = document.getElementById('open-settings');
-const closeSettingsBtn = document.getElementById('close-settings');
-const toggleFullscreenBtn = document.getElementById('toggle-fullscreen');
-
-const settingsHubModal = document.getElementById('settings-hub-modal');
-const closeHubModalBtn = document.getElementById('close-hub-modal');
-const resourcesModal = document.getElementById('resources-modal');
-const closeResourcesModalBtn = document.getElementById('close-resources-modal');
-
 const mapViewerModal = document.getElementById('map-viewer-modal');
 const closeMapModalBtn = document.getElementById('close-map-modal');
 const mapImageDisplay = document.getElementById('map-image-display');
 const mapTitle = document.getElementById('map-title');
 const mapDescription = document.getElementById('map-description');
 
+const toggleFullscreenBtn = document.getElementById('toggle-fullscreen');
 const verseActionBar = document.getElementById('verse-action-bar');
 const actionCount = document.getElementById('action-count');
 const toastEl = document.getElementById('toast');
 
+// --- TAB NAVIGATION ENGINE ---
+function switchTab(tabId) {
+  state.activeTab = tabId;
+
+  // Toggle Tab Views
+  document.querySelectorAll('.tab-view').forEach(view => view.classList.remove('active-tab'));
+  const targetView = document.getElementById(`view-${tabId}`);
+  if (targetView) targetView.classList.add('active-tab');
+
+  // Toggle Bottom Navigation Buttons
+  document.querySelectorAll('.nav-tab-item').forEach(btn => btn.classList.remove('active'));
+  const targetBtn = document.getElementById(`tab-btn-${tabId}`);
+  if (targetBtn) targetBtn.classList.add('active');
+
+  // Show Header only on Read Tab
+  if (readHeader) {
+    readHeader.style.display = tabId === 'read' ? 'flex' : 'none';
+  }
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// --- DATA FETCHING & SCRIPTURE LOAD ---
 async function getTranslationData(code) {
   const codeLower = code.toLowerCase();
   if (translationCache[codeLower]) return translationCache[codeLower];
@@ -180,10 +198,7 @@ async function loadParallelChapter(bookName, chapterNum) {
 
   try {
     const parallelData = await getTranslationData(state.parallelTranslation);
-    
-    if (metaParallel) {
-      metaParallel.textContent = parallelData.translation || TRANSLATIONS[state.parallelTranslation];
-    }
+    if (metaParallel) metaParallel.textContent = parallelData.translation || TRANSLATIONS[state.parallelTranslation];
 
     const pBook = parallelData.books.find(b => b.name.toLowerCase() === bookName.toLowerCase());
     if (!pBook) return;
@@ -204,7 +219,6 @@ async function loadParallelChapter(bookName, chapterNum) {
 
 function renderChapter(bookName, chapterData) {
   chapterTitle.textContent = `${bookName} ${chapterData.chapter}`;
-  
   versesList.innerHTML = chapterData.verses.map(v => `
     <div class="verse" data-verse="${v.verse}" onclick="toggleVerseSelection(this)">
       <span class="verse-num">${v.verse}</span><span class="verse-text">${v.text}</span>
@@ -212,7 +226,7 @@ function renderChapter(bookName, chapterData) {
   `).join('');
 }
 
-// VERSE SELECTION & CLIPBOARD COPY ENGINE
+// --- VERSE SELECTION & CLIPBOARD COPY ---
 function toggleVerseSelection(el) {
   el.classList.toggle('selected');
   updateVerseActionBar();
@@ -267,29 +281,23 @@ function showToast(msg) {
   setTimeout(() => toastEl.classList.remove('show'), 2200);
 }
 
-// Check if the browser natively supports document-level fullscreen
-const supportsFullscreen = document.fullscreenEnabled || 
-                           document.webkitFullscreenEnabled;
-
+// --- FULLSCREEN ---
+const supportsFullscreen = document.fullscreenEnabled || document.webkitFullscreenEnabled;
 if (toggleFullscreenBtn) {
   if (!supportsFullscreen) {
     toggleFullscreenBtn.style.display = 'none';
   } else {
     toggleFullscreenBtn.addEventListener('click', () => {
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-          console.warn(`Fullscreen error: ${err.message}`);
-        });
+        document.documentElement.requestFullscreen().catch(err => console.warn(`Fullscreen error: ${err.message}`));
       } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen();
-        }
+        if (document.exitFullscreen) document.exitFullscreen();
       }
     });
   }
 }
 
-// Modal Handlers
+// --- SELECTION MODALS ---
 function openModal(type) {
   state.modalType = type;
   navModal.classList.add('open');
@@ -341,6 +349,7 @@ function renderModalContent() {
   }
 }
 
+// Prev / Next Chapter Buttons
 prevBtn.addEventListener('click', () => {
   if (state.chapter > 1) {
     state.chapter--;
@@ -370,33 +379,7 @@ nextBtn.addEventListener('click', () => {
   }
 });
 
-openSettingsBtn.addEventListener('click', () => {
-  settingsHubModal.classList.add('open');
-  overlay.classList.add('active');
-});
-
-function closeSettingsHub() {
-  settingsHubModal.classList.remove('open');
-  overlay.classList.remove('active');
-}
-
-function openCustomizationSettings() {
-  closeSettingsHub();
-  settingsModal.classList.add('open');
-  overlay.classList.add('active');
-}
-
-function openResourcesHub() {
-  closeSettingsHub();
-  resourcesModal.classList.add('open');
-  overlay.classList.add('active');
-}
-
-function closeResourcesModal() {
-  resourcesModal.classList.remove('open');
-  overlay.classList.remove('active');
-}
-
+// MAP VIEWER
 function openMap(mapId) {
   const mapObj = BIBLE_MAPS.find(m => m.id === mapId);
   if (!mapObj) return;
@@ -405,7 +388,6 @@ function openMap(mapId) {
   mapImageDisplay.src = mapObj.file;
   mapDescription.textContent = mapObj.description;
 
-  resourcesModal.classList.remove('open');
   if (mapViewerModal) mapViewerModal.classList.add('open');
   overlay.classList.add('active');
 }
@@ -415,29 +397,62 @@ function closeMapModal() {
   overlay.classList.remove('active');
 }
 
-if (closeHubModalBtn) closeHubModalBtn.addEventListener('click', closeSettingsHub);
-if (closeResourcesModalBtn) closeResourcesModalBtn.addEventListener('click', closeResourcesModal);
 if (closeMapModalBtn) closeMapModalBtn.addEventListener('click', closeMapModal);
-
-function closeSettingsModal() {
-  settingsModal.classList.remove('open');
-  overlay.classList.remove('active');
-}
-
-closeSettingsBtn.addEventListener('click', closeSettingsModal);
-overlay.addEventListener('click', () => { 
-  closeModal(); 
-  closeSettingsModal(); 
-  closeSettingsHub();
-  closeResourcesModal();
-  closeMapModal();
-});
-closeNavModalBtn.addEventListener('click', closeModal);
+if (closeNavModalBtn) closeNavModalBtn.addEventListener('click', closeModal);
+overlay.addEventListener('click', () => { closeModal(); closeMapModal(); });
 
 btnBookSelect.addEventListener('click', () => openModal('books'));
 btnChapterSelect.addEventListener('click', () => openModal('chapters'));
 btnTransSelect.addEventListener('click', () => openModal('translations'));
 
+// --- READING PLANS ENGINE ---
+function selectPlan(planKey) {
+  state.activePlan = planKey;
+  localStorage.setItem('bible_active_plan', planKey);
+
+  document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('active-plan'));
+  const activeCard = document.getElementById(`plan-${planKey}`);
+  if (activeCard) activeCard.classList.add('active-plan');
+
+  renderPlanSchedule();
+}
+
+function renderPlanSchedule() {
+  const planContainer = document.getElementById('plan-schedule-container');
+  const planTitle = document.getElementById('current-plan-title');
+  if (!planContainer) return;
+
+  const currentPlan = READING_PLANS[state.activePlan] || READING_PLANS['gospels'];
+  if (planTitle) planTitle.textContent = `${currentPlan.title} — Schedule`;
+
+  planContainer.innerHTML = currentPlan.days.map(item => {
+    const itemKey = `${state.activePlan}_day_${item.day}`;
+    const isChecked = state.planProgress[itemKey] ? 'checked' : '';
+    return `
+      <div class="reading-item">
+        <div style="display:flex; align-items:center; gap: 0.75rem;">
+          <input type="checkbox" ${isChecked} onchange="togglePlanItem('${itemKey}', this.checked)" />
+          <span>Day ${item.day}</span>
+        </div>
+        <span class="reading-link" onclick="navigateToPassage('${item.book}', ${item.chapter})">${item.label}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+function togglePlanItem(itemKey, isChecked) {
+  state.planProgress[itemKey] = isChecked;
+  localStorage.setItem('bible_plan_progress', JSON.stringify(state.planProgress));
+}
+
+function navigateToPassage(book, chapter) {
+  state.book = book;
+  state.chapter = chapter;
+  switchTab('read');
+  loadChapter();
+}
+
+// --- SETTINGS CONTROLS ---
 function setFont(font, valKey = '') {
   document.documentElement.style.setProperty('--body-font', font);
   localStorage.setItem('bible_font', font);
@@ -522,7 +537,6 @@ function applyTextColor() {
   }
 }
 
-// PUSHABLE BUTTON TOGGLE HANDLERS
 function toggleReaderMode() {
   const isReader = document.body.classList.toggle('reader-mode');
   localStorage.setItem('bible_reader_mode', isReader);
@@ -556,7 +570,6 @@ function setParallelTranslation(code) {
   loadChapter();
 }
 
-// Dynamically generate parallel buttons from TRANSLATIONS object
 function renderParallelTranslationOptions() {
   const control = document.getElementById('parallel-trans-control');
   if (!control) return;
@@ -584,6 +597,7 @@ function updateActiveSegment(controlId, activeVal) {
   });
 }
 
+// --- INITIALIZATION ---
 window.addEventListener('DOMContentLoaded', () => {
   const savedFont = localStorage.getItem('bible_font');
   const savedAlign = localStorage.getItem('bible_text_align') || 'left';
@@ -613,7 +627,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   if (savedTextColor) {
     document.documentElement.style.setProperty('--text-color', savedTextColor);
-    document.getElementById('text-color-picker').value = savedTextColor;
+    const picker = document.getElementById('text-color-picker');
+    if (picker) picker.value = savedTextColor;
   }
 
   if (isReaderMode) {
@@ -633,5 +648,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   renderParallelTranslationOptions();
+  selectPlan(state.activePlan);
+  switchTab('read');
   loadChapter();
 });
