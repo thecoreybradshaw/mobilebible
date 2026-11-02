@@ -1,11 +1,11 @@
 // --- BIBLE APP LOGIC & STATE ENGINE ---
 
 const state = {
-  translation: localStorage.getItem('bible_translation') || 'kjv',
+  translation: localStorage.getItem('bible_translation') || 'bsb',
   book: localStorage.getItem('bible_book') || 'John',
   chapter: parseInt(localStorage.getItem('bible_chapter'), 10) || 1,
   modalType: 'books',
-  parallelTranslation: localStorage.getItem('bible_parallel_trans') || 'asv',
+  parallelTranslation: localStorage.getItem('bible_parallel_trans') || 'kjv',
   isParallelActive: localStorage.getItem('bible_parallel_mode') === 'true',
   activeTab: 'read',
   activePlan: localStorage.getItem('bible_active_plan') || 'gospels',
@@ -51,9 +51,9 @@ const BIBLE_BOOKS = [
 ];
 
 const TRANSLATIONS = {
+  bsb: 'Berean Standard Bible',
   kjv: 'King James Version',
   asv: 'American Standard Version',
-  bsb: 'Berean Standard Bible',
   ylt: 'Youngs Literal Translation'
 };
 
@@ -64,7 +64,6 @@ const BIBLE_MAPS = [
   { id: 'map-4', title: "The Seven Churches of Revelation", file: "./resources/maps/seven-churches.jpg", description: "Locations of the seven churches in Asia Minor (Revelation 2-3)." }
 ];
 
-// --- SAMPLE READING PLANS DATA ---
 const READING_PLANS = {
   gospels: {
     title: "The Four Gospels (30-Day)",
@@ -88,7 +87,6 @@ const READING_PLANS = {
   }
 };
 
-// DOM Elements
 const labelBook = document.getElementById('label-book');
 const labelChapter = document.getElementById('label-chapter');
 const labelTranslation = document.getElementById('label-translation');
@@ -125,17 +123,14 @@ const toastEl = document.getElementById('toast');
 function switchTab(tabId) {
   state.activeTab = tabId;
 
-  // Toggle Tab Views
   document.querySelectorAll('.tab-view').forEach(view => view.classList.remove('active-tab'));
   const targetView = document.getElementById(`view-${tabId}`);
   if (targetView) targetView.classList.add('active-tab');
 
-  // Toggle Bottom Navigation Buttons
   document.querySelectorAll('.nav-tab-item').forEach(btn => btn.classList.remove('active'));
   const targetBtn = document.getElementById(`tab-btn-${tabId}`);
   if (targetBtn) targetBtn.classList.add('active');
 
-  // Show Header only on Read Tab
   if (readHeader) {
     readHeader.style.display = tabId === 'read' ? 'flex' : 'none';
   }
@@ -349,7 +344,6 @@ function renderModalContent() {
   }
 }
 
-// Prev / Next Chapter Buttons
 prevBtn.addEventListener('click', () => {
   if (state.chapter > 1) {
     state.chapter--;
@@ -464,7 +458,7 @@ function setFont(font, valKey = '') {
     else if (font.includes('Inter')) valKey = 'sans';
     else if (font.includes('Cinzel')) valKey = 'cinzel';
     else if (font.includes('Fira')) valKey = 'mono';
-    else valKey = 'serif';
+    else valKey = 'sans';
   }
   updateActiveSegment('font-control', valKey);
 }
@@ -610,7 +604,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const isParallelMode = localStorage.getItem('bible_parallel_mode') === 'true';
 
   if (savedFont) setFont(savedFont);
-  else setFont('Source Serif 4, Georgia, serif', 'serif');
+  else setFont('Inter, system-ui, sans-serif', 'sans');
 
   setTextAlign(savedAlign);
   setPanelColor(savedPanel);
