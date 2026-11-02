@@ -447,20 +447,29 @@ function navigateToPassage(book, chapter) {
 }
 
 // --- SETTINGS CONTROLS ---
-function setFont(font, valKey = '') {
-  document.documentElement.style.setProperty('--body-font', font);
-  localStorage.setItem('bible_font', font);
-  if (!valKey) {
-    if (font.includes('Playfair Display SC')) valKey = 'playfair-sc';
-    else if (font.includes('Cinzel Decorative')) valKey = 'cinzel-decor';
-    else if (font.includes('Playfair')) valKey = 'editorial';
-    else if (font.includes('Lora')) valKey = 'lora';
-    else if (font.includes('Source Serif 4')) valKey = 'serif';
-    else if (font.includes('Cinzel')) valKey = 'cinzel';
-    else if (font.includes('Fira')) valKey = 'mono';
-    else valKey = 'sans';
+const FONT_FAMILIES = {
+  'sans': 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+  'serif': '"Source Serif 4", Georgia, serif',
+  'editorial': '"Playfair Display", Georgia, serif',
+  'lora': 'Lora, Georgia, serif',
+  'cinzel': 'Cinzel, Georgia, serif',
+  'mono': '"Fira Code", monospace',
+  'cinzel-decor': '"Cinzel Decorative", Georgia, serif',
+  'playfair-sc': '"Playfair Display SC", Georgia, serif'
+};
+
+function setFont(fontKey, element) {
+  const fontFamily = FONT_FAMILIES[fontKey] || FONT_FAMILIES['sans'];
+  document.documentElement.style.setProperty('--body-font', fontFamily);
+  localStorage.setItem('bible_font_key', fontKey);
+  localStorage.setItem('bible_font', fontFamily);
+
+  if (element) {
+    document.querySelectorAll('#font-control button').forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+  } else {
+    updateActiveSegment('font-control', fontKey);
   }
-  updateActiveSegment('font-control', valKey);
 }
 
 let currentFontSize = parseFloat(localStorage.getItem('bible_font_size')) || 1.15;
@@ -478,7 +487,7 @@ function setTextAlign(align) {
   updateActiveSegment('align-control', align);
 }
 
-// Bar Color Gallery handles both solid and complex layered background images/textures
+// Bar Color Gallery
 function setPanelColor(colorValue, element) {
   document.documentElement.style.setProperty('--panel-bg', colorValue);
   localStorage.setItem('bible_panel_color', colorValue);
@@ -489,12 +498,12 @@ function setPanelColor(colorValue, element) {
   }
 }
 
-// Background Gallery handles background textures/gradients and dynamic UI contrast
-function setGalleryBg(bgValue, element, isTextured = false, solidFallbackColor = null) {
-  if (isTextured) {
+// Background Gallery
+function setGalleryBg(bgValue, type, element, solidFallbackColor = null) {
+  if (type === 'texture') {
     document.documentElement.style.setProperty('--bg-image', bgValue);
     document.documentElement.style.setProperty('--bg-color', solidFallbackColor || '#fcfaf7');
-  } else if (bgValue.includes('gradient')) {
+  } else if (type === 'gradient') {
     document.documentElement.style.setProperty('--bg-image', bgValue);
     document.documentElement.style.setProperty('--bg-color', 'transparent');
   } else {
@@ -532,7 +541,7 @@ function setGalleryBg(bgValue, element, isTextured = false, solidFallbackColor =
   }
 
   localStorage.setItem('bible_bg_gallery', bgValue);
-  localStorage.setItem('bible_bg_textured', isTextured);
+  localStorage.setItem('bible_bg_type', type);
   if (solidFallbackColor) {
     localStorage.setItem('bible_bg_fallback', solidFallbackColor);
   } else {
@@ -616,24 +625,22 @@ function updateActiveSegment(controlId, activeVal) {
 
 // --- INITIALIZATION ---
 window.addEventListener('DOMContentLoaded', () => {
-  const savedFont = localStorage.getItem('bible_font');
+  const savedFontKey = localStorage.getItem('bible_font_key') || 'sans';
   const savedAlign = localStorage.getItem('bible_text_align') || 'left';
   const savedBg = localStorage.getItem('bible_bg_gallery') || '#fcfaf7';
-  const savedIsTextured = localStorage.getItem('bible_bg_textured') === 'true';
+  const savedBgType = localStorage.getItem('bible_bg_type') || 'solid';
   const savedBgFallback = localStorage.getItem('bible_bg_fallback') || null;
-  const savedPanel = localStorage.getItem('bible_panel_color') || 'rgba(252, 250, 247, 0.85)';
+  const savedPanel = localStorage.getItem('bible_panel_color') || 'rgba(252, 250, 247, 0.9)';
   const savedTextColor = localStorage.getItem('bible_text_color');
   
   const isReaderMode = localStorage.getItem('bible_reader_mode') === 'true';
   const isScrollMode = localStorage.getItem('bible_scroll_mode') === 'true';
   const isParallelMode = localStorage.getItem('bible_parallel_mode') === 'true';
 
-  if (savedFont) setFont(savedFont);
-  else setFont('Inter, system-ui, sans-serif', 'sans');
-
+  setFont(savedFontKey);
   setTextAlign(savedAlign);
   setPanelColor(savedPanel);
-  setGalleryBg(savedBg, null, savedIsTextured, savedBgFallback);
+  setGalleryBg(savedBg, savedBgType, null, savedBgFallback);
 
   if (savedTextColor) {
     document.documentElement.style.setProperty('--text-color', savedTextColor);
