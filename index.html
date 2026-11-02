@@ -519,7 +519,7 @@
 
     .segmented-control {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(65px, 1fr));
       padding: 4px;
       border-radius: 18px;
       gap: 4px;
@@ -529,7 +529,7 @@
       border: none;
       box-shadow: none;
       padding: 0.55rem 0.2rem;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       border-radius: 14px;
     }
 
@@ -758,14 +758,20 @@
     <div class="setting-section">
       <label class="setting-label">Background Gallery</label>
       <div class="gallery-grid" id="bg-gallery">
-        <div class="gallery-chip" style="background: #fcfaf7;" onclick="setGalleryBg('#fcfaf7', this)"></div>
-        <div class="gallery-chip" style="background: #121110;" onclick="setGalleryBg('#121110', this)"></div>
+        <!-- Row 1: Solid & Gradient -->
+        <div class="gallery-chip" style="background: #fcfaf7;" onclick="setGalleryBg('#fcfaf7', this)" title="Parchment"></div>
+        <div class="gallery-chip" style="background: #121110;" onclick="setGalleryBg('#121110', this)" title="Midnight"></div>
         <div class="gallery-chip" style="background: linear-gradient(135deg, #f7dcd0 0%, #e88a74 100%);" onclick="setGalleryBg('linear-gradient(135deg, #f7dcd0 0%, #e88a74 100%)', this)" title="Soft Crimson"></div>
         <div class="gallery-chip" style="background: linear-gradient(135deg, #ffe0b2 0%, #fb8c00 100%);" onclick="setGalleryBg('linear-gradient(135deg, #ffe0b2 0%, #fb8c00 100%)', this)" title="Sunset Orange"></div>
         <div class="gallery-chip" style="background: linear-gradient(135deg, #e0f7fa 0%, #00acc1 100%);" onclick="setGalleryBg('linear-gradient(135deg, #e0f7fa 0%, #00acc1 100%)', this)" title="Cyan Cyan"></div>
         <div class="gallery-chip" style="background: linear-gradient(135deg, #e1bee7 0%, #8e24aa 100%);" onclick="setGalleryBg('linear-gradient(135deg, #e1bee7 0%, #8e24aa 100%)', this)" title="Deep Purple"></div>
         <div class="gallery-chip" style="background: linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%);" onclick="setGalleryBg('linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%)', this)" title="Soft Sage"></div>
         <div class="gallery-chip" style="background: linear-gradient(135deg, #141826 0%, #080a12 100%);" onclick="setGalleryBg('linear-gradient(135deg, #141826 0%, #080a12 100%)', this)" title="Midnight Indigo"></div>
+        <!-- Row 2: Textured Background Options -->
+        <div class="gallery-chip" style="background-color: #f7f4eb; background-image: radial-gradient(#d6cebd 1px, transparent 1px); background-size: 12px 12px;" onclick="setGalleryBg('radial-gradient(#d6cebd 1px, transparent 1px)', this, '#f7f4eb')" title="Subtle Linen Dot"></div>
+        <div class="gallery-chip" style="background-color: #1a1918; background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 2px, transparent 0, transparent 8px);" onclick="setGalleryBg('repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0, rgba(255,255,255,0.03) 2px, transparent 0, transparent 8px)', this, '#1a1918')" title="Dark Canvas Stripe"></div>
+        <div class="gallery-chip" style="background-color: #eef2f5; background-image: linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.04) 1px, transparent 1px); background-size: 16px 16px;" onclick="setGalleryBg('linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.04) 1px, transparent 1px)', this, '#eef2f5')" title="Subtle Paper Grid"></div>
+        <div class="gallery-chip" style="background-color: #2b231c; background-image: radial-gradient(rgba(255,255,255,0.08) 1.5px, transparent 1.5px); background-size: 10px 10px;" onclick="setGalleryBg('radial-gradient(rgba(255,255,255,0.08) 1.5px, transparent 1.5px)', this, '#2b231c')" title="Warm Leather Dot"></div>
       </div>
     </div>
 
@@ -773,6 +779,7 @@
     <div class="setting-section">
       <label class="setting-label">Bar Color Gallery</label>
       <div class="gallery-grid" id="panel-gallery">
+        <!-- Row 1: Solid & Translucent Bars -->
         <div class="gallery-chip" style="background: rgba(252, 250, 247, 0.85);" onclick="setPanelColor('rgba(252, 250, 247, 0.85)', this)" title="Parchment"></div>
         <div class="gallery-chip" style="background: rgba(18, 17, 16, 0.85);" onclick="setPanelColor('rgba(18, 17, 16, 0.85)', this)" title="Midnight"></div>
         <div class="gallery-chip" style="background: rgba(168, 50, 50, 0.85);" onclick="setPanelColor('rgba(168, 50, 50, 0.85)', this)" title="Crimson Red"></div>
@@ -781,6 +788,11 @@
         <div class="gallery-chip" style="background: rgba(30, 42, 74, 0.85);" onclick="setPanelColor('rgba(30, 42, 74, 0.85)', this)" title="Deep Blue"></div>
         <div class="gallery-chip" style="background: rgba(88, 44, 132, 0.85);" onclick="setPanelColor('rgba(88, 44, 132, 0.85)', this)" title="Royal Purple"></div>
         <div class="gallery-chip" style="background: rgba(34, 112, 62, 0.85);" onclick="setPanelColor('rgba(34, 112, 62, 0.85)', this)" title="Emerald Green"></div>
+        <!-- Row 2: Textured Bar Options -->
+        <div class="gallery-chip" style="background-color: rgba(247, 244, 235, 0.9); background-image: radial-gradient(#d6cebd 1px, transparent 1px); background-size: 10px 10px;" onclick="setPanelColor('rgba(247, 244, 235, 0.9)', this)" title="Textured Linen Bar"></div>
+        <div class="gallery-chip" style="background-color: rgba(26, 25, 24, 0.9); background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0, rgba(255,255,255,0.04) 2px, transparent 0, transparent 8px);" onclick="setPanelColor('rgba(26, 25, 24, 0.9)', this)" title="Dark Canvas Stripe Bar"></div>
+        <div class="gallery-chip" style="background-color: rgba(238, 242, 245, 0.9); background-image: linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.04) 1px, transparent 1px); background-size: 14px 14px;" onclick="setPanelColor('rgba(238, 242, 245, 0.9)', this)" title="Subtle Paper Grid Bar"></div>
+        <div class="gallery-chip" style="background-color: rgba(43, 35, 28, 0.9); background-image: radial-gradient(rgba(255,255,255,0.08) 1.5px, transparent 1.5px); background-size: 10px 10px;" onclick="setPanelColor('rgba(43, 35, 28, 0.9)', this)" title="Warm Leather Dot Bar"></div>
       </div>
     </div>
 
