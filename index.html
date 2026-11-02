@@ -54,7 +54,7 @@
     body {
       background-color: var(--bg-color);
       background-image: var(--bg-image);
-      background-size: cover;
+      background-size: auto;
       background-position: center;
       background-attachment: fixed;
       color: var(--ui-text-color);
@@ -66,6 +66,14 @@
       flex-direction: column;
       overflow-x: hidden;
       transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Scroll Mode Enhancements */
+    body.scroll-mode {
+      scroll-behavior: smooth;
+    }
+    body.scroll-mode .tab-view {
+      max-width: 720px;
     }
 
     /* --- BUTTONS & CONTROLS --- */
@@ -791,10 +799,10 @@
         <div class="gallery-chip" style="background: linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%);" onclick="setGalleryBg('linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%)', 'gradient', this)" title="Soft Sage"></div>
         <div class="gallery-chip" style="background: linear-gradient(135deg, #141826 0%, #080a12 100%);" onclick="setGalleryBg('linear-gradient(135deg, #141826 0%, #080a12 100%)', 'gradient', this)" title="Midnight Indigo"></div>
         <!-- Row 2: Textured Background Options -->
-        <div class="gallery-chip" style="background-color: #f7f4eb; background-image: radial-gradient(#d6cebd 1.2px, transparent 1.2px); background-size: 12px 12px;" onclick="setGalleryBg('radial-gradient(#d6cebd 1.2px, transparent 1.2px), #f7f4eb', 'texture', this, '#f7f4eb')" title="Subtle Linen Dot"></div>
-        <div class="gallery-chip" style="background-color: #1a1918; background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 2px, transparent 0, transparent 8px);" onclick="setGalleryBg('repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 2px, transparent 0, transparent 8px), #1a1918', 'texture', this, '#1a1918')" title="Dark Canvas Stripe"></div>
-        <div class="gallery-chip" style="background-color: #eef2f5; background-image: linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px); background-size: 16px 16px;" onclick="setGalleryBg('linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px), #eef2f5', 'texture', this, '#eef2f5')" title="Subtle Paper Grid"></div>
-        <div class="gallery-chip" style="background-color: #2b231c; background-image: radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px); background-size: 10px 10px;" onclick="setGalleryBg('radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px), #2b231c', 'texture', this, '#2b231c')" title="Warm Leather Dot"></div>
+        <div class="gallery-chip" style="background-color: #f7f4eb; background-image: radial-gradient(#d6cebd 1.2px, transparent 1.2px); background-size: 12px 12px;" onclick="setGalleryBg('radial-gradient(#d6cebd 1.2px, transparent 1.2px)', 'texture', this, '#f7f4eb')" title="Subtle Linen Dot"></div>
+        <div class="gallery-chip" style="background-color: #1a1918; background-image: repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 2px, transparent 0, transparent 8px);" onclick="setGalleryBg('repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0, rgba(255,255,255,0.05) 2px, transparent 0, transparent 8px)', 'texture', this, '#1a1918')" title="Dark Canvas Stripe"></div>
+        <div class="gallery-chip" style="background-color: #eef2f5; background-image: linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px); background-size: 16px 16px;" onclick="setGalleryBg('linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(0deg, rgba(0,0,0,0.05) 1px, transparent 1px)', 'texture', this, '#eef2f5')" title="Subtle Paper Grid"></div>
+        <div class="gallery-chip" style="background-color: #2b231c; background-image: radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px); background-size: 10px 10px;" onclick="setGalleryBg('radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px)', 'texture', this, '#2b231c')" title="Warm Leather Dot"></div>
       </div>
     </div>
 
