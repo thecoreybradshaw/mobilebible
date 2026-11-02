@@ -388,7 +388,7 @@ function openMap(mapId) {
 
 function closeMapModal() {
   if (mapViewerModal) mapViewerModal.classList.remove('open');
-  overlay.classList.remove('active');
+  overlay.classList.add('active');
 }
 
 if (closeMapModalBtn) closeMapModalBtn.addEventListener('click', closeMapModal);
@@ -478,7 +478,7 @@ function setTextAlign(align) {
   updateActiveSegment('align-control', align);
 }
 
-// Bar Color Gallery ONLY controls the bar/panel background color
+// Bar Color Gallery handles both solid and complex layered background images/textures
 function setPanelColor(colorValue, element) {
   document.documentElement.style.setProperty('--panel-bg', colorValue);
   localStorage.setItem('bible_panel_color', colorValue);
@@ -489,11 +489,14 @@ function setPanelColor(colorValue, element) {
   }
 }
 
-// Background Gallery controls background, UI text, card backgrounds, and borders
-function setGalleryBg(bgValue, element, solidFallbackColor = null) {
-  if (bgValue.includes('gradient') || bgValue.includes('radial') || bgValue.includes('repeating')) {
+// Background Gallery handles background textures/gradients and dynamic UI contrast
+function setGalleryBg(bgValue, element, isTextured = false, solidFallbackColor = null) {
+  if (isTextured) {
     document.documentElement.style.setProperty('--bg-image', bgValue);
-    document.documentElement.style.setProperty('--bg-color', solidFallbackColor || 'transparent');
+    document.documentElement.style.setProperty('--bg-color', solidFallbackColor || '#fcfaf7');
+  } else if (bgValue.includes('gradient')) {
+    document.documentElement.style.setProperty('--bg-image', bgValue);
+    document.documentElement.style.setProperty('--bg-color', 'transparent');
   } else {
     document.documentElement.style.setProperty('--bg-image', 'none');
     document.documentElement.style.setProperty('--bg-color', bgValue);
@@ -529,6 +532,7 @@ function setGalleryBg(bgValue, element, solidFallbackColor = null) {
   }
 
   localStorage.setItem('bible_bg_gallery', bgValue);
+  localStorage.setItem('bible_bg_textured', isTextured);
   if (solidFallbackColor) {
     localStorage.setItem('bible_bg_fallback', solidFallbackColor);
   } else {
@@ -615,6 +619,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const savedFont = localStorage.getItem('bible_font');
   const savedAlign = localStorage.getItem('bible_text_align') || 'left';
   const savedBg = localStorage.getItem('bible_bg_gallery') || '#fcfaf7';
+  const savedIsTextured = localStorage.getItem('bible_bg_textured') === 'true';
   const savedBgFallback = localStorage.getItem('bible_bg_fallback') || null;
   const savedPanel = localStorage.getItem('bible_panel_color') || 'rgba(252, 250, 247, 0.85)';
   const savedTextColor = localStorage.getItem('bible_text_color');
@@ -628,7 +633,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setTextAlign(savedAlign);
   setPanelColor(savedPanel);
-  setGalleryBg(savedBg, null, savedBgFallback);
+  setGalleryBg(savedBg, null, savedIsTextured, savedBgFallback);
 
   if (savedTextColor) {
     document.documentElement.style.setProperty('--text-color', savedTextColor);
