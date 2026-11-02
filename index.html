@@ -20,7 +20,7 @@
       --bg-color: #fcfaf7;
       --text-color: #2c2523;
       --heading-font: 'Playfair Display', Georgia, serif;
-      --body-font: 'Source Serif 4', Georgia, serif;
+      --body-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --accent-gold: #b8860b;
       --panel-bg: rgba(252, 250, 247, 0.88);
@@ -155,6 +155,46 @@
 
     .tab-view.active-tab {
       display: block;
+    }
+
+    /* Content-Aware Non-Read Tabs (Resources, Plans, Settings) */
+    #view-resources, #view-plans, #view-settings {
+      color: #2c2523 !important;
+      text-align: left !important;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+      font-size: 1rem !important;
+      line-height: 1.6 !important;
+    }
+
+    #view-resources .chapter-header, 
+    #view-plans .chapter-header, 
+    #view-settings .chapter-header {
+      color: #2c2523 !important;
+      font-family: 'Playfair Display', Georgia, serif !important;
+    }
+
+    #view-resources .preview-card,
+    #view-plans .plan-card,
+    #view-plans .reading-item,
+    #view-settings .preview-card,
+    #view-settings .color-picker-row {
+      background: rgba(255, 255, 255, 0.85) !important;
+      color: #2c2523 !important;
+      border-color: rgba(0, 0, 0, 0.1) !important;
+    }
+
+    #view-settings .segmented-control {
+      background: rgba(0, 0, 0, 0.05) !important;
+      border-color: rgba(0, 0, 0, 0.1) !important;
+    }
+
+    #view-settings .segmented-control button {
+      color: #2c2523 !important;
+    }
+
+    #view-settings .segmented-control button.active {
+      background: #ffffff !important;
+      color: #2c2523 !important;
     }
 
     .section-title {
@@ -468,32 +508,32 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-weight: 700;
-      color: var(--verse-num-color);
+      color: #6b635b;
     }
 
     .segmented-control {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-      background: var(--pill-bg);
+      background: rgba(0, 0, 0, 0.05);
       padding: 4px;
       border-radius: 18px;
       gap: 4px;
-      border: 1px solid var(--border-color);
+      border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     .segmented-control button {
       border: none;
       background: transparent;
       box-shadow: none;
-      color: var(--button-text-color);
+      color: #2c2523;
       padding: 0.55rem 0.2rem;
       font-size: 0.78rem;
       border-radius: 14px;
     }
 
     .segmented-control button.active {
-      background: var(--card-bg);
-      color: var(--text-color);
+      background: #ffffff;
+      color: #2c2523;
       box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
@@ -501,21 +541,21 @@
     .gallery-chip {
       aspect-ratio: 16/10;
       border-radius: 14px;
-      border: 2px solid var(--border-color);
+      border: 2px solid rgba(0,0,0,0.1);
       cursor: pointer;
       transition: transform 0.15s ease, border-color 0.15s ease;
-      box-shadow: var(--glass-shadow);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
     }
-    .gallery-chip.active { border-color: var(--active-pill); transform: scale(0.96); }
+    .gallery-chip.active { border-color: #2c2523; transform: scale(0.96); }
 
     .color-picker-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: var(--pill-bg);
+      background: rgba(255, 255, 255, 0.85);
       padding: 0.6rem 1rem;
       border-radius: 18px;
-      border: 1px solid var(--border-color);
+      border: 1px solid rgba(0, 0, 0, 0.1);
     }
     .color-picker-row input[type="color"] {
       border: none;
@@ -528,8 +568,8 @@
 
     /* --- READING PLANS LIST --- */
     .plan-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(0,0,0,0.1);
       border-radius: 18px;
       padding: 1rem 1.25rem;
       margin-bottom: 0.75rem;
@@ -543,8 +583,8 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(0,0,0,0.1);
       border-radius: 14px;
       padding: 0.75rem 1rem;
       margin-bottom: 0.5rem;
@@ -579,7 +619,7 @@
         <span class="chevron">▼</span>
       </button>
       <button class="nav-pill" id="btn-trans-select">
-        <span id="label-translation">KJV</span>
+        <span id="label-translation">BSB</span>
         <span class="chevron">▼</span>
       </button>
     </div>
@@ -596,7 +636,7 @@
 
     <div class="reader-grid" id="reader-grid">
       <div class="reader-column">
-        <span class="translation-tag" id="meta-translation">King James Version</span>
+        <span class="translation-tag" id="meta-translation">Berean Standard Bible</span>
         <div id="verses-list"></div>
       </div>
       <div class="reader-column parallel-column">
@@ -613,7 +653,6 @@
       <div class="divider"></div>
     </div>
 
-    <!-- 1. MAPS SECTION -->
     <div class="section-title">Atlas & Geography</div>
     <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-1')">
       <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">Divided Israel and Judah</h3>
@@ -632,7 +671,6 @@
       <p style="font-size: 0.85rem; opacity: 0.8;">Locations of the seven churches of Asia Minor in Revelation 2–3.</p>
     </div>
 
-    <!-- 2. COMMENTARIES SECTION -->
     <div class="section-title">Commentaries & Notes</div>
     <div class="preview-card" style="cursor: pointer;" onclick="showToast('Matthew Henry Commentary coming soon!')">
       <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">Matthew Henry Concise Commentary</h3>
@@ -643,7 +681,6 @@
       <p style="font-size: 0.85rem; opacity: 0.8;">Explanatory and critical notes on Old and New Testaments.</p>
     </div>
 
-    <!-- 3. APOCRYPHA SECTION -->
     <div class="section-title">Apocrypha / Deuterocanon</div>
     <div class="preview-card" style="cursor: pointer;" onclick="showToast('Apocryphal books integration coming soon!')">
       <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">Deuterocanonical Text Collection</h3>
@@ -669,9 +706,7 @@
     </div>
 
     <div class="section-title" id="current-plan-title">Daily Checklist</div>
-    <div id="plan-schedule-container">
-      <!-- Daily checklist items render here dynamically -->
-    </div>
+    <div id="plan-schedule-container"></div>
   </div>
 
   <!-- TAB 4: SETTINGS & CUSTOMIZATION -->
@@ -687,14 +722,30 @@
       <span class="verse-num">1</span>In the beginning was the Word, and the Word was with God, and the Word was God.
     </div>
 
+    <!-- Reading Options (Moved to Top) -->
+    <div class="setting-section">
+      <label class="setting-label">Reading Options</label>
+      <div class="segmented-control">
+        <button id="btn-reader-mode" onclick="toggleReaderMode()">Hide Numbers</button>
+        <button id="btn-scroll-mode" onclick="toggleScrollMode()">Scroll Mode</button>
+        <button id="btn-parallel-mode" onclick="toggleParallelMode()">Parallel</button>
+      </div>
+    </div>
+
+    <!-- Parallel Selector -->
+    <div class="setting-section" id="parallel-select-section" style="display: none;">
+      <label class="setting-label">Secondary Translation</label>
+      <div class="segmented-control" id="parallel-trans-control"></div>
+    </div>
+
     <!-- Font Style -->
     <div class="setting-section">
       <label class="setting-label">Font Style</label>
       <div class="segmented-control" id="font-control">
+        <button data-val="sans" onclick="setFont('Inter, system-ui, sans-serif', 'sans')">Sans</button>
         <button data-val="serif" onclick="setFont('Source Serif 4, Georgia, serif', 'serif')">Serif</button>
         <button data-val="editorial" onclick="setFont('Playfair Display, serif', 'editorial')">Editorial</button>
         <button data-val="lora" onclick="setFont('Lora, serif', 'lora')">Classic</button>
-        <button data-val="sans" onclick="setFont('Inter, system-ui, sans-serif', 'sans')">Sans</button>
         <button data-val="cinzel" onclick="setFont('Cinzel, serif', 'cinzel')">Elegance</button>
         <button data-val="mono" onclick="setFont('Fira Code, monospace', 'mono')">Mono</button>
         <button data-val="cinzel-decor" onclick="setFont('Cinzel Decorative, serif', 'cinzel-decor')">Majestic</button>
@@ -761,22 +812,6 @@
           <button style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="applyTextColor()">Apply</button>
         </div>
       </div>
-    </div>
-
-    <!-- Reading Modes -->
-    <div class="setting-section">
-      <label class="setting-label">Reading Options</label>
-      <div class="segmented-control">
-        <button id="btn-reader-mode" onclick="toggleReaderMode()">Hide Numbers</button>
-        <button id="btn-scroll-mode" onclick="toggleScrollMode()">Scroll Mode</button>
-        <button id="btn-parallel-mode" onclick="toggleParallelMode()">Parallel</button>
-      </div>
-    </div>
-
-    <!-- Parallel Selector -->
-    <div class="setting-section" id="parallel-select-section" style="display: none;">
-      <label class="setting-label">Secondary Translation</label>
-      <div class="segmented-control" id="parallel-trans-control"></div>
     </div>
   </div>
 
