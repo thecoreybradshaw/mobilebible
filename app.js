@@ -490,16 +490,16 @@ function setPanelColor(colorValue, element) {
 }
 
 // Background Gallery controls background, UI text, card backgrounds, and borders
-function setGalleryBg(bgValue, element) {
-  if (bgValue.includes('gradient')) {
+function setGalleryBg(bgValue, element, solidFallbackColor = null) {
+  if (bgValue.includes('gradient') || bgValue.includes('radial') || bgValue.includes('repeating')) {
     document.documentElement.style.setProperty('--bg-image', bgValue);
-    document.documentElement.style.setProperty('--bg-color', 'transparent');
+    document.documentElement.style.setProperty('--bg-color', solidFallbackColor || 'transparent');
   } else {
     document.documentElement.style.setProperty('--bg-image', 'none');
     document.documentElement.style.setProperty('--bg-color', bgValue);
   }
 
-  const isDark = bgValue === '#121110' || bgValue.includes('#141826');
+  const isDark = bgValue === '#121110' || bgValue.includes('#141826') || bgValue.includes('#1a1918') || bgValue.includes('#2b231c');
   if (isDark) {
     if (!localStorage.getItem('bible_text_color')) {
       document.documentElement.style.setProperty('--text-color', '#fcfaf7');
@@ -529,6 +529,12 @@ function setGalleryBg(bgValue, element) {
   }
 
   localStorage.setItem('bible_bg_gallery', bgValue);
+  if (solidFallbackColor) {
+    localStorage.setItem('bible_bg_fallback', solidFallbackColor);
+  } else {
+    localStorage.removeItem('bible_bg_fallback');
+  }
+
   if (element) {
     document.querySelectorAll('#bg-gallery .gallery-chip').forEach(el => el.classList.remove('active'));
     element.classList.add('active');
@@ -609,6 +615,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const savedFont = localStorage.getItem('bible_font');
   const savedAlign = localStorage.getItem('bible_text_align') || 'left';
   const savedBg = localStorage.getItem('bible_bg_gallery') || '#fcfaf7';
+  const savedBgFallback = localStorage.getItem('bible_bg_fallback') || null;
   const savedPanel = localStorage.getItem('bible_panel_color') || 'rgba(252, 250, 247, 0.85)';
   const savedTextColor = localStorage.getItem('bible_text_color');
   
@@ -621,7 +628,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setTextAlign(savedAlign);
   setPanelColor(savedPanel);
-  setGalleryBg(savedBg);
+  setGalleryBg(savedBg, null, savedBgFallback);
 
   if (savedTextColor) {
     document.documentElement.style.setProperty('--text-color', savedTextColor);
