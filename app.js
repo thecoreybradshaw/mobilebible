@@ -491,18 +491,10 @@ function setPanelColor(colorValue, element) {
       document.documentElement.style.setProperty('--button-text-color', '#121110');
       document.documentElement.style.setProperty('--pill-bg', 'rgba(0, 0, 0, 0.06)');
       document.documentElement.style.setProperty('--pill-border', 'rgba(0, 0, 0, 0.12)');
-      document.documentElement.style.setProperty('--border-color', 'rgba(0, 0, 0, 0.1)');
-      document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.65)');
-      document.documentElement.style.setProperty('--verse-num-color', '#a89f91');
-      document.documentElement.style.setProperty('--accent-gold', '#b8860b');
     } else {
       document.documentElement.style.setProperty('--button-text-color', '#ffffff');
       document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.15)');
       document.documentElement.style.setProperty('--pill-border', 'rgba(255, 255, 255, 0.22)');
-      document.documentElement.style.setProperty('--border-color', 'rgba(255, 255, 255, 0.12)');
-      document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.08)');
-      document.documentElement.style.setProperty('--verse-num-color', 'rgba(255, 255, 255, 0.45)');
-      document.documentElement.style.setProperty('--accent-gold', '#f3cca1');
     }
   }
 
@@ -519,6 +511,22 @@ function setGalleryBg(bgValue, element) {
   } else {
     document.documentElement.style.setProperty('--bg-image', 'none');
     document.documentElement.style.setProperty('--bg-color', bgValue);
+  }
+
+  // Determine light or dark contrast based on selected background
+  const isDark = bgValue === '#121110' || bgValue.includes('#141826');
+  if (isDark) {
+    document.documentElement.style.setProperty('--text-color', '#fcfaf7');
+    document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.08)');
+    document.documentElement.style.setProperty('--border-color', 'rgba(255, 255, 255, 0.15)');
+    document.documentElement.style.setProperty('--verse-num-color', 'rgba(255, 255, 255, 0.45)');
+    document.documentElement.style.setProperty('--accent-gold', '#f3cca1');
+  } else {
+    document.documentElement.style.setProperty('--text-color', '#2c2523');
+    document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.65)');
+    document.documentElement.style.setProperty('--border-color', 'rgba(0, 0, 0, 0.1)');
+    document.documentElement.style.setProperty('--verse-num-color', '#a89f91');
+    document.documentElement.style.setProperty('--accent-gold', '#b8860b');
   }
 
   localStorage.setItem('bible_bg_gallery', bgValue);
@@ -601,7 +609,7 @@ function updateActiveSegment(controlId, activeVal) {
 window.addEventListener('DOMContentLoaded', () => {
   const savedFont = localStorage.getItem('bible_font');
   const savedAlign = localStorage.getItem('bible_text_align') || 'left';
-  const savedBg = localStorage.getItem('bible_bg_gallery');
+  const savedBg = localStorage.getItem('bible_bg_gallery') || '#fcfaf7';
   const savedPanel = localStorage.getItem('bible_panel_color') || 'rgba(252, 250, 247, 0.85)';
   const savedTextColor = localStorage.getItem('bible_text_color');
   
@@ -614,16 +622,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setTextAlign(savedAlign);
   setPanelColor(savedPanel);
-
-  if (savedBg) {
-    if (savedBg.includes('gradient')) {
-      document.documentElement.style.setProperty('--bg-image', savedBg);
-      document.documentElement.style.setProperty('--bg-color', 'transparent');
-    } else {
-      document.documentElement.style.setProperty('--bg-image', 'none');
-      document.documentElement.style.setProperty('--bg-color', savedBg);
-    }
-  }
+  setGalleryBg(savedBg);
 
   if (savedTextColor) {
     document.documentElement.style.setProperty('--text-color', savedTextColor);
