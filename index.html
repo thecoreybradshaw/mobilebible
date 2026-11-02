@@ -56,11 +56,10 @@
       background-size: cover;
       background-position: center;
       background-attachment: fixed;
-      color: var(--text-color);
-      font-family: var(--body-font);
+      color: var(--button-text-color);
+      font-family: var(--ui-font);
       font-size: var(--font-size);
       line-height: var(--line-height);
-      text-align: var(--text-align);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -157,9 +156,16 @@
       display: block;
     }
 
-    /* Fully Dynamic Non-Read Tabs */
-    #view-resources, #view-plans, #view-settings {
+    /* Isolated Scripture Reader Font & Color Styling */
+    #view-read, #preview-box {
       color: var(--text-color);
+      font-family: var(--body-font);
+      text-align: var(--text-align);
+    }
+
+    /* Non-Read Tabs UI System */
+    #view-resources, #view-plans, #view-settings {
+      color: var(--button-text-color);
       text-align: left;
       font-family: var(--ui-font);
       font-size: 1rem;
@@ -169,7 +175,7 @@
     #view-resources .chapter-header, 
     #view-plans .chapter-header, 
     #view-settings .chapter-header {
-      color: var(--text-color);
+      color: var(--button-text-color);
       font-family: var(--heading-font);
     }
 
@@ -179,21 +185,21 @@
     #view-settings .preview-card,
     #view-settings .color-picker-row {
       background: var(--card-bg);
-      color: var(--text-color);
+      color: var(--button-text-color);
       border: 1px solid var(--border-color);
     }
 
     #view-settings .segmented-control {
-      background: var(--card-bg);
+      background: var(--pill-bg);
       border: 1px solid var(--border-color);
     }
 
     #view-settings .segmented-control button {
-      color: var(--text-color);
+      color: var(--button-text-color);
     }
 
     #view-settings .segmented-control button.active {
-      background: var(--panel-bg);
+      background: var(--card-bg);
       color: var(--button-text-color);
     }
 
@@ -228,7 +234,7 @@
       font-family: var(--heading-font);
       font-size: 2.2rem;
       font-weight: 700;
-      color: var(--text-color);
+      color: var(--button-text-color);
       letter-spacing: -0.02em;
     }
 
@@ -303,11 +309,8 @@
       border: 1px solid var(--border-color);
       border-radius: 18px;
       padding: 1.1rem;
-      text-align: var(--text-align);
-      font-family: var(--body-font);
       font-size: var(--font-size);
       line-height: var(--line-height);
-      color: var(--text-color);
       transition: all 0.2s ease;
       box-shadow: var(--glass-shadow);
       margin-bottom: 0.8rem;
@@ -538,7 +541,7 @@
       transition: transform 0.15s ease, border-color 0.15s ease;
       box-shadow: var(--glass-shadow);
     }
-    .gallery-chip.active { border-color: var(--text-color); transform: scale(0.96); }
+    .gallery-chip.active { border-color: var(--button-text-color); transform: scale(0.96); }
 
     .color-picker-row {
       display: flex;
@@ -750,7 +753,7 @@
       </div>
     </div>
 
-    <!-- Background Gallery FIRST -->
+    <!-- Background Gallery -->
     <div class="setting-section">
       <label class="setting-label">Background Gallery</label>
       <div class="gallery-grid" id="bg-gallery">
@@ -765,7 +768,7 @@
       </div>
     </div>
 
-    <!-- Bar Color Gallery SECOND -->
+    <!-- Bar Color Gallery -->
     <div class="setting-section">
       <label class="setting-label">Bar Color Gallery</label>
       <div class="gallery-grid" id="panel-gallery">
@@ -782,7 +785,7 @@
 
     <!-- Custom Text Color -->
     <div class="setting-section">
-      <label class="setting-label">Custom Text Color</label>
+      <label class="setting-label">Custom Reader Text Color</label>
       <div class="color-picker-row">
         <span>Text Color</span>
         <div style="display:flex; align-items:center; gap: 0.5rem;">
