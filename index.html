@@ -24,9 +24,9 @@
       --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --accent-gold: #b8860b;
       --panel-bg: rgba(252, 250, 247, 0.88);
-      --border-color: rgba(0, 0, 0, 0.08);
+      --border-color: rgba(0, 0, 0, 0.1);
       --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.06);
-      --verse-num-color: #a89f91;
+      --verse-num-color: #8c8273;
       --font-size: 1.15rem;
       --line-height: 1.85;
       --text-align: left;
@@ -65,7 +65,7 @@
       display: flex;
       flex-direction: column;
       overflow-x: hidden;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     /* --- BUTTONS & CONTROLS --- */
@@ -157,7 +157,7 @@
       display: block;
     }
 
-    /* Content-Aware Non-Read Tabs (Resources, Plans, Settings) */
+    /* Fully Dynamic Non-Read Tabs */
     #view-resources, #view-plans, #view-settings {
       color: var(--text-color);
       text-align: left;
@@ -180,21 +180,21 @@
     #view-settings .color-picker-row {
       background: var(--card-bg);
       color: var(--text-color);
-      border-color: var(--border-color);
+      border: 1px solid var(--border-color);
     }
 
     #view-settings .segmented-control {
-      background: var(--pill-bg);
-      border-color: var(--border-color);
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
     }
 
     #view-settings .segmented-control button {
-      color: var(--button-text-color);
+      color: var(--text-color);
     }
 
     #view-settings .segmented-control button.active {
-      background: var(--card-bg);
-      color: var(--text-color);
+      background: var(--panel-bg);
+      color: var(--button-text-color);
     }
 
     .section-title {
@@ -237,8 +237,9 @@
       height: 2px;
       background: var(--accent-gold);
       margin: 1rem auto 0 auto;
-      opacity: 0.8;
+      opacity: 0.9;
       border-radius: 2px;
+      transition: background 0.3s ease;
     }
 
     .verse {
@@ -256,8 +257,8 @@
     }
 
     .verse.selected {
-      background: rgba(184, 134, 11, 0.12);
-      border-color: rgba(184, 134, 11, 0.35);
+      background: rgba(184, 134, 11, 0.15);
+      border-color: var(--accent-gold);
     }
 
     .verse-num {
@@ -268,6 +269,7 @@
       margin-right: 0.45rem;
       user-select: none;
       vertical-align: super;
+      transition: color 0.3s ease;
     }
 
     body.reader-mode .verse-num { display: none; }
@@ -514,27 +516,17 @@
     .segmented-control {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-      background: var(--pill-bg);
       padding: 4px;
       border-radius: 18px;
       gap: 4px;
-      border: 1px solid var(--border-color);
     }
 
     .segmented-control button {
       border: none;
-      background: transparent;
       box-shadow: none;
-      color: var(--button-text-color);
       padding: 0.55rem 0.2rem;
       font-size: 0.78rem;
       border-radius: 14px;
-    }
-
-    .segmented-control button.active {
-      background: var(--card-bg);
-      color: var(--text-color);
-      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
     .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
@@ -546,35 +538,18 @@
       transition: transform 0.15s ease, border-color 0.15s ease;
       box-shadow: var(--glass-shadow);
     }
-    .gallery-chip.active { border-color: var(--button-text-color); transform: scale(0.96); }
+    .gallery-chip.active { border-color: var(--text-color); transform: scale(0.96); }
 
     .color-picker-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: var(--pill-bg);
       padding: 0.6rem 1rem;
       border-radius: 18px;
-      border: 1px solid var(--border-color);
-      color: var(--button-text-color);
-    }
-    .color-picker-row span {
-      font-size: 0.85rem;
-      font-weight: 600;
-    }
-    .color-picker-row input[type="color"] {
-      border: none;
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      cursor: pointer;
-      background: transparent;
     }
 
     /* --- READING PLANS LIST --- */
     .plan-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
       border-radius: 18px;
       padding: 1rem 1.25rem;
       margin-bottom: 0.75rem;
@@ -588,8 +563,6 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
       border-radius: 14px;
       padding: 0.75rem 1rem;
       margin-bottom: 0.5rem;
@@ -777,22 +750,7 @@
       </div>
     </div>
 
-    <!-- Bar Theme Palette -->
-    <div class="setting-section">
-      <label class="setting-label">Bar Theme Palette</label>
-      <div class="gallery-grid" id="panel-gallery">
-        <div class="gallery-chip" style="background: rgba(252, 250, 247, 0.85);" onclick="setPanelColor('rgba(252, 250, 247, 0.85)', this)" title="Parchment"></div>
-        <div class="gallery-chip" style="background: rgba(18, 17, 16, 0.85);" onclick="setPanelColor('rgba(18, 17, 16, 0.85)', this)" title="Midnight"></div>
-        <div class="gallery-chip" style="background: rgba(168, 50, 50, 0.85);" onclick="setPanelColor('rgba(168, 50, 50, 0.85)', this)" title="Crimson Red"></div>
-        <div class="gallery-chip" style="background: rgba(224, 112, 32, 0.85);" onclick="setPanelColor('rgba(224, 112, 32, 0.85)', this)" title="Warm Orange"></div>
-        <div class="gallery-chip" style="background: rgba(18, 140, 126, 0.85);" onclick="setPanelColor('rgba(18, 140, 126, 0.85)', this)" title="Cyan Teal"></div>
-        <div class="gallery-chip" style="background: rgba(30, 42, 74, 0.85);" onclick="setPanelColor('rgba(30, 42, 74, 0.85)', this)" title="Deep Blue"></div>
-        <div class="gallery-chip" style="background: rgba(88, 44, 132, 0.85);" onclick="setPanelColor('rgba(88, 44, 132, 0.85)', this)" title="Royal Purple"></div>
-        <div class="gallery-chip" style="background: rgba(34, 112, 62, 0.85);" onclick="setPanelColor('rgba(34, 112, 62, 0.85)', this)" title="Emerald Green"></div>
-      </div>
-    </div>
-
-    <!-- Background Gallery -->
+    <!-- Background Gallery FIRST -->
     <div class="setting-section">
       <label class="setting-label">Background Gallery</label>
       <div class="gallery-grid" id="bg-gallery">
@@ -804,6 +762,21 @@
         <div class="gallery-chip" style="background: linear-gradient(135deg, #e1bee7 0%, #8e24aa 100%);" onclick="setGalleryBg('linear-gradient(135deg, #e1bee7 0%, #8e24aa 100%)', this)" title="Deep Purple"></div>
         <div class="gallery-chip" style="background: linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%);" onclick="setGalleryBg('linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%)', this)" title="Soft Sage"></div>
         <div class="gallery-chip" style="background: linear-gradient(135deg, #141826 0%, #080a12 100%);" onclick="setGalleryBg('linear-gradient(135deg, #141826 0%, #080a12 100%)', this)" title="Midnight Indigo"></div>
+      </div>
+    </div>
+
+    <!-- Bar Color Gallery SECOND -->
+    <div class="setting-section">
+      <label class="setting-label">Bar Color Gallery</label>
+      <div class="gallery-grid" id="panel-gallery">
+        <div class="gallery-chip" style="background: rgba(252, 250, 247, 0.85);" onclick="setPanelColor('rgba(252, 250, 247, 0.85)', this)" title="Parchment"></div>
+        <div class="gallery-chip" style="background: rgba(18, 17, 16, 0.85);" onclick="setPanelColor('rgba(18, 17, 16, 0.85)', this)" title="Midnight"></div>
+        <div class="gallery-chip" style="background: rgba(168, 50, 50, 0.85);" onclick="setPanelColor('rgba(168, 50, 50, 0.85)', this)" title="Crimson Red"></div>
+        <div class="gallery-chip" style="background: rgba(224, 112, 32, 0.85);" onclick="setPanelColor('rgba(224, 112, 32, 0.85)', this)" title="Warm Orange"></div>
+        <div class="gallery-chip" style="background: rgba(18, 140, 126, 0.85);" onclick="setPanelColor('rgba(18, 140, 126, 0.85)', this)" title="Cyan Teal"></div>
+        <div class="gallery-chip" style="background: rgba(30, 42, 74, 0.85);" onclick="setPanelColor('rgba(30, 42, 74, 0.85)', this)" title="Deep Blue"></div>
+        <div class="gallery-chip" style="background: rgba(88, 44, 132, 0.85);" onclick="setPanelColor('rgba(88, 44, 132, 0.85)', this)" title="Royal Purple"></div>
+        <div class="gallery-chip" style="background: rgba(34, 112, 62, 0.85);" onclick="setPanelColor('rgba(34, 112, 62, 0.85)', this)" title="Emerald Green"></div>
       </div>
     </div>
 
