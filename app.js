@@ -478,25 +478,10 @@ function setTextAlign(align) {
   updateActiveSegment('align-control', align);
 }
 
+// Bar Color Gallery ONLY controls the bar/panel background color
 function setPanelColor(colorValue, element) {
   document.documentElement.style.setProperty('--panel-bg', colorValue);
   localStorage.setItem('bible_panel_color', colorValue);
-
-  const rgbaMatch = colorValue.match(/\d+/g);
-  if (rgbaMatch && rgbaMatch.length >= 3) {
-    const [r, g, b] = rgbaMatch.map(Number);
-    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-
-    if (luminance > 0.5) {
-      document.documentElement.style.setProperty('--button-text-color', '#121110');
-      document.documentElement.style.setProperty('--pill-bg', 'rgba(0, 0, 0, 0.06)');
-      document.documentElement.style.setProperty('--pill-border', 'rgba(0, 0, 0, 0.12)');
-    } else {
-      document.documentElement.style.setProperty('--button-text-color', '#ffffff');
-      document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.15)');
-      document.documentElement.style.setProperty('--pill-border', 'rgba(255, 255, 255, 0.22)');
-    }
-  }
 
   if (element) {
     document.querySelectorAll('#panel-gallery .gallery-chip').forEach(el => el.classList.remove('active'));
@@ -504,6 +489,7 @@ function setPanelColor(colorValue, element) {
   }
 }
 
+// Background Gallery controls background, UI text, card backgrounds, and borders
 function setGalleryBg(bgValue, element) {
   if (bgValue.includes('gradient')) {
     document.documentElement.style.setProperty('--bg-image', bgValue);
@@ -518,18 +504,28 @@ function setGalleryBg(bgValue, element) {
     if (!localStorage.getItem('bible_text_color')) {
       document.documentElement.style.setProperty('--text-color', '#fcfaf7');
     }
+    document.documentElement.style.setProperty('--ui-text-color', '#fcfaf7');
     document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.08)');
     document.documentElement.style.setProperty('--border-color', 'rgba(255, 255, 255, 0.15)');
     document.documentElement.style.setProperty('--verse-num-color', 'rgba(255, 255, 255, 0.45)');
     document.documentElement.style.setProperty('--accent-gold', '#f3cca1');
+    document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.15)');
+    document.documentElement.style.setProperty('--pill-border', 'rgba(255, 255, 255, 0.22)');
+    document.documentElement.style.setProperty('--active-pill', '#fcfaf7');
+    document.documentElement.style.setProperty('--active-pill-text', '#121110');
   } else {
     if (!localStorage.getItem('bible_text_color')) {
       document.documentElement.style.setProperty('--text-color', '#2c2523');
     }
+    document.documentElement.style.setProperty('--ui-text-color', '#2c2523');
     document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.65)');
     document.documentElement.style.setProperty('--border-color', 'rgba(0, 0, 0, 0.1)');
     document.documentElement.style.setProperty('--verse-num-color', '#8c8273');
     document.documentElement.style.setProperty('--accent-gold', '#b8860b');
+    document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.65)');
+    document.documentElement.style.setProperty('--pill-border', 'rgba(0, 0, 0, 0.12)');
+    document.documentElement.style.setProperty('--active-pill', '#2c2523');
+    document.documentElement.style.setProperty('--active-pill-text', '#ffffff');
   }
 
   localStorage.setItem('bible_bg_gallery', bgValue);
