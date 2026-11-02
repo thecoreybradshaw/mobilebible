@@ -9,13 +9,13 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <link rel="manifest" href="manifest.json" />
 
-  <!-- Google Fonts for 8 Distinct Typography Styles -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;700&family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display+SC:wght@700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 
   <style>
-    /* --- DESIGN SYSTEM & DYNAMIC CONTRAST VARIABLES --- */
+    /* --- DESIGN SYSTEM & CONTRAST VARIABLES --- */
     :root {
       --bg-color: #fcfaf7;
       --text-color: #2c2523;
@@ -23,7 +23,7 @@
       --body-font: 'Source Serif 4', Georgia, serif;
       --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --accent-gold: #b8860b;
-      --panel-bg: rgba(252, 250, 247, 0.85);
+      --panel-bg: rgba(252, 250, 247, 0.88);
       --border-color: rgba(0, 0, 0, 0.08);
       --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.06);
       --verse-num-color: #a89f91;
@@ -33,7 +33,6 @@
       --bg-image: none;
       --card-bg: rgba(255, 255, 255, 0.65);
       
-      /* Dynamic Button Contrast System */
       --pill-bg: rgba(255, 255, 255, 0.65);
       --pill-border: rgba(0, 0, 0, 0.12);
       --button-text-color: #2c2523;
@@ -69,8 +68,8 @@
       transition: background-color 0.3s ease;
     }
 
-    /* --- FROSTED GLASSMORPHISM BUTTON ENGINE --- */
-    button, .nav-pill, .nav-btn, .icon-btn, .chip-btn {
+    /* --- BUTTONS & CONTROLS --- */
+    button, .nav-pill, .nav-btn, .icon-btn, .chip-btn, .tab-btn {
       font-family: var(--ui-font);
       font-size: 0.85rem;
       font-weight: 600;
@@ -83,20 +82,20 @@
       -webkit-backdrop-filter: blur(16px);
       box-shadow: var(--glass-shadow);
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     button:hover, .nav-pill:hover, .nav-btn:hover, .icon-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.12);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     }
 
-    button:active, .nav-pill:active, .nav-btn:active, .icon-btn:active, .chip-btn:active {
+    button:active, .nav-pill:active, .nav-btn:active, .icon-btn:active, .chip-btn:active, .tab-btn:active {
       transform: scale(0.95);
       opacity: 0.9;
     }
 
-    /* --- HEADER & NAVIGATION BAR --- */
+    /* --- HEADER (READ TAB) --- */
     header {
       position: sticky;
       top: 0;
@@ -109,30 +108,28 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: calc(0.6rem + var(--safe-area-top)) 1rem 0.6rem 1rem;
-    }
-
-    .nav-pill-group {
-      display: flex;
-      align-items: center;
+      padding: calc(0.6rem + var(--safe-area-top)) 0.75rem 0.6rem 0.75rem;
       gap: 0.4rem;
     }
 
-    .header-actions {
+    .header-nav-center {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      justify-content: center;
+      gap: 0.35rem;
+      flex: 1;
     }
 
     .nav-pill {
-      padding: 0.5rem 0.85rem;
+      padding: 0.45rem 0.7rem;
       display: flex;
       align-items: center;
-      gap: 0.35rem;
+      gap: 0.3rem;
+      font-size: 0.8rem;
     }
 
     .nav-pill .chevron {
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       opacity: 0.6;
     }
 
@@ -140,23 +137,40 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
-      font-size: 1.1rem;
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+      flex-shrink: 0;
     }
 
-    /* --- MAIN READER CONTENT --- */
-    main {
+    /* --- TAB VIEW PANELS --- */
+    .tab-view {
+      display: none;
       flex: 1;
-      max-width: 680px;
       width: 100%;
+      max-width: 680px;
       margin: 0 auto;
-      padding: 2rem 1.25rem calc(6rem + var(--safe-area-bottom)) 1.25rem;
+      padding: 1.5rem 1.25rem calc(5.5rem + var(--safe-area-bottom)) 1.25rem;
     }
 
+    .tab-view.active-tab {
+      display: block;
+    }
+
+    .section-title {
+      font-family: var(--ui-font);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin: 1.25rem 0 0.6rem 0;
+    }
+
+    /* --- SCRIPTURE READER --- */
     .book-meta {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .translation-tag {
@@ -216,46 +230,109 @@
       vertical-align: super;
     }
 
-    .verse[data-verse="1"]::first-letter {
-      font-family: var(--heading-font);
-      font-size: 1.3em;
+    body.reader-mode .verse-num { display: none; }
+    body.reader-mode .verse.selected .verse-num { display: inline-block; color: var(--accent-gold); }
+
+    /* Parallel Grid */
+    .reader-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    body.parallel-mode .reader-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .parallel-column {
+      display: none;
+      border-left: 1px solid var(--border-color);
+      padding-left: 1rem;
+    }
+
+    body.parallel-mode .parallel-column {
+      display: block;
+    }
+
+    /* --- CARDS & PREVIEW PANELS --- */
+    .preview-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 1.1rem;
+      text-align: var(--text-align);
+      font-family: var(--body-font);
+      font-size: var(--font-size);
+      line-height: var(--line-height);
+      color: var(--text-color);
+      transition: all 0.2s ease;
+      box-shadow: var(--glass-shadow);
+      margin-bottom: 0.8rem;
+    }
+
+    .preview-label {
+      font-family: var(--ui-font);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
       font-weight: 700;
       color: var(--accent-gold);
+      margin-bottom: 0.4rem;
+      display: block;
     }
 
-    body.reader-mode .verse-num {
-      display: none;
-    }
-    body.reader-mode .verse.selected .verse-num {
-      display: inline-block;
-      color: var(--accent-gold);
-    }
-
-    /* --- FOOTER NAVIGATION --- */
-    footer {
+    /* --- PERMANENT BOTTOM NAVIGATION BAR --- */
+    .bottom-nav {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
+      height: calc(3.6rem + var(--safe-area-bottom));
+      padding-bottom: var(--safe-area-bottom);
       background: var(--panel-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-top: 1px solid var(--border-color);
-      box-shadow: var(--glass-shadow);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       align-items: center;
-      padding: 0.75rem 1.25rem calc(0.75rem + var(--safe-area-bottom)) 1.25rem;
-      z-index: 10;
+      z-index: 80;
     }
 
-    .nav-btn {
-      padding: 0.55rem 1.25rem;
-      flex: 0 1 120px;
-      text-align: center;
+    .nav-tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      height: 100%;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+      color: var(--button-text-color);
+      opacity: 0.6;
     }
 
-    /* --- FLOATING VERSE SELECTION ACTION BAR --- */
+    .nav-tab-item .tab-icon {
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    .nav-tab-item .tab-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+    }
+
+    .nav-tab-item.active {
+      opacity: 1;
+      color: var(--accent-gold);
+    }
+
+    /* --- FLOATING ACTION BAR & TOAST --- */
     .verse-action-bar {
       position: fixed;
       bottom: calc(4.5rem + var(--safe-area-bottom));
@@ -271,7 +348,7 @@
       align-items: center;
       gap: 0.75rem;
       box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-      z-index: 20;
+      z-index: 90;
       opacity: 0;
       pointer-events: none;
       transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -283,19 +360,6 @@
       pointer-events: auto;
     }
 
-    .action-count {
-      font-family: var(--ui-font);
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--button-text-color);
-    }
-
-    .action-btn {
-      padding: 0.45rem 0.9rem;
-      font-size: 0.8rem;
-    }
-
-    /* TOAST NOTIFICATION */
     .toast {
       position: fixed;
       top: calc(4.5rem + var(--safe-area-top));
@@ -332,10 +396,7 @@
       transition: opacity 0.3s ease;
     }
 
-    .overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .overlay.active { opacity: 1; pointer-events: auto; }
 
     .modal-sheet {
       position: fixed;
@@ -357,9 +418,7 @@
       gap: 1rem;
     }
 
-    .modal-sheet.open {
-      bottom: 0;
-    }
+    .modal-sheet.open { bottom: 0; }
 
     .sheet-header {
       display: flex;
@@ -401,94 +460,8 @@
       border-color: var(--active-pill);
     }
 
-    /* --- GLASSMORPHIC SETTINGS MODAL --- */
-    .settings-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.95);
-      width: calc(100% - 2rem);
-      max-width: 440px;
-      max-height: 85vh;
-      background: var(--panel-bg);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid var(--border-color);
-      border-radius: 28px;
-      z-index: 100;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .settings-modal.open {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translate(-50%, -50%) scale(1);
-    }
-
-    .settings-header-fixed {
-      padding: 1.1rem 1.25rem;
-      background: var(--panel-bg);
-      border-bottom: 1px solid var(--border-color);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .settings-scroll-body {
-      padding: 1.25rem;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .preview-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 18px;
-      padding: 1.2rem;
-      text-align: var(--text-align);
-      font-family: var(--body-font);
-      font-size: var(--font-size);
-      line-height: var(--line-height);
-      color: var(--text-color);
-      transition: all 0.2s ease;
-      box-shadow: var(--glass-shadow);
-    }
-
-    .preview-label {
-      font-family: var(--ui-font);
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 700;
-      color: var(--accent-gold);
-      margin-bottom: 0.4rem;
-      display: block;
-    }
-
-    .preview-verse-num {
-      font-family: var(--ui-font);
-      font-size: 0.75em;
-      font-weight: 700;
-      color: var(--verse-num-color);
-      margin-right: 0.4rem;
-      vertical-align: super;
-    }
-
-    .setting-section {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
+    /* --- SETTINGS CONTROLS --- */
+    .setting-section { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
     .setting-label {
       font-family: var(--ui-font);
       font-size: 0.72rem;
@@ -524,12 +497,7 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.08);
     }
 
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0.5rem;
-    }
-
+    .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
     .gallery-chip {
       aspect-ratio: 16/10;
       border-radius: 14px;
@@ -538,11 +506,7 @@
       transition: transform 0.15s ease, border-color 0.15s ease;
       box-shadow: var(--glass-shadow);
     }
-
-    .gallery-chip.active {
-      border-color: var(--active-pill);
-      transform: scale(0.96);
-    }
+    .gallery-chip.active { border-color: var(--active-pill); transform: scale(0.96); }
 
     .color-picker-row {
       display: flex;
@@ -552,21 +516,7 @@
       padding: 0.6rem 1rem;
       border-radius: 18px;
       border: 1px solid var(--border-color);
-      gap: 0.5rem;
     }
-
-    .color-picker-controls {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .color-picker-row span {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--button-text-color);
-    }
-
     .color-picker-row input[type="color"] {
       border: none;
       width: 32px;
@@ -576,68 +526,50 @@
       background: transparent;
     }
 
-    .save-color-btn {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.75rem;
-      border-radius: 12px;
+    /* --- READING PLANS LIST --- */
+    .plan-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 0.75rem;
+      cursor: pointer;
     }
-
-    .toggle-row {
+    .plan-card.active-plan {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 1px var(--accent-gold);
+    }
+    .reading-item {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      padding: 0.4rem 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
     }
-
-    .toggle-row span {
+    .reading-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--accent-gold);
+      cursor: pointer;
+    }
+    .reading-link {
       font-family: var(--ui-font);
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--button-text-color);
-    }
-    /* Parallel Side-by-Side Reading Grid */
-    .reader-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-      width: 100%;
-    }
-
-    body.parallel-mode .reader-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-
-    .parallel-column {
-      display: none;
-      border-left: 1px solid var(--border-color);
-      padding-left: 1rem;
-    }
-
-    body.parallel-mode .parallel-column {
-      display: block;
-    }
-
-    /* Scroll Snap Mode (One Verse at a Time) */
-    body.scroll-mode main {
-      scroll-snap-type: y mandatory;
-      overflow-y: scroll;
-      height: calc(100vh - 140px);
-    }
-
-    body.scroll-mode .verse {
-      scroll-snap-align: center;
-      min-height: 45vh;
-      display: flex;
-      align-items: center;
-      font-size: 1.25em;
+      font-weight: 600;
+      color: var(--accent-gold);
+      cursor: pointer;
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
-  <!-- TOP NAVIGATION -->
-  <header>
-    <div class="nav-pill-group">
+  <!-- READ TAB HEADER -->
+  <header id="read-header">
+    <button class="icon-btn" id="prev-chapter" aria-label="Previous Chapter" title="Previous">←</button>
+    <div class="header-nav-center">
       <button class="nav-pill" id="btn-book-select">
         <span id="label-book">John</span>
         <span class="chevron">▼</span>
@@ -651,52 +583,230 @@
         <span class="chevron">▼</span>
       </button>
     </div>
-    <div class="header-actions">
-      <button class="icon-btn" id="toggle-fullscreen" aria-label="Toggle Fullscreen" title="Fullscreen">⛶</button>
-      <button class="icon-btn" id="open-settings" aria-label="Settings">☰</button>
-    </div>
+    <button class="icon-btn" id="next-chapter" aria-label="Next Chapter" title="Next">→</button>
+    <button class="icon-btn" id="toggle-fullscreen" aria-label="Toggle Fullscreen" title="Fullscreen">⛶</button>
   </header>
 
-  <!-- MAIN READER CONTENT -->
-
-  <main id="reader-container">
+  <!-- TAB 1: READ (MAIN READER) -->
+  <main class="tab-view active-tab" id="view-read">
     <div class="book-meta">
       <h1 class="chapter-header" id="chapter-title">John 1</h1>
       <div class="divider"></div>
     </div>
 
-    <!-- MAIN SINGLE / PARALLEL READING COLUMNS -->
     <div class="reader-grid" id="reader-grid">
       <div class="reader-column">
         <span class="translation-tag" id="meta-translation">King James Version</span>
-        <div id="verses-list">
-          <!-- Main Translation Verses Render Here -->
-        </div>
+        <div id="verses-list"></div>
       </div>
       <div class="reader-column parallel-column">
         <span class="translation-tag" id="meta-translation-parallel">American Standard Version</span>
-        <div id="parallel-verses-list">
-          <!-- Secondary Parallel Translation Verses Render Here -->
-        </div>
+        <div id="parallel-verses-list"></div>
       </div>
     </div>
   </main>
 
-  <!-- FLOATING VERSE SELECTION ACTION BAR -->
-  <div class="verse-action-bar" id="verse-action-bar">
-    <span class="action-count" id="action-count">1 verse selected</span>
-    <button class="action-btn" onclick="copySelectedVerses()">📋 Copy</button>
-    <button class="action-btn" onclick="clearVerseSelection()">✕ Clear</button>
+  <!-- TAB 2: RESOURCES -->
+  <div class="tab-view" id="view-resources">
+    <div class="book-meta">
+      <h1 class="chapter-header">Resources</h1>
+      <div class="divider"></div>
+    </div>
+
+    <!-- 1. MAPS SECTION -->
+    <div class="section-title">Atlas & Geography</div>
+    <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-1')">
+      <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">Divided Israel and Judah</h3>
+      <p style="font-size: 0.85rem; opacity: 0.8;">Map of the divided kingdom when Israel and Judah were separate nations.</p>
+    </div>
+    <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-2')">
+      <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">New Testament Israel</h3>
+      <p style="font-size: 0.85rem; opacity: 0.8;">Map of Israel during the time and ministry of Jesus.</p>
+    </div>
+    <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-3')">
+      <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">New Testament Greco-Roman World</h3>
+      <p style="font-size: 0.85rem; opacity: 0.8;">Map of the Mediterranean world during early apostolic missionary journeys.</p>
+    </div>
+    <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-4')">
+      <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">Seven Churches of Revelation</h3>
+      <p style="font-size: 0.85rem; opacity: 0.8;">Locations of the seven churches of Asia Minor in Revelation 2–3.</p>
+    </div>
+
+    <!-- 2. COMMENTARIES SECTION -->
+    <div class="section-title">Commentaries & Notes</div>
+    <div class="preview-card" style="cursor: pointer;" onclick="showToast('Matthew Henry Commentary coming soon!')">
+      <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">Matthew Henry Concise Commentary</h3>
+      <p style="font-size: 0.85rem; opacity: 0.8;">Practical and devotional verse-by-verse commentary.</p>
+    </div>
+    <div class="preview-card" style="cursor: pointer;" onclick="showToast('Jamieson-Fausset-Brown Commentary coming soon!')">
+      <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">Jamieson-Fausset-Brown Commentary</h3>
+      <p style="font-size: 0.85rem; opacity: 0.8;">Explanatory and critical notes on Old and New Testaments.</p>
+    </div>
+
+    <!-- 3. APOCRYPHA SECTION -->
+    <div class="section-title">Apocrypha / Deuterocanon</div>
+    <div class="preview-card" style="cursor: pointer;" onclick="showToast('Apocryphal books integration coming soon!')">
+      <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">Deuterocanonical Text Collection</h3>
+      <p style="font-size: 0.85rem; opacity: 0.8;">Access Tobit, Judith, Wisdom of Solomon, Sirach, Baruch, and Maccabees.</p>
+    </div>
   </div>
 
-  <!-- TOAST NOTIFICATION -->
-  <div class="toast" id="toast">Copied to clipboard!</div>
+  <!-- TAB 3: READING PLANS -->
+  <div class="tab-view" id="view-plans">
+    <div class="book-meta">
+      <h1 class="chapter-header">Reading Plans</h1>
+      <div class="divider"></div>
+    </div>
 
-  <!-- FOOTER NAVIGATION -->
-  <footer>
-    <button class="nav-btn" id="prev-chapter">← Prev</button>
-    <button class="nav-btn" id="next-chapter">Next →</button>
-  </footer>
+    <div class="section-title">Select Active Plan</div>
+    <div class="plan-card active-plan" id="plan-gospels" onclick="selectPlan('gospels')">
+      <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">The Four Gospels (30-Day)</h3>
+      <p style="font-size: 0.85rem; opacity: 0.8;">A structured walkthrough of Matthew, Mark, Luke, and John.</p>
+    </div>
+    <div class="plan-card" id="plan-wisdom" onclick="selectPlan('wisdom')">
+      <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">Wisdom Literature (14-Day)</h3>
+      <p style="font-size: 0.85rem; opacity: 0.8;">Selected readings from Psalms, Proverbs, and Ecclesiastes.</p>
+    </div>
+
+    <div class="section-title" id="current-plan-title">Daily Checklist</div>
+    <div id="plan-schedule-container">
+      <!-- Daily checklist items render here dynamically -->
+    </div>
+  </div>
+
+  <!-- TAB 4: SETTINGS & CUSTOMIZATION -->
+  <div class="tab-view" id="view-settings">
+    <div class="book-meta">
+      <h1 class="chapter-header">Settings</h1>
+      <div class="divider"></div>
+    </div>
+
+    <!-- Preview Card -->
+    <div class="preview-card" id="preview-box">
+      <span class="preview-label">Live Preview — John 1:1</span>
+      <span class="verse-num">1</span>In the beginning was the Word, and the Word was with God, and the Word was God.
+    </div>
+
+    <!-- Font Style -->
+    <div class="setting-section">
+      <label class="setting-label">Font Style</label>
+      <div class="segmented-control" id="font-control">
+        <button data-val="serif" onclick="setFont('Source Serif 4, Georgia, serif', 'serif')">Serif</button>
+        <button data-val="editorial" onclick="setFont('Playfair Display, serif', 'editorial')">Editorial</button>
+        <button data-val="lora" onclick="setFont('Lora, serif', 'lora')">Classic</button>
+        <button data-val="sans" onclick="setFont('Inter, system-ui, sans-serif', 'sans')">Sans</button>
+        <button data-val="cinzel" onclick="setFont('Cinzel, serif', 'cinzel')">Elegance</button>
+        <button data-val="mono" onclick="setFont('Fira Code, monospace', 'mono')">Mono</button>
+        <button data-val="cinzel-decor" onclick="setFont('Cinzel Decorative, serif', 'cinzel-decor')">Majestic</button>
+        <button data-val="playfair-sc" onclick="setFont('Playfair Display SC, serif', 'playfair-sc')">Caps</button>
+      </div>
+    </div>
+
+    <!-- Text Size -->
+    <div class="setting-section">
+      <label class="setting-label">Text Size</label>
+      <div class="segmented-control">
+        <button onclick="adjustFontSize(-0.10)">A-</button>
+        <button onclick="adjustFontSize(0.10)">A+</button>
+      </div>
+    </div>
+
+    <!-- Alignment -->
+    <div class="setting-section">
+      <label class="setting-label">Alignment</label>
+      <div class="segmented-control" id="align-control">
+        <button data-val="left" onclick="setTextAlign('left')">Left</button>
+        <button data-val="center" onclick="setTextAlign('center')">Center</button>
+        <button data-val="justify" onclick="setTextAlign('justify')">Justify</button>
+      </div>
+    </div>
+
+    <!-- Bar Theme Palette -->
+    <div class="setting-section">
+      <label class="setting-label">Bar Theme Palette</label>
+      <div class="gallery-grid" id="panel-gallery">
+        <div class="gallery-chip" style="background: rgba(252, 250, 247, 0.85);" onclick="setPanelColor('rgba(252, 250, 247, 0.85)', this)" title="Parchment"></div>
+        <div class="gallery-chip" style="background: rgba(18, 17, 16, 0.85);" onclick="setPanelColor('rgba(18, 17, 16, 0.85)', this)" title="Midnight"></div>
+        <div class="gallery-chip" style="background: rgba(168, 50, 50, 0.85);" onclick="setPanelColor('rgba(168, 50, 50, 0.85)', this)" title="Crimson Red"></div>
+        <div class="gallery-chip" style="background: rgba(224, 112, 32, 0.85);" onclick="setPanelColor('rgba(224, 112, 32, 0.85)', this)" title="Warm Orange"></div>
+        <div class="gallery-chip" style="background: rgba(18, 140, 126, 0.85);" onclick="setPanelColor('rgba(18, 140, 126, 0.85)', this)" title="Cyan Teal"></div>
+        <div class="gallery-chip" style="background: rgba(30, 42, 74, 0.85);" onclick="setPanelColor('rgba(30, 42, 74, 0.85)', this)" title="Deep Blue"></div>
+        <div class="gallery-chip" style="background: rgba(88, 44, 132, 0.85);" onclick="setPanelColor('rgba(88, 44, 132, 0.85)', this)" title="Royal Purple"></div>
+        <div class="gallery-chip" style="background: rgba(34, 112, 62, 0.85);" onclick="setPanelColor('rgba(34, 112, 62, 0.85)', this)" title="Emerald Green"></div>
+      </div>
+    </div>
+
+    <!-- Background Gallery -->
+    <div class="setting-section">
+      <label class="setting-label">Background Gallery</label>
+      <div class="gallery-grid" id="bg-gallery">
+        <div class="gallery-chip" style="background: #fcfaf7;" onclick="setGalleryBg('#fcfaf7', this)"></div>
+        <div class="gallery-chip" style="background: #121110;" onclick="setGalleryBg('#121110', this)"></div>
+        <div class="gallery-chip" style="background: linear-gradient(135deg, #f7dcd0 0%, #e88a74 100%);" onclick="setGalleryBg('linear-gradient(135deg, #f7dcd0 0%, #e88a74 100%)', this)" title="Soft Crimson"></div>
+        <div class="gallery-chip" style="background: linear-gradient(135deg, #ffe0b2 0%, #fb8c00 100%);" onclick="setGalleryBg('linear-gradient(135deg, #ffe0b2 0%, #fb8c00 100%)', this)" title="Sunset Orange"></div>
+        <div class="gallery-chip" style="background: linear-gradient(135deg, #e0f7fa 0%, #00acc1 100%);" onclick="setGalleryBg('linear-gradient(135deg, #e0f7fa 0%, #00acc1 100%)', this)" title="Cyan Cyan"></div>
+        <div class="gallery-chip" style="background: linear-gradient(135deg, #e1bee7 0%, #8e24aa 100%);" onclick="setGalleryBg('linear-gradient(135deg, #e1bee7 0%, #8e24aa 100%)', this)" title="Deep Purple"></div>
+        <div class="gallery-chip" style="background: linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%);" onclick="setGalleryBg('linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%)', this)" title="Soft Sage"></div>
+        <div class="gallery-chip" style="background: linear-gradient(135deg, #141826 0%, #080a12 100%);" onclick="setGalleryBg('linear-gradient(135deg, #141826 0%, #080a12 100%)', this)" title="Midnight Indigo"></div>
+      </div>
+    </div>
+
+    <!-- Custom Text Color -->
+    <div class="setting-section">
+      <label class="setting-label">Custom Text Color</label>
+      <div class="color-picker-row">
+        <span>Text Color</span>
+        <div style="display:flex; align-items:center; gap: 0.5rem;">
+          <input type="color" id="text-color-picker" value="#2c2523" />
+          <button style="padding: 0.4rem 0.8rem; font-size: 0.75rem;" onclick="applyTextColor()">Apply</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reading Modes -->
+    <div class="setting-section">
+      <label class="setting-label">Reading Options</label>
+      <div class="segmented-control">
+        <button id="btn-reader-mode" onclick="toggleReaderMode()">Hide Numbers</button>
+        <button id="btn-scroll-mode" onclick="toggleScrollMode()">Scroll Mode</button>
+        <button id="btn-parallel-mode" onclick="toggleParallelMode()">Parallel</button>
+      </div>
+    </div>
+
+    <!-- Parallel Selector -->
+    <div class="setting-section" id="parallel-select-section" style="display: none;">
+      <label class="setting-label">Secondary Translation</label>
+      <div class="segmented-control" id="parallel-trans-control"></div>
+    </div>
+  </div>
+
+  <!-- PERMANENT BOTTOM NAVIGATION BAR -->
+  <nav class="bottom-nav">
+    <button class="nav-tab-item active" id="tab-btn-read" onclick="switchTab('read')">
+      <span class="tab-icon">📖</span>
+      <span class="tab-label">Read</span>
+    </button>
+    <button class="nav-tab-item" id="tab-btn-resources" onclick="switchTab('resources')">
+      <span class="tab-icon">🗺️</span>
+      <span class="tab-label">Resources</span>
+    </button>
+    <button class="nav-tab-item" id="tab-btn-plans" onclick="switchTab('plans')">
+      <span class="tab-icon">📅</span>
+      <span class="tab-label">Plans</span>
+    </button>
+    <button class="nav-tab-item" id="tab-btn-settings" onclick="switchTab('settings')">
+      <span class="tab-icon">⚙️</span>
+      <span class="tab-label">Settings</span>
+    </button>
+  </nav>
+
+  <!-- FLOATING VERSE ACTION BAR & TOAST -->
+  <div class="verse-action-bar" id="verse-action-bar">
+    <span class="action-count" id="action-count">1 verse selected</span>
+    <button style="padding: 0.45rem 0.9rem; font-size: 0.8rem;" onclick="copySelectedVerses()">📋 Copy</button>
+    <button style="padding: 0.45rem 0.9rem; font-size: 0.8rem;" onclick="clearVerseSelection()">✕ Clear</button>
+  </div>
+  <div class="toast" id="toast">Copied to clipboard!</div>
 
   <!-- OVERLAY -->
   <div class="overlay" id="overlay"></div>
@@ -707,209 +817,17 @@
       <div class="sheet-title" id="nav-modal-title">Select Book</div>
       <button class="icon-btn" id="close-nav-modal">✕</button>
     </div>
-    <div class="sheet-grid" id="nav-grid">
-      <!-- Dynamic chips for books, chapters, or translations -->
-    </div>
-  </div>
-
-  <!-- POP-UP SETTINGS MODAL (STATIC HEADER) -->
-  <div class="settings-modal" id="settings-modal">
-    <div class="settings-header-fixed">
-      <div class="sheet-title">Settings</div>
-      <button class="icon-btn" id="close-settings">✕</button>
-    </div>
-
-    <div class="settings-scroll-body">
-      <!-- LIVE PREVIEW BOX -->
-      <div class="preview-card" id="preview-box">
-        <span class="preview-label">Live Preview — John 1:1</span>
-        <span class="preview-verse-num">1</span>In the beginning was the Word, and the Word was with God, and the Word was God.
-      </div>
-
-      <!-- 8 Distinct Typography Choices -->
-      <div class="setting-section">
-        <label class="setting-label">Font Style</label>
-        <div class="segmented-control" id="font-control">
-          <button data-val="serif" onclick="setFont('Source Serif 4, Georgia, serif', 'serif')">Serif</button>
-          <button data-val="editorial" onclick="setFont('Playfair Display, serif', 'editorial')">Editorial</button>
-          <button data-val="lora" onclick="setFont('Lora, serif', 'lora')">Classic</button>
-          <button data-val="sans" onclick="setFont('Inter, system-ui, sans-serif', 'sans')">Sans</button>
-          <button data-val="cinzel" onclick="setFont('Cinzel, serif', 'cinzel')">Elegance</button>
-          <button data-val="mono" onclick="setFont('Fira Code, monospace', 'mono')">Mono</button>
-          <button data-val="cinzel-decor" onclick="setFont('Cinzel Decorative, serif', 'cinzel-decor')">Majestic</button>
-          <button data-val="playfair-sc" onclick="setFont('Playfair Display SC, serif', 'playfair-sc')">Caps</button>
-        </div>
-      </div>
-
-      <!-- Text Size -->
-      <div class="setting-section">
-        <label class="setting-label">Text Size</label>
-        <div class="segmented-control">
-          <button onclick="adjustFontSize(-0.10)">A-</button>
-          <button onclick="adjustFontSize(0.10)">A+</button>
-        </div>
-      </div>
-
-      <!-- Alignment -->
-      <div class="setting-section">
-        <label class="setting-label">Alignment</label>
-        <div class="segmented-control" id="align-control">
-          <button data-val="left" onclick="setTextAlign('left')">Left</button>
-          <button data-val="center" onclick="setTextAlign('center')">Center</button>
-          <button data-val="justify" onclick="setTextAlign('justify')">Justify</button>
-        </div>
-      </div>
-
-      <!-- Expanded Bar Theme Palette with Spectrum Primary Colors -->
-      <div class="setting-section">
-        <label class="setting-label">Bar Theme Palette</label>
-        <div class="gallery-grid" id="panel-gallery">
-          <div class="gallery-chip" style="background: rgba(252, 250, 247, 0.85);" onclick="setPanelColor('rgba(252, 250, 247, 0.85)', this)" title="Parchment"></div>
-          <div class="gallery-chip" style="background: rgba(18, 17, 16, 0.85);" onclick="setPanelColor('rgba(18, 17, 16, 0.85)', this)" title="Midnight"></div>
-          <div class="gallery-chip" style="background: rgba(168, 50, 50, 0.85);" onclick="setPanelColor('rgba(168, 50, 50, 0.85)', this)" title="Crimson Red"></div>
-          <div class="gallery-chip" style="background: rgba(224, 112, 32, 0.85);" onclick="setPanelColor('rgba(224, 112, 32, 0.85)', this)" title="Warm Orange"></div>
-          <div class="gallery-chip" style="background: rgba(18, 140, 126, 0.85);" onclick="setPanelColor('rgba(18, 140, 126, 0.85)', this)" title="Cyan Teal"></div>
-          <div class="gallery-chip" style="background: rgba(30, 42, 74, 0.85);" onclick="setPanelColor('rgba(30, 42, 74, 0.85)', this)" title="Deep Blue"></div>
-          <div class="gallery-chip" style="background: rgba(88, 44, 132, 0.85);" onclick="setPanelColor('rgba(88, 44, 132, 0.85)', this)" title="Royal Purple"></div>
-          <div class="gallery-chip" style="background: rgba(34, 112, 62, 0.85);" onclick="setPanelColor('rgba(34, 112, 62, 0.85)', this)" title="Emerald Green"></div>
-        </div>
-      </div>
-
-      <!-- Expanded Background Gallery with Spectrum Primary Colors -->
-      <div class="setting-section">
-        <label class="setting-label">Background Gallery</label>
-        <div class="gallery-grid" id="bg-gallery">
-          <div class="gallery-chip" style="background: #fcfaf7;" onclick="setGalleryBg('#fcfaf7', this)"></div>
-          <div class="gallery-chip" style="background: #121110;" onclick="setGalleryBg('#121110', this)"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #f7dcd0 0%, #e88a74 100%);" onclick="setGalleryBg('linear-gradient(135deg, #f7dcd0 0%, #e88a74 100%)', this)" title="Soft Crimson"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #ffe0b2 0%, #fb8c00 100%);" onclick="setGalleryBg('linear-gradient(135deg, #ffe0b2 0%, #fb8c00 100%)', this)" title="Sunset Orange"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #e0f7fa 0%, #00acc1 100%);" onclick="setGalleryBg('linear-gradient(135deg, #e0f7fa 0%, #00acc1 100%)', this)" title="Cyan Cyan"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #e1bee7 0%, #8e24aa 100%);" onclick="setGalleryBg('linear-gradient(135deg, #e1bee7 0%, #8e24aa 100%)', this)" title="Deep Purple"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%);" onclick="setGalleryBg('linear-gradient(135deg, #eaf2ed 0%, #cce0d4 100%)', this)" title="Soft Sage"></div>
-          <div class="gallery-chip" style="background: linear-gradient(135deg, #141826 0%, #080a12 100%);" onclick="setGalleryBg('linear-gradient(135deg, #141826 0%, #080a12 100%)', this)" title="Midnight Indigo"></div>
-        </div>
-      </div>
-
-      <!-- Live Custom Text Color Picker with Save Button -->
-      <div class="setting-section">
-        <label class="setting-label">Custom Text Color</label>
-        <div class="color-picker-row">
-          <span>Text Color</span>
-          <div class="color-picker-controls">
-            <input type="color" id="text-color-picker" value="#2c2523" />
-            <button class="save-color-btn" onclick="applyTextColor()">Apply Color</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Reading Modes & Features -->
-      <div class="setting-section">
-        <label class="setting-label">Reading Options</label>
-        <div class="segmented-control">
-          <button id="btn-reader-mode" onclick="toggleReaderMode()">Hide Numbers</button>
-          <button id="btn-scroll-mode" onclick="toggleScrollMode()">Scroll Mode</button>
-          <button id="btn-parallel-mode" onclick="toggleParallelMode()">Parallel</button>
-        </div>
-      </div>
-
-      <!-- Parallel Translation Selector (Only shows when Parallel Mode is active) -->
-      <div class="setting-section" id="parallel-select-section" style="display: none;">
-        <label class="setting-label">Secondary Translation</label>
-        <div class="segmented-control" id="parallel-trans-control">
-          <!-- Populated dynamically from TRANSLATIONS object -->
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: SETTINGS HUB MENU -->
-  <div class="settings-modal" id="settings-hub-modal">
-    <div class="settings-header-fixed">
-      <div class="sheet-title">Menu</div>
-      <button class="icon-btn" id="close-hub-modal">✕</button>
-    </div>
-    <div class="settings-scroll-body" style="gap: 0.75rem;">
-      <button class="nav-pill" style="width: 100%; justify-content: space-between; padding: 1rem 1.25rem; font-size: 0.95rem;" onclick="openCustomizationSettings()">
-        <span>Customization</span>
-        <span>›</span>
-      </button>
-      <button class="nav-pill" style="width: 100%; justify-content: space-between; padding: 1rem 1.25rem; font-size: 0.95rem;" onclick="openResourcesHub()">
-        <span>Resources (Maps & Commentaries)</span>
-        <span>›</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- MODAL: BIBLE RESOURCES -->
-  <div class="settings-modal" id="resources-modal">
-    <div class="settings-header-fixed">
-      <div class="sheet-title">Bible Resources</div>
-      <button class="icon-btn" id="close-resources-modal">✕</button>
-    </div>
-    <div class="settings-scroll-body" style="gap: 1rem;">
-    
-      <!-- MAP TEMPLATE 1 -->
-      <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-1')">
-        <span class="preview-label">Atlas & Geography</span>
-        <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">
-          Divided Israel and Judea
-        </h3>
-        <p style="font-size: 0.9rem; opacity: 0.8;">
-          Map of the divided kingdom of Israel, when Israel and Judah were seperate nations
-        </p>
-      </div>
-
-      <!-- MAP TEMPLATE 2 -->
-      <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-2')">
-        <span class="preview-label">Atlas & Geography</span>
-        <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">
-          New Testament Israel
-        </h3>
-        <p style="font-size: 0.9rem; opacity: 0.8;">
-          A map of Israel in the time of Jesus.
-        </p>
-      </div>
-
-      <!-- MAP TEMPLATE 3 -->
-      <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-3')">
-        <span class="preview-label">Atlas & Geography</span>
-        <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">
-          New Testament World
-        </h3>
-        <p style="font-size: 0.9rem; opacity: 0.8;">
-          A map of the world in the times of the New Testament.
-        </p>
-      </div>
-
-      <!-- MAP TEMPLATE 4 -->
-      <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-4')">
-        <span class="preview-label">Atlas & Geography</span>
-        <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">
-          The Seven Churches of Revelation
-        </h3>
-        <p style="font-size: 0.9rem; opacity: 0.8;">
-          A map showing the locations of the seven churches mentioned in Revelation 2-3.
-        </p>
-      </div>
-
-      <!-- COMMENTARIES SECTION -->
-      <div class="preview-card" style="cursor: pointer;" onclick="showToast('Commentaries feature coming soon!')">
-        <span class="preview-label">Study Notes</span>
-        <h3 style="font-family: var(--ui-font); font-size: 1.1rem; margin-bottom: 0.3rem;">Commentaries & Notes</h3>
-        <p style="font-size: 0.9rem; opacity: 0.8;">Access verse-by-verse historical commentaries and cross-references.</p>
-      </div>
-
-    </div>
+    <div class="sheet-grid" id="nav-grid"></div>
   </div>
 
   <!-- MODAL: MAP VIEWER -->
-  <div class="settings-modal" id="map-viewer-modal" style="max-width: 600px;">
-    <div class="settings-header-fixed">
+  <div class="modal-sheet" id="map-viewer-modal" style="max-height: 90vh;">
+    <div class="sheet-header">
       <div class="sheet-title" id="map-title">Bible Map</div>
       <button class="icon-btn" id="close-map-modal">✕</button>
     </div>
-    <div class="settings-scroll-body" style="text-align: center; padding: 1rem;">
-      <div style="overflow: auto; max-height: 65vh; border-radius: 12px; border: 1px solid var(--border-color);">
+    <div style="text-align: center; padding: 0.5rem; overflow-y: auto;">
+      <div style="overflow: auto; max-height: 60vh; border-radius: 12px; border: 1px solid var(--border-color);">
         <img id="map-image-display" src="" alt="Bible Map" style="width: 100%; height: auto; display: block;" />
       </div>
       <p id="map-description" style="font-size: 0.85rem; opacity: 0.8; margin-top: 0.75rem;"></p>
