@@ -487,36 +487,7 @@ function setTextAlign(align) {
   updateActiveSegment('align-control', align);
 }
 
-// --- THEME & DARK MODE HELPER ---
-function applyThemeMode(isDark) {
-  if (isDark) {
-    if (!localStorage.getItem('bible_text_color')) {
-      document.documentElement.style.setProperty('--text-color', '#fcfaf7');
-    }
-    document.documentElement.style.setProperty('--ui-text-color', '#fcfaf7');
-    document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.08)');
-    document.documentElement.style.setProperty('--border-color', 'rgba(255, 255, 255, 0.15)');
-    document.documentElement.style.setProperty('--verse-num-color', 'rgba(255, 255, 255, 0.45)');
-    document.documentElement.style.setProperty('--accent-gold', '#f3cca1');
-    document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.15)');
-    document.documentElement.style.setProperty('--pill-border', 'rgba(255, 255, 255, 0.22)');
-    document.documentElement.style.setProperty('--active-pill', '#fcfaf7');
-    document.documentElement.style.setProperty('--active-pill-text', '#121110');
-  } else {
-    if (!localStorage.getItem('bible_text_color')) {
-      document.documentElement.style.setProperty('--text-color', '#2c2523');
-    }
-    document.documentElement.style.setProperty('--ui-text-color', '#2c2523');
-    document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.65)');
-    document.documentElement.style.setProperty('--border-color', 'rgba(0, 0, 0, 0.1)');
-    document.documentElement.style.setProperty('--verse-num-color', '#8c8273');
-    document.documentElement.style.setProperty('--accent-gold', '#b8860b');
-    document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.65)');
-    document.documentElement.style.setProperty('--pill-border', 'rgba(0, 0, 0, 0.12)');
-    document.documentElement.style.setProperty('--active-pill', '#2c2523');
-    document.documentElement.style.setProperty('--active-pill-text', '#ffffff');
-  }
-}
+// --- SEPARATED THEME HELPERS ---
 
 function checkIsDark(val) {
   if (!val) return false;
@@ -532,7 +503,45 @@ function checkIsDark(val) {
          lower.includes('rgba(34, 112, 62');
 }
 
-// Bar Color Gallery
+// 1. Reading Content Theme (Controlled ONLY by Background Color)
+function applyReadBackgroundTheme(isDark) {
+  if (isDark) {
+    if (!localStorage.getItem('bible_text_color')) {
+      document.documentElement.style.setProperty('--text-color', '#fcfaf7');
+    }
+    document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.08)');
+    document.documentElement.style.setProperty('--border-color', 'rgba(255, 255, 255, 0.15)');
+    document.documentElement.style.setProperty('--verse-num-color', 'rgba(255, 255, 255, 0.45)');
+    document.documentElement.style.setProperty('--accent-gold', '#f3cca1');
+  } else {
+    if (!localStorage.getItem('bible_text_color')) {
+      document.documentElement.style.setProperty('--text-color', '#2c2523');
+    }
+    document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.65)');
+    document.documentElement.style.setProperty('--border-color', 'rgba(0, 0, 0, 0.1)');
+    document.documentElement.style.setProperty('--verse-num-color', '#8c8273');
+    document.documentElement.style.setProperty('--accent-gold', '#b8860b');
+  }
+}
+
+// 2. UI Bars & Navigation Theme (Controlled ONLY by Bar Color)
+function applyBarColorTheme(isDark) {
+  if (isDark) {
+    document.documentElement.style.setProperty('--ui-text-color', '#fcfaf7');
+    document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.15)');
+    document.documentElement.style.setProperty('--pill-border', 'rgba(255, 255, 255, 0.22)');
+    document.documentElement.style.setProperty('--active-pill', '#fcfaf7');
+    document.documentElement.style.setProperty('--active-pill-text', '#121110');
+  } else {
+    document.documentElement.style.setProperty('--ui-text-color', '#2c2523');
+    document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.65)');
+    document.documentElement.style.setProperty('--pill-border', 'rgba(0, 0, 0, 0.12)');
+    document.documentElement.style.setProperty('--active-pill', '#2c2523');
+    document.documentElement.style.setProperty('--active-pill-text', '#ffffff');
+  }
+}
+
+// Bar Color Gallery (Controls UI / Bottom Bar Text exclusively)
 function setPanelColor(colorValue, element, bgSize = 'auto') {
   document.documentElement.style.setProperty('--panel-bg', colorValue);
   document.documentElement.style.setProperty('--panel-size', bgSize);
@@ -540,7 +549,7 @@ function setPanelColor(colorValue, element, bgSize = 'auto') {
   localStorage.setItem('bible_panel_size', bgSize);
 
   const isDarkPanel = checkIsDark(colorValue);
-  applyThemeMode(isDarkPanel);
+  applyBarColorTheme(isDarkPanel);
 
   if (element) {
     document.querySelectorAll('#panel-gallery .gallery-chip').forEach(el => el.classList.remove('active'));
@@ -548,7 +557,7 @@ function setPanelColor(colorValue, element, bgSize = 'auto') {
   }
 }
 
-// Background Gallery
+// Background Gallery (Controls Reading Content, Verses, Dividers, & Book Headers exclusively)
 function setGalleryBg(bgValue, type, element, solidFallbackColor = null, bgSize = 'auto') {
   if (type === 'texture') {
     document.documentElement.style.setProperty('--bg-image', bgValue);
@@ -565,7 +574,7 @@ function setGalleryBg(bgValue, type, element, solidFallbackColor = null, bgSize 
   }
 
   const isDarkBg = checkIsDark(bgValue) || (solidFallbackColor && checkIsDark(solidFallbackColor));
-  applyThemeMode(isDarkBg);
+  applyReadBackgroundTheme(isDarkBg);
 
   localStorage.setItem('bible_bg_gallery', bgValue);
   localStorage.setItem('bible_bg_type', type);
