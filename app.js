@@ -385,6 +385,16 @@ function selectPlan(planKey) {
   renderPlanWeeks();
 }
 
+// Automatically calculate the current week of the year (1 to 52)
+function getCurrentWeekNumber() {
+  const now = new Date();
+  const start = new Date(now.getFullYear(), 0, 1);
+  const diff = now - start;
+  const oneDay = 1000 * 60 * 60 * 24;
+  const dayOfYear = Math.floor(diff / oneDay);
+  return Math.min(52, Math.max(1, Math.ceil(dayOfYear / 7)));
+}
+
 function renderPlanSelector() {
   const container = document.getElementById('plans-selector-container');
   if (!container) return;
@@ -392,9 +402,10 @@ function renderPlanSelector() {
   container.innerHTML = Object.entries(READING_PLANS).map(([key, plan]) => {
     const isActive = key === state.activePlan;
     return `
-      <button class="chip-btn plan-chip-pill ${isActive ? 'active' : ''}" onclick="selectPlan('${key}')">
-        ${plan.title}
-      </button>
+      <div class="plan-card-option ${isActive ? 'active' : ''}" onclick="selectPlan('${key}')">
+        <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-color); margin-bottom: 0.25rem;">${plan.title}</div>
+        <div style="font-size: 0.78rem; opacity: 0.7; line-height: 1.3;">${plan.description}</div>
+      </div>
     `;
   }).join('');
 }
@@ -425,15 +436,21 @@ function renderPlanWeeks() {
   if (percentageText) percentageText.textContent = `${percentage}%`;
   if (progressFill) progressFill.style.width = `${percentage}%`;
 
-  container.innerHTML = currentPlan.weeks.map((week, idx) => {
-    const isCurrentWeek = idx === 0;
+  const activeWeekNum = getCurrentWeekNumber();
+
+  container.innerHTML = currentPlan.weeks.map((week) => {
+    const isCurrentWeek = week.week === activeWeekNum;
+    const openAttribute = isCurrentWeek ? 'open' : '';
+
     return `
-      <div class="week-container">
-        <div class="week-header">
-          <span>${week.title}</span>
-          <span class="week-badge">${isCurrentWeek ? 'Current Week' : 'Upcoming'}</span>
-        </div>
-        <div style="margin-top: 0.75rem;">
+      <details class="week-accordion" ${openAttribute}>
+        <summary class="week-summary">
+          <div>
+            <span class="week-badge">${isCurrentWeek ? 'Current Week' : `Week ${week.week}`}</span>
+            <span>${week.title}</span>
+          </div>
+        </summary>
+        <div class="week-content-body">
           ${week.days.map(day => {
             const itemKey = `${state.activePlan}_w${week.week}_d${day.day}`;
             const isChecked = state.planProgress[itemKey] ? 'checked' : '';
@@ -448,7 +465,7 @@ function renderPlanWeeks() {
             `;
           }).join('')}
         </div>
-      </div>
+      </details>
     `;
   }).join('');
 }
