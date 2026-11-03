@@ -388,7 +388,7 @@ function openMap(mapId) {
 
 function closeMapModal() {
   if (mapViewerModal) mapViewerModal.classList.remove('open');
-  overlay.classList.add('active');
+  overlay.classList.remove('active');
 }
 
 if (closeMapModalBtn) closeMapModalBtn.addEventListener('click', closeMapModal);
@@ -488,9 +488,11 @@ function setTextAlign(align) {
 }
 
 // Bar Color Gallery
-function setPanelColor(colorValue, element) {
+function setPanelColor(colorValue, element, bgSize = 'auto') {
   document.documentElement.style.setProperty('--panel-bg', colorValue);
+  document.documentElement.style.setProperty('--panel-size', bgSize);
   localStorage.setItem('bible_panel_color', colorValue);
+  localStorage.setItem('bible_panel_size', bgSize);
 
   if (element) {
     document.querySelectorAll('#panel-gallery .gallery-chip').forEach(el => el.classList.remove('active'));
@@ -499,16 +501,19 @@ function setPanelColor(colorValue, element) {
 }
 
 // Background Gallery
-function setGalleryBg(bgValue, type, element, solidFallbackColor = null) {
+function setGalleryBg(bgValue, type, element, solidFallbackColor = null, bgSize = 'auto') {
   if (type === 'texture') {
     document.documentElement.style.setProperty('--bg-image', bgValue);
     document.documentElement.style.setProperty('--bg-color', solidFallbackColor || '#fcfaf7');
+    document.documentElement.style.setProperty('--bg-size', bgSize);
   } else if (type === 'gradient') {
     document.documentElement.style.setProperty('--bg-image', bgValue);
     document.documentElement.style.setProperty('--bg-color', 'transparent');
+    document.documentElement.style.setProperty('--bg-size', 'auto');
   } else {
     document.documentElement.style.setProperty('--bg-image', 'none');
     document.documentElement.style.setProperty('--bg-color', bgValue);
+    document.documentElement.style.setProperty('--bg-size', 'auto');
   }
 
   const isDark = bgValue === '#121110' || bgValue.includes('#141826') || bgValue.includes('#1a1918') || bgValue.includes('#2b231c');
@@ -542,6 +547,7 @@ function setGalleryBg(bgValue, type, element, solidFallbackColor = null) {
 
   localStorage.setItem('bible_bg_gallery', bgValue);
   localStorage.setItem('bible_bg_type', type);
+  localStorage.setItem('bible_bg_size', bgSize);
   if (solidFallbackColor) {
     localStorage.setItem('bible_bg_fallback', solidFallbackColor);
   } else {
@@ -630,7 +636,9 @@ window.addEventListener('DOMContentLoaded', () => {
   const savedBg = localStorage.getItem('bible_bg_gallery') || '#fcfaf7';
   const savedBgType = localStorage.getItem('bible_bg_type') || 'solid';
   const savedBgFallback = localStorage.getItem('bible_bg_fallback') || null;
+  const savedBgSize = localStorage.getItem('bible_bg_size') || 'auto';
   const savedPanel = localStorage.getItem('bible_panel_color') || 'rgba(252, 250, 247, 0.9)';
+  const savedPanelSize = localStorage.getItem('bible_panel_size') || 'auto';
   const savedTextColor = localStorage.getItem('bible_text_color');
   
   const isReaderMode = localStorage.getItem('bible_reader_mode') === 'true';
@@ -639,8 +647,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   setFont(savedFontKey);
   setTextAlign(savedAlign);
-  setPanelColor(savedPanel);
-  setGalleryBg(savedBg, savedBgType, null, savedBgFallback);
+  setPanelColor(savedPanel, null, savedPanelSize);
+  setGalleryBg(savedBg, savedBgType, null, savedBgFallback, savedBgSize);
 
   if (savedTextColor) {
     document.documentElement.style.setProperty('--text-color', savedTextColor);
