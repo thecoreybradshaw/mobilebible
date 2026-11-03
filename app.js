@@ -503,7 +503,7 @@ function checkIsDark(val) {
          lower.includes('rgba(34, 112, 62');
 }
 
-// 1. Reading Content Theme (Controlled ONLY by Background Color)
+// 1. Reading Content & Page Text Theme (Controlled ONLY by Background Color)
 function applyReadBackgroundTheme(isDark) {
   if (isDark) {
     if (!localStorage.getItem('bible_text_color')) {
@@ -541,7 +541,7 @@ function applyBarColorTheme(isDark) {
   }
 }
 
-// Bar Color Gallery (Controls UI / Bottom Bar Text exclusively)
+// Bar Color Gallery (Controls Header & Bottom Bar Text exclusively)
 function setPanelColor(colorValue, element, bgSize = 'auto') {
   document.documentElement.style.setProperty('--panel-bg', colorValue);
   document.documentElement.style.setProperty('--panel-size', bgSize);
@@ -557,7 +557,7 @@ function setPanelColor(colorValue, element, bgSize = 'auto') {
   }
 }
 
-// Background Gallery (Controls Reading Content, Verses, Dividers, & Book Headers exclusively)
+// Background Gallery (Controls Reading Content, Cards, Verses, Headers, & Tabs exclusively)
 function setGalleryBg(bgValue, type, element, solidFallbackColor = null, bgSize = 'auto') {
   if (type === 'texture') {
     document.documentElement.style.setProperty('--bg-image', bgValue);
