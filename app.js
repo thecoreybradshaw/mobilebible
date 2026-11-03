@@ -487,36 +487,8 @@ function setTextAlign(align) {
   updateActiveSegment('align-control', align);
 }
 
-// Bar Color Gallery
-function setPanelColor(colorValue, element, bgSize = 'auto') {
-  document.documentElement.style.setProperty('--panel-bg', colorValue);
-  document.documentElement.style.setProperty('--panel-size', bgSize);
-  localStorage.setItem('bible_panel_color', colorValue);
-  localStorage.setItem('bible_panel_size', bgSize);
-
-  if (element) {
-    document.querySelectorAll('#panel-gallery .gallery-chip').forEach(el => el.classList.remove('active'));
-    element.classList.add('active');
-  }
-}
-
-// Background Gallery
-function setGalleryBg(bgValue, type, element, solidFallbackColor = null, bgSize = 'auto') {
-  if (type === 'texture') {
-    document.documentElement.style.setProperty('--bg-image', bgValue);
-    document.documentElement.style.setProperty('--bg-color', solidFallbackColor || '#fcfaf7');
-    document.documentElement.style.setProperty('--bg-size', bgSize);
-  } else if (type === 'gradient') {
-    document.documentElement.style.setProperty('--bg-image', bgValue);
-    document.documentElement.style.setProperty('--bg-color', 'transparent');
-    document.documentElement.style.setProperty('--bg-size', 'auto');
-  } else {
-    document.documentElement.style.setProperty('--bg-image', 'none');
-    document.documentElement.style.setProperty('--bg-color', bgValue);
-    document.documentElement.style.setProperty('--bg-size', 'auto');
-  }
-
-  const isDark = bgValue === '#121110' || bgValue.includes('#141826') || bgValue.includes('#1a1918') || bgValue.includes('#2b231c');
+// --- THEME & DARK MODE HELPER ---
+function applyThemeMode(isDark) {
   if (isDark) {
     if (!localStorage.getItem('bible_text_color')) {
       document.documentElement.style.setProperty('--text-color', '#fcfaf7');
@@ -544,6 +516,56 @@ function setGalleryBg(bgValue, type, element, solidFallbackColor = null, bgSize 
     document.documentElement.style.setProperty('--active-pill', '#2c2523');
     document.documentElement.style.setProperty('--active-pill-text', '#ffffff');
   }
+}
+
+function checkIsDark(val) {
+  if (!val) return false;
+  const lower = val.toLowerCase();
+  return lower.includes('#121110') || 
+         lower.includes('#141826') || 
+         lower.includes('#1a1918') || 
+         lower.includes('#2b231c') || 
+         lower.includes('rgba(18, 17, 16') ||
+         lower.includes('rgba(30, 42, 74') ||
+         lower.includes('rgba(88, 44, 132') ||
+         lower.includes('rgba(168, 50, 50') ||
+         lower.includes('rgba(34, 112, 62');
+}
+
+// Bar Color Gallery
+function setPanelColor(colorValue, element, bgSize = 'auto') {
+  document.documentElement.style.setProperty('--panel-bg', colorValue);
+  document.documentElement.style.setProperty('--panel-size', bgSize);
+  localStorage.setItem('bible_panel_color', colorValue);
+  localStorage.setItem('bible_panel_size', bgSize);
+
+  const isDarkPanel = checkIsDark(colorValue);
+  applyThemeMode(isDarkPanel);
+
+  if (element) {
+    document.querySelectorAll('#panel-gallery .gallery-chip').forEach(el => el.classList.remove('active'));
+    element.classList.add('active');
+  }
+}
+
+// Background Gallery
+function setGalleryBg(bgValue, type, element, solidFallbackColor = null, bgSize = 'auto') {
+  if (type === 'texture') {
+    document.documentElement.style.setProperty('--bg-image', bgValue);
+    document.documentElement.style.setProperty('--bg-color', solidFallbackColor || '#fcfaf7');
+    document.documentElement.style.setProperty('--bg-size', bgSize);
+  } else if (type === 'gradient') {
+    document.documentElement.style.setProperty('--bg-image', bgValue);
+    document.documentElement.style.setProperty('--bg-color', 'transparent');
+    document.documentElement.style.setProperty('--bg-size', 'auto');
+  } else {
+    document.documentElement.style.setProperty('--bg-image', 'none');
+    document.documentElement.style.setProperty('--bg-color', bgValue);
+    document.documentElement.style.setProperty('--bg-size', 'auto');
+  }
+
+  const isDarkBg = checkIsDark(bgValue) || (solidFallbackColor && checkIsDark(solidFallbackColor));
+  applyThemeMode(isDarkBg);
 
   localStorage.setItem('bible_bg_gallery', bgValue);
   localStorage.setItem('bible_bg_type', type);
