@@ -8,7 +8,7 @@ const state = {
   parallelTranslation: localStorage.getItem('bible_parallel_trans') || 'kjv',
   isParallelActive: localStorage.getItem('bible_parallel_mode') === 'true',
   activeTab: 'read',
-  activePlan: localStorage.getItem('bible_active_plan') || 'gospels',
+  activePlan: localStorage.getItem('bible_active_plan') || 'fiveday',
   planProgress: JSON.parse(localStorage.getItem('bible_plan_progress') || '{}')
 };
 
@@ -64,25 +64,142 @@ const BIBLE_MAPS = [
   { id: 'map-4', title: "The Seven Churches of Revelation", file: "./resources/maps/seven-churches.jpg", description: "Locations of the seven churches in Asia Minor (Revelation 2-3)." }
 ];
 
+// --- READING PLANS DATA ENGINE ---
 const READING_PLANS = {
-  gospels: {
-    title: "The Four Gospels (30-Day)",
-    days: [
-      { day: 1, book: 'Matthew', chapter: 1, label: 'Matthew 1 - Genealogy & Birth of Christ' },
-      { day: 2, book: 'Matthew', chapter: 2, label: 'Matthew 2 - Visit of the Wise Men' },
-      { day: 3, book: 'Matthew', chapter: 5, label: 'Matthew 5 - Sermon on the Mount' },
-      { day: 4, book: 'Mark', chapter: 1, label: 'Mark 1 - Beginning of the Gospel' },
-      { day: 5, book: 'Luke', chapter: 1, label: 'Luke 1 - Announcement of John & Jesus' },
-      { day: 6, book: 'John', chapter: 1, label: 'John 1 - The Word Became Flesh' }
+  fiveday: {
+    title: "5-Day Bible Reading Program",
+    description: "The official plan from fivedaybiblereading.com used by your church.",
+    weeks: [
+      {
+        week: 1,
+        title: "Week 1",
+        days: [
+          { day: 1, label: 'Genesis 1-2', book: 'Genesis', chapter: 1 },
+          { day: 2, label: 'Genesis 3-4', book: 'Genesis', chapter: 3 },
+          { day: 3, label: 'Genesis 5-6', book: 'Genesis', chapter: 5 },
+          { day: 4, label: 'Genesis 7-8', book: 'Genesis', chapter: 7 },
+          { day: 5, label: 'Genesis 9-11', book: 'Genesis', chapter: 9 }
+        ]
+      },
+      {
+        week: 2,
+        title: "Week 2",
+        days: [
+          { day: 6, label: 'Genesis 12-13', book: 'Genesis', chapter: 12 },
+          { day: 7, label: 'Genesis 14-15', book: 'Genesis', chapter: 14 },
+          { day: 8, label: 'Genesis 16-17', book: 'Genesis', chapter: 16 },
+          { day: 9, label: 'Genesis 18-19', book: 'Genesis', chapter: 18 },
+          { day: 10, label: 'Genesis 20-22', book: 'Genesis', chapter: 20 }
+        ]
+      }
     ]
   },
-  wisdom: {
-    title: "Wisdom Literature (14-Day)",
-    days: [
-      { day: 1, book: 'Psalms', chapter: 1, label: 'Psalms 1 - The Two Paths' },
-      { day: 2, book: 'Psalms', chapter: 23, label: 'Psalms 23 - The Lord is My Shepherd' },
-      { day: 3, book: 'Proverbs', chapter: 1, label: 'Proverbs 1 - Beginning of Knowledge' },
-      { day: 4, book: 'Ecclesiastes', chapter: 1, label: 'Ecclesiastes 1 - Everything is Meaningless' }
+  year365: {
+    title: "365-Day Chronological",
+    description: "Read straight through Genesis to Revelation over the course of a year.",
+    weeks: [
+      {
+        week: 1,
+        title: "Week 1",
+        days: [
+          { day: 1, label: 'Genesis 1-3', book: 'Genesis', chapter: 1 },
+          { day: 2, label: 'Genesis 4-7', book: 'Genesis', chapter: 4 },
+          { day: 3, label: 'Genesis 8-11', book: 'Genesis', chapter: 8 },
+          { day: 4, label: 'Genesis 12-15', book: 'Genesis', chapter: 12 },
+          { day: 5, label: 'Genesis 16-19', book: 'Genesis', chapter: 16 },
+          { day: 6, label: 'Genesis 20-22', book: 'Genesis', chapter: 20 },
+          { day: 7, label: 'Genesis 23-24', book: 'Genesis', chapter: 23 }
+        ]
+      }
+    ]
+  },
+  ot_relaxed: {
+    title: "OT Relaxed (1-Year)",
+    description: "A steady, comfortable pace through the Old Testament.",
+    weeks: [
+      {
+        week: 1,
+        title: "Week 1",
+        days: [
+          { day: 1, label: 'Genesis 1-5', book: 'Genesis', chapter: 1 },
+          { day: 2, label: 'Genesis 6-10', book: 'Genesis', chapter: 6 },
+          { day: 3, label: 'Genesis 11-15', book: 'Genesis', chapter: 11 }
+        ]
+      }
+    ]
+  },
+  ot_moderate: {
+    title: "OT Moderate (6-Month)",
+    description: "A balanced pace through the Old Testament in 6 months.",
+    weeks: [
+      {
+        week: 1,
+        title: "Week 1",
+        days: [
+          { day: 1, label: 'Genesis 1-10', book: 'Genesis', chapter: 1 },
+          { day: 2, label: 'Genesis 11-20', book: 'Genesis', chapter: 11 }
+        ]
+      }
+    ]
+  },
+  ot_intensive: {
+    title: "OT Intensive (3-Month)",
+    description: "An intensive sprint through the Old Testament in 3 months.",
+    weeks: [
+      {
+        week: 1,
+        title: "Week 1",
+        days: [
+          { day: 1, label: 'Genesis 1-15', book: 'Genesis', chapter: 1 },
+          { day: 2, label: 'Genesis 16-30', book: 'Genesis', chapter: 16 }
+        ]
+      }
+    ]
+  },
+  nt_relaxed: {
+    title: "NT Relaxed (6-Month)",
+    description: "A thoughtful pace through the New Testament in 6 months.",
+    weeks: [
+      {
+        week: 1,
+        title: "Week 1",
+        days: [
+          { day: 1, label: 'Matthew 1-4', book: 'Matthew', chapter: 1 },
+          { day: 2, label: 'Matthew 5-8', book: 'Matthew', chapter: 5 }
+        ]
+      }
+    ]
+  },
+  nt_moderate: {
+    title: "NT Moderate (3-Month)",
+    description: "A steady pace through the New Testament in 3 months.",
+    weeks: [
+      {
+        week: 1,
+        title: "Week 1",
+        days: [
+          { day: 1, label: 'Matthew 1-7', book: 'Matthew', chapter: 1 },
+          { day: 2, label: 'Matthew 8-14', book: 'Matthew', chapter: 8 }
+        ]
+      }
+    ]
+  },
+  nt_intensive: {
+    title: "NT Intensive (1-Month)",
+    description: "An intensive walk through the entire New Testament in 30 days.",
+    weeks: [
+      {
+        week: 1,
+        title: "Week 1",
+        days: [
+          { day: 1, label: 'Matthew 1-7', book: 'Matthew', chapter: 1 },
+          { day: 2, label: 'Matthew 8-14', book: 'Matthew', chapter: 8 },
+          { day: 3, label: 'Matthew 15-21', book: 'Matthew', chapter: 15 },
+          { day: 4, label: 'Matthew 22-28', book: 'Matthew', chapter: 22 },
+          { day: 5, label: 'Mark 1-8', book: 'Mark', chapter: 1 },
+          { day: 6, label: 'Mark 9-16', book: 'Mark', chapter: 9 }
+        ]
+      }
     ]
   }
 };
@@ -404,31 +521,73 @@ function selectPlan(planKey) {
   state.activePlan = planKey;
   localStorage.setItem('bible_active_plan', planKey);
 
-  document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('active-plan'));
-  const activeCard = document.getElementById(`plan-${planKey}`);
-  if (activeCard) activeCard.classList.add('active-plan');
-
-  renderPlanSchedule();
+  renderPlanSelector();
+  renderPlanWeeks();
 }
 
-function renderPlanSchedule() {
-  const planContainer = document.getElementById('plan-schedule-container');
-  const planTitle = document.getElementById('current-plan-title');
-  if (!planContainer) return;
+function renderPlanSelector() {
+  const container = document.getElementById('plans-selector-container');
+  if (!container) return;
 
-  const currentPlan = READING_PLANS[state.activePlan] || READING_PLANS['gospels'];
-  if (planTitle) planTitle.textContent = `${currentPlan.title} — Schedule`;
-
-  planContainer.innerHTML = currentPlan.days.map(item => {
-    const itemKey = `${state.activePlan}_day_${item.day}`;
-    const isChecked = state.planProgress[itemKey] ? 'checked' : '';
+  container.innerHTML = Object.entries(READING_PLANS).map(([key, plan]) => {
+    const isActive = key === state.activePlan;
     return `
-      <div class="reading-item">
-        <div style="display:flex; align-items:center; gap: 0.75rem;">
-          <input type="checkbox" ${isChecked} onchange="togglePlanItem('${itemKey}', this.checked)" />
-          <span>Day ${item.day}</span>
+      <button class="chip-btn plan-chip-pill ${isActive ? 'active' : ''}" onclick="selectPlan('${key}')">
+        ${plan.title}
+      </button>
+    `;
+  }).join('');
+}
+
+function renderPlanWeeks() {
+  const container = document.getElementById('plan-weeks-container');
+  const titleTracker = document.getElementById('active-plan-title-tracker');
+  const percentageText = document.getElementById('plan-percentage-text');
+  const progressFill = document.getElementById('plan-progress-fill');
+
+  if (!container) return;
+
+  const currentPlan = READING_PLANS[state.activePlan] || READING_PLANS['fiveday'];
+  if (titleTracker) titleTracker.textContent = currentPlan.title;
+
+  let totalReadings = 0;
+  let completedReadings = 0;
+
+  currentPlan.weeks.forEach(w => {
+    w.days.forEach(d => {
+      totalReadings++;
+      const itemKey = `${state.activePlan}_w${w.week}_d${d.day}`;
+      if (state.planProgress[itemKey]) completedReadings++;
+    });
+  });
+
+  const percentage = totalReadings > 0 ? Math.round((completedReadings / totalReadings) * 100) : 0;
+  if (percentageText) percentageText.textContent = `${percentage}%`;
+  if (progressFill) progressFill.style.width = `${percentage}%`;
+
+  container.innerHTML = currentPlan.weeks.map((week, idx) => {
+    const isCurrentWeek = idx === 0;
+    return `
+      <div class="week-container">
+        <div class="week-header">
+          <span>${week.title}</span>
+          <span class="week-badge">${isCurrentWeek ? 'Current Week' : 'Upcoming'}</span>
         </div>
-        <span class="reading-link" onclick="navigateToPassage('${item.book}', ${item.chapter})">${item.label}</span>
+        <div style="margin-top: 0.75rem;">
+          ${week.days.map(day => {
+            const itemKey = `${state.activePlan}_w${week.week}_d${day.day}`;
+            const isChecked = state.planProgress[itemKey] ? 'checked' : '';
+            return `
+              <div class="reading-item-row">
+                <label class="custom-checkbox-wrap">
+                  <input type="checkbox" ${isChecked} onchange="togglePlanItem('${itemKey}', this.checked)" />
+                  <span class="checkmark-box"></span>
+                  <span style="font-size: 0.9rem; font-weight: 500;">Day ${day.day}: <strong style="color: var(--accent-gold); cursor: pointer;" onclick="navigateToPassage('${day.book}', ${day.chapter})">${day.label}</strong></span>
+                </label>
+              </div>
+            `;
+          }).join('')}
+        </div>
       </div>
     `;
   }).join('');
@@ -437,6 +596,7 @@ function renderPlanSchedule() {
 function togglePlanItem(itemKey, isChecked) {
   state.planProgress[itemKey] = isChecked;
   localStorage.setItem('bible_plan_progress', JSON.stringify(state.planProgress));
+  renderPlanWeeks();
 }
 
 function navigateToPassage(book, chapter) {
@@ -704,6 +864,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   renderParallelTranslationOptions();
+  renderPlanSelector();
   selectPlan(state.activePlan);
   switchTab('read');
   loadChapter();
