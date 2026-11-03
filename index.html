@@ -21,6 +21,7 @@
       --bg-image: none;
       --text-color: #2c2523;
       --ui-text-color: #2c2523;
+      --bar-text-color: #2c2523; /* <-- NEW */
       --heading-font: 'Playfair Display', Georgia, serif;
       --body-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -85,7 +86,7 @@
       border-radius: 16px;
       border: 1px solid var(--pill-border);
       background: var(--pill-bg);
-      color: var(--ui-text-color);
+      color: var(--bar-text-color); /* <-- UPDATED */
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       box-shadow: var(--glass-shadow);
@@ -408,7 +409,7 @@
       border: none;
       box-shadow: none;
       border-radius: 0;
-      color: var(--ui-text-color);
+      color: var(--bar-text-color); /* <-- UPDATED */
       opacity: 0.6;
     }
 
@@ -529,7 +530,7 @@
       font-family: var(--ui-font);
       font-size: 1rem;
       font-weight: 700;
-      color: var(--ui-text-color);
+      color: var(--bar-text-color);
     }
 
     .sheet-grid {
