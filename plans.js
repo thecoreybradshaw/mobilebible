@@ -3,7 +3,7 @@
 const READING_PLANS = {
   fiveday: {
     title: "5-Day Bible Reading Program",
-    description: "The official plan from fivedaybiblereading.com used by your church.",
+    description: "The official fivedaybiblereading.com plan with 5 readings per week and 2 flex days.",
     weeks: [
       {
         week: 1,
