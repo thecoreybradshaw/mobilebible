@@ -527,13 +527,13 @@ function applyReadBackgroundTheme(isDark) {
 // 2. UI Bars & Navigation Theme (Controlled ONLY by Bar Color)
 function applyBarColorTheme(isDark) {
   if (isDark) {
-    document.documentElement.style.setProperty('--ui-text-color', '#fcfaf7');
+    document.documentElement.style.setProperty('--bar-text-color', '#fcfaf7');
     document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.15)');
     document.documentElement.style.setProperty('--pill-border', 'rgba(255, 255, 255, 0.22)');
     document.documentElement.style.setProperty('--active-pill', '#fcfaf7');
     document.documentElement.style.setProperty('--active-pill-text', '#121110');
   } else {
-    document.documentElement.style.setProperty('--ui-text-color', '#2c2523');
+    document.documentElement.style.setProperty('--bar-text-color', '#2c2523');
     document.documentElement.style.setProperty('--pill-bg', 'rgba(255, 255, 255, 0.65)');
     document.documentElement.style.setProperty('--pill-border', 'rgba(0, 0, 0, 0.12)');
     document.documentElement.style.setProperty('--active-pill', '#2c2523');
