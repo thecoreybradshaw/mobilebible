@@ -19,9 +19,11 @@
     :root {
       --bg-color: #fcfaf7;
       --bg-image: none;
+      --bg-size: auto;
+      --panel-size: auto;
       --text-color: #2c2523;
       --ui-text-color: #2c2523;
-      --bar-text-color: #2c2523; /* <-- NEW */
+      --bar-text-color: #2c2523;
       --heading-font: 'Playfair Display', Georgia, serif;
       --body-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       --ui-font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -58,7 +60,7 @@
       background-size: var(--bg-size, auto);
       background-position: center;
       background-attachment: fixed;
-      color: var(--ui-text-color);
+      color: var(--text-color);
       font-family: var(--ui-font);
       font-size: var(--font-size);
       line-height: var(--line-height);
@@ -86,7 +88,7 @@
       border-radius: 16px;
       border: 1px solid var(--pill-border);
       background: var(--pill-bg);
-      color: var(--bar-text-color); /* <-- UPDATED */
+      color: var(--bar-text-color);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       box-shadow: var(--glass-shadow);
@@ -176,7 +178,7 @@
 
     /* Non-Read Tabs UI System */
     #view-resources, #view-plans, #view-settings {
-      color: var(--text-color); /* UPDATED: Now follows background text color */
+      color: var(--text-color);
       text-align: left;
       font-family: var(--ui-font);
       font-size: 1rem;
@@ -186,7 +188,7 @@
     #view-resources .chapter-header, 
     #view-plans .chapter-header, 
     #view-settings .chapter-header {
-      color: var(--text-color); /* UPDATED: Now follows background text color */
+      color: var(--text-color);
       font-family: var(--heading-font);
     }
 
@@ -196,7 +198,7 @@
     #view-settings .preview-card,
     #view-settings .color-picker-row {
       background: var(--card-bg);
-      color: var(--ui-text-color);
+      color: var(--text-color);
       border: 1px solid var(--border-color);
     }
 
@@ -219,12 +221,12 @@
       padding: 0.6rem 0.4rem;
       font-size: 0.78rem;
       border-radius: 12px;
-      color: var(--ui-text-color);
+      color: var(--bar-text-color);
     }
 
     .font-segmented-control button.active {
       background: var(--card-bg);
-      color: var(--ui-text-color);
+      color: var(--text-color);
       font-weight: 700;
       box-shadow: var(--glass-shadow);
     }
@@ -245,12 +247,12 @@
       padding: 0.55rem 0.2rem;
       font-size: 0.78rem;
       border-radius: 14px;
-      color: var(--ui-text-color);
+      color: var(--bar-text-color);
     }
 
     #view-settings .segmented-control button.active {
       background: var(--card-bg);
-      color: var(--ui-text-color);
+      color: var(--text-color);
     }
 
     .section-title {
@@ -261,6 +263,7 @@
       font-weight: 700;
       color: var(--accent-gold);
       margin: 1.25rem 0 0.6rem 0;
+      transition: color 0.3s ease;
     }
 
     /* --- SCRIPTURE READER --- */
@@ -278,6 +281,7 @@
       font-weight: 600;
       display: block;
       margin-bottom: 0.3rem;
+      transition: color 0.3s ease;
     }
 
     .chapter-header {
@@ -286,6 +290,7 @@
       font-weight: 700;
       color: var(--text-color);
       letter-spacing: -0.02em;
+      transition: color 0.3s ease;
     }
 
     .divider {
@@ -409,7 +414,7 @@
       border: none;
       box-shadow: none;
       border-radius: 0;
-      color: var(--bar-text-color); /* <-- UPDATED */
+      color: var(--bar-text-color);
       opacity: 0.6;
     }
 
@@ -578,7 +583,7 @@
       transition: transform 0.15s ease, border-color 0.15s ease;
       box-shadow: var(--glass-shadow);
     }
-    .gallery-chip.active { border-color: var(--ui-text-color); transform: scale(0.96); }
+    .gallery-chip.active { border-color: var(--text-color); transform: scale(0.96); }
 
     .color-picker-row {
       display: flex;
@@ -852,7 +857,7 @@
       <span class="tab-label">Read</span>
     </button>
     <button class="nav-tab-item" id="tab-btn-resources" onclick="switchTab('resources')">
-      <span class="tab-icon">🗺️</span>
+      <span class="tab-icon">📚</span>
       <span class="tab-label">Resources</span>
     </button>
     <button class="nav-tab-item" id="tab-btn-plans" onclick="switchTab('plans')">
@@ -865,40 +870,41 @@
     </button>
   </nav>
 
-  <!-- FLOATING VERSE ACTION BAR & TOAST -->
-  <div class="verse-action-bar" id="verse-action-bar">
-    <span class="action-count" id="action-count">1 verse selected</span>
-    <button style="padding: 0.45rem 0.9rem; font-size: 0.8rem;" onclick="copySelectedVerses()">📋 Copy</button>
-    <button style="padding: 0.45rem 0.9rem; font-size: 0.8rem;" onclick="clearVerseSelection()">✕ Clear</button>
-  </div>
-  <div class="toast" id="toast">Copied to clipboard!</div>
-
-  <!-- OVERLAY -->
+  <!-- OVERLAY & MODALS -->
   <div class="overlay" id="overlay"></div>
 
-  <!-- MODAL: BOOK, CHAPTER & TRANSLATION SELECTOR -->
+  <!-- SELECTION MODAL -->
   <div class="modal-sheet" id="nav-modal">
     <div class="sheet-header">
-      <div class="sheet-title" id="nav-modal-title">Select Book</div>
+      <span class="sheet-title" id="nav-modal-title">Select Option</span>
       <button class="icon-btn" id="close-nav-modal">✕</button>
     </div>
     <div class="sheet-grid" id="nav-grid"></div>
   </div>
 
-  <!-- MODAL: MAP VIEWER -->
-  <div class="modal-sheet" id="map-viewer-modal" style="max-height: 90vh;">
+  <!-- MAP VIEWER MODAL -->
+  <div class="modal-sheet" id="map-viewer-modal">
     <div class="sheet-header">
-      <div class="sheet-title" id="map-title">Bible Map</div>
+      <span class="sheet-title" id="map-title">Map Viewer</span>
       <button class="icon-btn" id="close-map-modal">✕</button>
     </div>
-    <div style="text-align: center; padding: 0.5rem; overflow-y: auto;">
-      <div style="overflow: auto; max-height: 60vh; border-radius: 12px; border: 1px solid var(--border-color);">
-        <img id="map-image-display" src="" alt="Bible Map" style="width: 100%; height: auto; display: block;" />
-      </div>
-      <p id="map-description" style="font-size: 0.85rem; opacity: 0.8; margin-top: 0.75rem;"></p>
+    <div style="padding: 0.5rem 0; text-align: center; overflow-y: auto;">
+      <img id="map-image-display" src="" alt="Map" style="max-width: 100%; height: auto; border-radius: 12px; margin-bottom: 0.5rem;" />
+      <p id="map-description" style="font-size: 0.85rem; opacity: 0.8;"></p>
     </div>
   </div>
 
-  <script src="./app.js"></script>
+  <!-- FLOATING ACTION BAR FOR SELECTED VERSES -->
+  <div class="verse-action-bar" id="verse-action-bar">
+    <span style="font-size: 0.8rem; font-weight: 600;" id="action-count">1 verse selected</span>
+    <button style="padding: 0.4rem 0.8rem; font-size: 0.78rem;" onclick="copySelectedVerses()">Copy</button>
+    <button style="padding: 0.4rem 0.8rem; font-size: 0.78rem;" onclick="clearVerseSelection()">Cancel</button>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast" id="toast"></div>
+
+  <!-- SCRIPT -->
+  <script src="app.js"></script>
 </body>
 </html>
