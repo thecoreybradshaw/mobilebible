@@ -593,37 +593,123 @@
       border-radius: 18px;
     }
 
-    /* --- READING PLANS LIST --- */
-    .plan-card {
+    /* --- READING PLANS ENHANCEMENTS --- */
+    .plans-selector-scroll {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1.25rem;
+      scrollbar-width: none; /* Hide scrollbar for clean look */
+    }
+    .plans-selector-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    .plan-chip-pill {
+      flex: 0 0 auto;
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+
+    .progress-tracker-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 1.1rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--glass-shadow);
+    }
+    .progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(0, 0, 0, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 0.6rem;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent-gold);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+
+    .week-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
       border-radius: 18px;
       padding: 1rem 1.25rem;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.85rem;
+      box-shadow: var(--glass-shadow);
+    }
+    .week-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       cursor: pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
     }
-    .plan-card.active-plan {
-      border-color: var(--accent-gold);
-      box-shadow: 0 0 0 1px var(--accent-gold);
+    .week-badge {
+      font-size: 0.72rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      color: var(--accent-gold);
     }
-    .reading-item {
+
+    /* Custom Satisfying Green Checkbox */
+    .custom-checkbox-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .custom-checkbox-wrap input[type="checkbox"] {
+      display: none;
+    }
+    .checkmark-box {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      border: 2px solid var(--border-color);
+      background: var(--pill-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .custom-checkbox-wrap input[type="checkbox"]:checked + .checkmark-box {
+      background: #22c55e; /* Satisfying green */
+      border-color: #22c55e;
+      transform: scale(1.08);
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    }
+    .checkmark-box::after {
+      content: '✓';
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: none;
+    }
+    .custom-checkbox-wrap input[type="checkbox"]:checked + .checkmark-box::after {
+      display: block;
+    }
+    .reading-item-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-radius: 14px;
-      padding: 0.75rem 1rem;
-      margin-bottom: 0.5rem;
+      padding: 0.6rem 0.5rem;
+      border-bottom: 1px solid var(--border-color);
     }
-    .reading-item input[type="checkbox"] {
-      width: 20px;
-      height: 20px;
-      accent-color: var(--accent-gold);
-      cursor: pointer;
-    }
-    .reading-link {
-      font-family: var(--ui-font);
-      font-weight: 600;
-      color: var(--accent-gold);
-      cursor: pointer;
-      text-decoration: underline;
+    .reading-item-row:last-child {
+      border-bottom: none;
     }
   </style>
 </head>
@@ -718,18 +804,26 @@
       <div class="divider"></div>
     </div>
 
-    <div class="section-title">Select Active Plan</div>
-    <div class="plan-card active-plan" id="plan-gospels" onclick="selectPlan('gospels')">
-      <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">The Four Gospels (30-Day)</h3>
-      <p style="font-size: 0.85rem; opacity: 0.8;">A structured walkthrough of Matthew, Mark, Luke, and John.</p>
-    </div>
-    <div class="plan-card" id="plan-wisdom" onclick="selectPlan('wisdom')">
-      <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">Wisdom Literature (14-Day)</h3>
-      <p style="font-size: 0.85rem; opacity: 0.8;">Selected readings from Psalms, Proverbs, and Ecclesiastes.</p>
+    <!-- Horizontal Plan Selector Scroll -->
+    <div class="plans-selector-scroll" id="plans-selector-container">
+      <!-- Populated dynamically by app.js -->
     </div>
 
-    <div class="section-title" id="current-plan-title">Daily Checklist</div>
-    <div id="plan-schedule-container"></div>
+    <!-- Overall Progress Tracker -->
+    <div class="progress-tracker-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;" id="active-plan-title-tracker">Plan Progress</span>
+        <span style="font-size: 0.9rem; font-weight: 700; color: var(--accent-gold);" id="plan-percentage-text">0%</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="plan-progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Weekly Timeline Container -->
+    <div id="plan-weeks-container">
+      <!-- Populated dynamically by app.js -->
+    </div>
   </div>
 
   <!-- TAB 4: SETTINGS & CUSTOMIZATION -->
