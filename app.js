@@ -377,6 +377,10 @@ btnChapterSelect.addEventListener('click', () => openModal('chapters'));
 btnTransSelect.addEventListener('click', () => openModal('translations'));
 
 // --- READING PLANS ENGINE ---
+
+// Add planStartDate to state
+state.planStartDate = localStorage.getItem('bible_plan_start_date') || '';
+
 function selectPlan(planKey) {
   state.activePlan = planKey;
   localStorage.setItem('bible_active_plan', planKey);
@@ -385,14 +389,36 @@ function selectPlan(planKey) {
   renderPlanWeeks();
 }
 
-// Automatically calculate the current week of the year (1 to 52)
+function setPlanTrackingMode(mode) {
+  if (mode === 'default') {
+    state.planStartDate = '';
+    localStorage.removeItem('bible_plan_start_date');
+    const dateInput = document.getElementById('plan-start-date-input');
+    if (dateInput) dateInput.value = '';
+  }
+  renderPlanWeeks();
+}
+
+function updatePlanStartDate(dateVal) {
+  state.planStartDate = dateVal;
+  localStorage.setItem('bible_plan_start_date', dateVal);
+  renderPlanWeeks();
+}
+
+// Automatically calculate the current week of the year or custom start date
 function getCurrentWeekNumber() {
   const now = new Date();
-  const start = new Date(now.getFullYear(), 0, 1);
+  let start;
+  if (state.planStartDate) {
+    start = new Date(state.planStartDate);
+  } else {
+    start = new Date(now.getFullYear(), 0, 1);
+  }
   const diff = now - start;
+  if (diff < 0) return 1;
   const oneDay = 1000 * 60 * 60 * 24;
   const dayOfYear = Math.floor(diff / oneDay);
-  return Math.min(52, Math.max(1, Math.ceil(dayOfYear / 7)));
+  return Math.min(52, Math.max(1, Math.ceil((dayOfYear + 1) / 7)));
 }
 
 function renderPlanSelector() {
@@ -412,9 +438,15 @@ function renderPlanSelector() {
 
 function renderPlanWeeks() {
   const container = document.getElementById('plan-weeks-container');
+  const featuredContainer = document.getElementById('featured-current-week-box');
   const titleTracker = document.getElementById('active-plan-title-tracker');
   const percentageText = document.getElementById('plan-percentage-text');
   const progressFill = document.getElementById('plan-progress-fill');
+  const dateInput = document.getElementById('plan-start-date-input');
+
+  if (dateInput && state.planStartDate) {
+    dateInput.value = state.planStartDate;
+  }
 
   if (!container) return;
 
@@ -438,12 +470,61 @@ function renderPlanWeeks() {
 
   const activeWeekNum = getCurrentWeekNumber();
 
+  // Capture currently open accordion week numbers so checking boxes doesn't collapse them
+  const openWeeks = Array.from(container.querySelectorAll('details.week-accordion[open]'))
+    .map(el => parseInt(el.getAttribute('data-week'), 10));
+
+  // Find current week object for the featured box
+  const currentWeekObj = currentPlan.weeks.find(w => w.week === activeWeekNum) || currentPlan.weeks[0];
+
+  if (currentWeekObj) {
+    const isCurrentWeekComplete = currentWeekObj.days.every(d => {
+      return state.planProgress[`${state.activePlan}_w${currentWeekObj.week}_d${d.day}`];
+    });
+
+    featuredContainer.innerHTML = `
+      <div class="featured-current-week ${isCurrentWeekComplete ? 'completed-week' : ''}" style="border: 2px solid ${isCurrentWeekComplete ? '#22c55e' : 'var(--accent-gold)'};">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+          <div>
+            <span class="week-badge" style="${isCurrentWeekComplete ? 'background: #22c55e; color: #fff; border-color: #22c55e;' : ''}">Current Week</span>
+            <span style="font-weight: 700; font-size: 1.05rem;">${currentWeekObj.title}</span>
+          </div>
+          <span style="font-size: 0.78rem; opacity: 0.7;">Week ${currentWeekObj.week} of 52</span>
+        </div>
+        <div>
+          ${currentWeekObj.days.map(day => {
+            const itemKey = `${state.activePlan}_w${currentWeekObj.week}_d${day.day}`;
+            const isChecked = state.planProgress[itemKey] ? 'checked' : '';
+            return `
+              <div class="reading-item-row">
+                <label class="custom-checkbox-wrap">
+                  <input type="checkbox" ${isChecked} onchange="togglePlanItem('${itemKey}', this.checked)" />
+                  <span class="checkmark-box"></span>
+                  <span style="font-size: 0.9rem; font-weight: 500;">Day ${day.day}: <strong style="color: var(--accent-gold); cursor: pointer;" onclick="navigateToPassage('${day.book}', ${day.chapter})">${day.label}</strong></span>
+                </label>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  // Render collapsible accordions for all weeks
   container.innerHTML = currentPlan.weeks.map((week) => {
     const isCurrentWeek = week.week === activeWeekNum;
-    const openAttribute = isCurrentWeek ? 'open' : '';
+    const isOpen = isCurrentWeek || openWeeks.includes(week.week);
+    const openAttribute = isOpen ? 'open' : '';
+
+    const allDaysCompleted = week.days.every(d => {
+      const itemKey = `${state.activePlan}_w${week.week}_d${d.day}`;
+      return state.planProgress[itemKey];
+    });
+
+    const weekCardClass = allDaysCompleted ? 'week-accordion completed-week' : 'week-accordion';
 
     return `
-      <details class="week-accordion" ${openAttribute}>
+      <details class="${weekCardClass}" data-week="${week.week}" ${openAttribute}>
         <summary class="week-summary">
           <div>
             <span class="week-badge">${isCurrentWeek ? 'Current Week' : `Week ${week.week}`}</span>
