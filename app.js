@@ -390,18 +390,41 @@ function selectPlan(planKey) {
 }
 
 function setPlanTrackingMode(mode) {
+  const defaultBtn = document.getElementById('btn-mode-default');
+  const dateInput = document.getElementById('plan-start-date-input');
+
   if (mode === 'default') {
     state.planStartDate = '';
     localStorage.removeItem('bible_plan_start_date');
-    const dateInput = document.getElementById('plan-start-date-input');
-    if (dateInput) dateInput.value = '';
+    
+    if (dateInput) {
+      dateInput.value = '';
+      dateInput.classList.remove('has-value');
+    }
+    
+    if (defaultBtn) {
+      defaultBtn.classList.add('active');
+    }
   }
   renderPlanWeeks();
 }
 
 function updatePlanStartDate(dateVal) {
-  state.planStartDate = dateVal;
-  localStorage.setItem('bible_plan_start_date', dateVal);
+  const defaultBtn = document.getElementById('btn-mode-default');
+  const dateInput = document.getElementById('plan-start-date-input');
+
+  if (dateVal) {
+    state.planStartDate = dateVal;
+    localStorage.setItem('bible_plan_start_date', dateVal);
+    
+    // User picked a custom date: turn off Calendar Year button, highlight date input
+    if (defaultBtn) defaultBtn.classList.remove('active');
+    if (dateInput) dateInput.classList.add('has-value');
+  } else {
+    // If they cleared the date input, revert to default calendar year mode
+    setPlanTrackingMode('default');
+  }
+  
   renderPlanWeeks();
 }
 
