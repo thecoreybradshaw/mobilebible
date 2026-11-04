@@ -1102,7 +1102,7 @@ const READING_PLANS = {
           { day: 279, label: 'Nahum 1-3', book: 'Nahum', chapter: 1 },
           { day: 280, label: 'Habakkuk 1-3', book: 'Habakkuk', chapter: 1 }
         ]
-      }
+      },
       {
         week: 41,
         title: "Week 41",
