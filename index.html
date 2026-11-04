@@ -785,6 +785,19 @@
       color: #ffffff;
       border-color: #22c55e;
     }
+
+    /* Green styling for active button or input with a date */
+    .chip-btn.active {
+      background-color: #10b981; /* Clean emerald green */
+      color: white;
+      border-color: #10b981;
+    }
+
+    input[type="date"].has-value {
+      border-color: #10b981;
+      background-color: #ecfdf5; /* Optional: very light green tint */
+      color: #065f46;
+    }
 </style>
 </head>
 <body>
@@ -837,10 +850,12 @@
     </div>
 
     <div class="section-title">Atlas & Geography</div>
+    <!-- Future Map 
     <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-1')">
       <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">Divided Israel and Judah</h3>
       <p style="font-size: 0.85rem; opacity: 0.8;">Map of the divided kingdom when Israel and Judah were separate nations.</p>
     </div>
+    -->
     <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-2')">
       <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">New Testament Israel</h3>
       <p style="font-size: 0.85rem; opacity: 0.8;">Map of Israel during the time and ministry of Jesus.</p>
@@ -849,10 +864,12 @@
       <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">New Testament Greco-Roman World</h3>
       <p style="font-size: 0.85rem; opacity: 0.8;">Map of the Mediterranean world during early apostolic missionary journeys.</p>
     </div>
+    <!-- Future Map
     <div class="preview-card" style="cursor: pointer;" onclick="openMap('map-4')">
       <h3 style="font-family: var(--ui-font); font-size: 1rem; margin-bottom: 0.2rem;">Seven Churches of Revelation</h3>
       <p style="font-size: 0.85rem; opacity: 0.8;">Locations of the seven churches of Asia Minor in Revelation 2–3.</p>
     </div>
+    -->
 
     <div class="section-title">Commentaries & Notes</div>
     <div class="preview-card" style="cursor: pointer;" onclick="showToast('Matthew Henry Commentary coming soon!')">
